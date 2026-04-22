@@ -1,0 +1,230 @@
+# ============================================================
+# SEAS Bootcamp — GitHub Actions CI/CD Pipeline
+# File: .github/workflows/cicd.yml
+#
+# HOW THIS WORKS:
+# Every time you push code to GitHub, this file runs automatically
+# on GitHub's cloud servers (runners). It does 4 things in order:
+#   1. BUILD  — installs dependencies, runs lint check
+#   2. TEST   — runs Jest unit tests with coverage report
+#   3. SCAN   — builds Docker image, runs Trivy security scan
+#   4. DEPLOY — sends deploy signal to Render (auto-deploy)
+#
+# If any step FAILS, the pipeline STOPS — broken code never reaches production.
+# This is what the CDC requires: "pipeline bloqué en cas de vulnérabilité critique"
+# ============================================================
+
+name: SEAS Bootcamp CI/CD Pipeline
+
+# WHEN does this pipeline run?
+on:
+  push:
+    branches: [ main, develop ]        # On every push to main or develop
+  pull_request:
+    branches: [ main, develop ]        # On every Pull Request targeting main or develop
+
+# Environment variables available to all jobs
+env:
+  DOCKER_IMAGE: seas-bootcamp-app      # Name of the Docker image we build
+  NODE_VERSION: '20'                   # Node.js version to use
+
+# ============================================================
+# JOB 1: BUILD & LINT
+# Checks code quality before running tests
+# ============================================================
+jobs:
+  build-and-lint:
+    name: "1 — Build & Lint"
+    runs-on: ubuntu-latest             # Run on GitHub's Ubuntu cloud server
+
+    steps:
+      # Step 1: Download your code from GitHub
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Install Node.js 20
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'                 # Cache npm packages to speed up pipeline
+
+      # Step 3: Install all dependencies
+      - name: Install dependencies
+        run: npm ci
+        # WHY npm ci instead of npm install?
+        # npm ci installs EXACTLY what is in package-lock.json
+        # This ensures the same versions every time — no surprises
+
+      # Step 4: Run ESLint (code quality check)
+      - name: Run ESLint
+        run: npm run lint
+        # WHY: Catches syntax errors and bad practices before tests run
+        # If ESLint fails, the pipeline stops here
+
+  # ============================================================
+  # JOB 2: UNIT TESTS
+  # Runs Jest tests and generates coverage report
+  # ============================================================
+  test:
+    name: "2 — Unit Tests"
+    runs-on: ubuntu-latest
+    needs: build-and-lint              # Only runs if Job 1 passed
+
+    services:
+      # Spin up a real PostgreSQL database for testing
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: seas_bootcamp_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: testpassword
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Initialize test database with our schema
+      - name: Set up test database
+        run: |
+          PGPASSWORD=testpassword psql -h localhost -U postgres -d seas_bootcamp_test -f db/init.sql
+        env:
+          PGPASSWORD: testpassword
+
+      # Run Jest tests with coverage
+      - name: Run unit tests
+        run: npm test -- --coverage --forceExit
+        env:
+          NODE_ENV: test
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: seas_bootcamp_test
+          DB_USER: postgres
+          DB_PASSWORD: testpassword
+          PORT: 3001
+
+      # Upload coverage report as artifact (downloadable from GitHub)
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+
+  # ============================================================
+  # JOB 3: DOCKER BUILD + TRIVY SECURITY SCAN
+  # Builds Docker image and scans for vulnerabilities
+  # ============================================================
+  docker-build-and-scan:
+    name: "3 — Docker Build & Security Scan"
+    runs-on: ubuntu-latest
+    needs: test                        # Only runs if tests passed
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Build Docker image with the commit SHA as tag
+      # WHY: Every build gets a unique tag — we can trace which code is deployed
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }} .
+          docker build -t ${{ env.DOCKER_IMAGE }}:latest .
+
+      # Run Trivy — scans the Docker image for known security vulnerabilities (CVEs)
+      # CDC requirement: "Scan Trivy obligatoire — pipeline bloqué en cas de vulnérabilité critique"
+      - name: Run Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.DOCKER_IMAGE }}:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'    # Block pipeline on CRITICAL or HIGH vulnerabilities
+          exit-code: '1'              # Exit code 1 = fail the pipeline if vulnerabilities found
+
+      # Upload Trivy results to GitHub Security tab
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      # Push image to Docker Hub ONLY when merging to main
+      - name: Log in to Docker Hub
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push image to Docker Hub
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          docker tag ${{ env.DOCKER_IMAGE }}:latest \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
+
+  # ============================================================
+  # JOB 4A: DEPLOY TO STAGING (develop branch only)
+  # ============================================================
+  deploy-staging:
+    name: "4A — Deploy to Staging"
+    runs-on: ubuntu-latest
+    needs: docker-build-and-scan
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment: staging               # Uses GitHub Environment "staging"
+
+    steps:
+      - name: Trigger Render staging deployment
+        run: |
+          curl -X POST \
+            "https://api.render.com/deploy/srv-${{ secrets.RENDER_STAGING_SERVICE_ID }}?key=${{ secrets.RENDER_STAGING_API_KEY }}" \
+            -H "Content-Type: application/json"
+        # WHY: Render exposes a webhook URL — one POST request triggers a new deployment
+
+      - name: Notify deployment success
+        run: echo "✅ Staging deployment triggered for commit ${{ github.sha }}"
+
+  # ============================================================
+  # JOB 4B: DEPLOY TO PRODUCTION (main branch only)
+  # CDC: "Tout push sur main déclenche un déploiement en moins de 10 minutes"
+  # ============================================================
+  deploy-production:
+    name: "4B — Deploy to Production"
+    runs-on: ubuntu-latest
+    needs: docker-build-and-scan
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production            # Uses GitHub Environment "production"
+
+    steps:
+      - name: Trigger Render production deployment
+        run: |
+          curl -X POST \
+            "https://api.render.com/deploy/srv-${{ secrets.RENDER_PROD_SERVICE_ID }}?key=${{ secrets.RENDER_PROD_API_KEY }}" \
+            -H "Content-Type: application/json"
+
+      - name: Confirm deployment
+        run: |
+          echo "🚀 Production deployment triggered!"
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref }}"
+          echo "Time: $(date)"

@@ -1,0 +1,42 @@
+// ============================================================
+// SEAS Bootcamp — ESLint Configuration
+// File: .eslintrc.json
+//
+// WHAT IS ESLINT:
+// ESLint is a tool that reads your JavaScript code and checks
+// for problems — bad syntax, unused variables, missing semicolons,
+// security risks, etc. It runs BEFORE tests in the CI/CD pipeline.
+//
+// WHY IT'S IN THE CDC:
+// "Tests Jest/ESLint" are explicitly required in the pipeline
+// (Section 2.2, Flux 4 of the CDC).
+// ============================================================
+{
+  "env": {
+    "node": true,
+    "es2021": true,
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "commonjs"
+  },
+  "rules": {
+    "no-console": "off",
+    "no-unused-vars": "warn",
+    "no-undef": "error",
+    "semi": ["warn", "always"],
+    "no-var": "warn",
+    "prefer-const": "warn",
+    "eqeqeq": ["warn", "always"],
+    "no-eval": "error",
+    "no-process-exit": "warn"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "coverage/"
+  ]
+}

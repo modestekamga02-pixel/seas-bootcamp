@@ -1,0 +1,15 @@
+# ============================================================
+# SEAS Bootcamp — .dockerignore
+# Tells Docker which files to IGNORE when building the image
+# (Same concept as .gitignore but for Docker)
+# ============================================================
+
+# Never copy these into the Docker image
+node_modules/
+.env
+.git/
+.gitignore
+coverage/
+*.log
+npm-debug.log*
+README.md
