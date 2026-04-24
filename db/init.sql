@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS participants (
+    id SERIAL PRIMARY KEY,
+    fullname VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    phone VARCHAR(50),
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
