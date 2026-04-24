@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SEAS Admin Panel</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: sans-serif; padding: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1e293b; }
+        th, td { padding: 15px; border: 1px solid #334155; text-align: left; }
+        th { background: #00d2ff; color: #0f172a; }
+        .btn { background: #00d2ff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; color: #0f172a; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Bootcamp Administration Dashboard</h1>
+    <p>View and manage all registered student records below.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Email Address</th>
+                <th>Course Selected</th>
+            </tr>
+        </thead>
+        <tbody id="student-list">
+            <tr>
+                <td>Example Student</td>
+                <td>modeste@example.com</td>
+                <td>Cloud Computing</td>
+            </tr>
+        </tbody>
+    </table>
+    <br><br>
+    <a href="index.html" class="btn">Back to Website</a>
+</body>
+</html>
