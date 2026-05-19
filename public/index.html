@@ -1,0 +1,79 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAS Bootcamp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="background-color: #0f172a; color: white; margin: 0; font-family: sans-serif;">
+
+    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background-color: #1e293b; border-bottom: 1px solid #334155;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/4202/4202275.png" alt="Logo" style="height: 40px;">
+            <span style="font-size: 24px; font-weight: bold; color: #00d2ff;">SEAS Bootcamp</span>
+        </div>
+        <ul style="display: flex; list-style: none; gap: 25px; margin: 0;">
+            <li><a href="#" style="color: white; text-decoration: none; font-weight: 500;">Home</a></li>
+            <li><a href="#" style="color: white; text-decoration: none; font-weight: 500;">Courses</a></li>
+            <li><a href="#" style="color: white; text-decoration: none; font-weight: 500;">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div style="display: flex; align-items: center; justify-content: center; padding: 80px 50px; gap: 50px; flex-wrap: wrap;">
+        <div style="max-width: 500px;">
+            <h1 style="font-size: 48px; margin-bottom: 20px;">Welcome to <span style="color: #00d2ff;">SEAS Bootcamp</span></h1>
+            <p style="font-size: 18px; color: #94a3b8; line-height: 1.6;">Build the future of technology. Master Cloud Computing, DevOps, and Automation with professional mentors.</p>
+        </div>
+        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=500&q=80" alt="Tech Background" style="border-radius: 20px; box-shadow: 0 20px 50px rgba(0, 210, 255, 0.2); width: 100%; max-width: 500px;">
+    </div>
+<h2 style="text-align: center; margin-top: 50px;">Our Core Training</h2>
+    <div style="display: flex; justify-content: center; gap: 30px; padding: 50px; flex-wrap: wrap;">
+        
+        <div style="background-color: #1e293b; padding: 30px; border-radius: 15px; width: 280px; border-bottom: 4px solid #00d2ff;">
+            <h3 style="color: #00d2ff;">Cloud Computing</h3>
+            <p style="color: #94a3b8;">Learn to deploy and manage applications on professional cloud platforms.</p>
+        </div>
+
+        <div style="background-color: #1e293b; padding: 30px; border-radius: 15px; width: 280px; border-bottom: 4px solid #00d2ff;">
+            <h3 style="color: #00d2ff;">DevOps & Docker</h3>
+            <p style="color: #94a3b8;">Master containerization and modern infrastructure management.</p>
+        </div>
+
+        <div style="background-color: #1e293b; padding: 30px; border-radius: 15px; width: 280px; border-bottom: 4px solid #00d2ff;">
+            <h3 style="color: #00d2ff;">CI/CD Pipelines</h3>
+            <p style="color: #94a3b8;">Automate your workflow from the first line of code to the final deployment.</p>
+        </div>
+
+    </div>
+    <section style="background-color: #1e293b; padding: 60px 20px; text-align: center; margin-top: 50px;">
+        <h2 style="color: #00d2ff; margin-bottom: 10px;">Ready to Join the Bootcamp?</h2>
+        <p style="color: #94a3b8; margin-bottom: 30px;">Enter your details below and our team will contact you.</p>
+        
+        <form style="max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+            <input type="text" placeholder="Full Name" style="padding: 12px; border-radius: 8px; border: none; outline: none;">
+            <input type="email" placeholder="Email Address" style="padding: 12px; border-radius: 8px; border: none; outline: none;">
+            <select style="padding: 12px; border-radius: 8px; border: none; outline: none; background-color: white;">
+                <option>Select Course</option>
+                <option>Cloud Computing</option>
+                <option>DevOps & Docker</option>
+                <option>CI/CD Pipelines</option>
+            </select>
+            <button type="submit" style="background-color: #00d2ff; color: #0f172a; padding: 15px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s;">
+                Register Now
+            </button>
+        </form>
+    </section>
+
+    <footer style="padding: 40px; text-align: center; color: #64748b; font-size: 14px;">
+        &copy; 2026 SEAS Bootcamp - Built with Cloud Automation
+    </footer>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.querySelector('input[type="text"]').value;
+            alert("Congratulations " + name + "! Your registration for SEAS Bootcamp has been received.");
+        });
+    </script>
+</body>
+</html>
