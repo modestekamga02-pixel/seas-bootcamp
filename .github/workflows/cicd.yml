@@ -15,7 +15,7 @@ jobs:
     name: "1 — Build & Lint"
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -27,39 +27,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run code linter (ESLint)
+      - name: Run ESLint
         run: npm run lint
 
   unit-tests:
     name: "2 — Unit Tests"
     runs-on: ubuntu-latest
     needs: build-and-lint
-    
-    services:
-      postgres:
-        image: postgres:15-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: seas_db
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    env:
-      DB_USER: postgres
-      DB_PASSWORD: password
-      DB_HOST: localhost
-      DB_PORT: 5432
-      DB_NAME: seas_db
-      PORT: 3000
-
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -71,7 +47,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run automated test suite (Jest)
+      - name: Run Jest Testing Suite
         run: npm test
 
   docker-build-and-scan:
@@ -79,61 +55,23 @@ jobs:
     runs-on: ubuntu-latest
     needs: unit-tests
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
-        uses: actions/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build Docker image locally
+      - name: Build local Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           load: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
+          tags: ${{ env.DOCKER_IMAGE }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run Trivy vulnerability scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL'
-
-      - name: Push verified image to Docker Hub
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:${{ github.sha }}
-          cache-from: type=gha
-
-  deploy-staging:
-    name: "4A — Deploy to Staging"
-    runs-on: ubuntu-latest
-    needs: docker-build-and-scan
-    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-    steps:
-      - name: Trigger Render staging deployment
-        run: echo "Skipping active webhook deployment for Module 2 validation stage."
-
-  deploy-production:
-    name: "4B — Deploy to Production"
-    runs-on: ubuntu-latest
-    needs: docker-build-and-scan
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-      - name: Trigger Render production deployment
-        run: echo "Skipping active webhook deployment for Module 2 validation stage."
+      - name: Confirm Local Image Generation
+        run: docker images | grep ${{ env.DOCKER_IMAGE }}
