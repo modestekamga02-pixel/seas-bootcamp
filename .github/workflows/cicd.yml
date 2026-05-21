@@ -75,3 +75,32 @@ jobs:
 
       - name: Confirm Local Image Generation
         run: docker images | grep ${{ env.DOCKER_IMAGE }}
+
+  deploy-staging:
+    name: "4A — Deploy to Staging"
+    runs-on: ubuntu-latest
+    needs: docker-build-and-scan
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Simulation of Staging Deployment Environment
+        run: |
+          echo "Connecting to SEAS Staging Target..."
+          echo "Deploying Container Tag: latest to Staging Slots..."
+          echo "Staging Deployment Completed and Verified successfully."
+
+  deploy-production:
+    name: "4B — Deploy to Production"
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Simulation of Production Release Gate
+        run: |
+          echo "Acquiring Production Orchestration Handshakes..."
+          echo "Executing Blue-Green Deployment Routing Update..."
+          echo "Production Cloud WebApp is now Live."
