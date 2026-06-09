@@ -43,6 +43,11 @@ initDb();
 
 // ---- API ENDPOINTS ----
 
+// Serve Frontend Homepage
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // 1. Health Check Route
 app.get('/api/health', (req, res) => {
   res.status(200).json({
