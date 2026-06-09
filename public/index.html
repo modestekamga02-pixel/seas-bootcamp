@@ -1,5 +1,69 @@
 <!DOCTYPE html>
-<html>
-<head><title>SEAS Bootcamp WebApp</title></head>
-<body><h1>Implementation of a Cloud-Hosted WebApp with CI/CD: Case of SEAS Bootcamp</h1></body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAS Bootcamp Registration</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Implementation of a Cloud-Hosted WebApp with CI/CD: Case of SEAS Bootcamp</h1>
+        
+        <h2>Participant Registration</h2>
+        <form id="registrationForm">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" required placeholder="Enter your full name">
+
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" required placeholder="Enter your email">
+
+            <label for="role">Course Track:</label>
+            <input type="text" id="role" required placeholder="e.g., Cloud Computing, DevOps">
+
+            <button type="submit">Register Now</button>
+        </form>
+        
+        <p id="message" style="margin-top: 15px; font-weight: bold;"></p>
+        
+        <br>
+        <a href="admin.html" class="btn-link">Go to Admin Dashboard</a>
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageElement = document.getElementById('message');
+            
+            const data = {
+                full_name: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                role: document.getElementById('role').value
+            };
+
+            try {
+                // Connects dynamically to your live Render environment endpoints
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    messageElement.style.color = 'green';
+                    messageElement.textContent = 'Registration successful!';
+                    document.getElementById('registrationForm').reset();
+                } else {
+                    messageElement.style.color = 'red';
+                    messageElement.textContent = result.error || 'Registration failed.';
+                }
+            } catch (err) {
+                messageElement.style.color = 'red';
+                messageElement.textContent = 'Error connecting to the server.';
+            }
+        });
+    </script>
+</body>
 </html>
