@@ -5,35 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEAS Bootcamp Registration</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Guarantees clean layout vertical stacking regardless of style.css settings */
+        .form-container {
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        .form-field-block {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-field-block label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-field-block input {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background: #fff;
+            color: #333;
+            font-size: 14px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #00bcd4;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background: #0097a7;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
+    <div style="text-align: center; padding: 20px; font-family: sans-serif; color: #fff;">
         <h1>Implementation of a Cloud-Hosted WebApp with CI/CD: Case of SEAS Bootcamp</h1>
         
-        <h2>Participant Registration</h2>
-        <form id="registrationForm">
-            <div class="form-group">
-                <label for="fullName">Full Name:</label>
-                <input type="text" id="fullName" required placeholder="Enter your full name">
-            </div>
+        <div class="form-container">
+            <h2>Participant Registration</h2>
+            <form id="registrationForm">
+                <div class="form-field-block">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" id="fullName" required placeholder="Enter your full name">
+                </div>
 
-            <div class="form-group">
-                <label for="email">Email Address:</label>
-                <input type="email" id="email" required placeholder="Enter your email">
-            </div>
+                <div class="form-field-block">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
 
-            <div class="form-group">
-                <label for="role">Course Track:</label>
-                <input type="text" id="role" required placeholder="e.g., Cloud Computing, DevOps">
-            </div>
+                <div class="form-field-block">
+                    <label for="role">Course Track:</label>
+                    <input type="text" id="role" required placeholder="e.g., Cloud Computing, DevOps">
+                </div>
 
-            <button type="submit" class="btn">Register Now</button>
-        </form>
-        
-        <p id="message" style="margin-top: 15px; font-weight: bold;"></p>
+                <button type="submit" class="submit-btn">Register Now</button>
+            </form>
+            <p id="message" style="margin-top: 15px; font-weight: bold;"></p>
+        </div>
         
         <br>
-        <a href="admin.html" class="btn-link">Go to Admin Dashboard</a>
+        <a href="admin.html" style="color: #00bcd4; text-decoration: none; font-weight: bold;">Go to Admin Dashboard</a>
     </div>
 
     <script>
@@ -48,7 +91,6 @@
             };
 
             try {
-                // Connects dynamically to your live Render environment endpoints
                 const response = await fetch('/api/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -58,15 +100,15 @@
                 const result = await response.json();
                 
                 if (response.ok) {
-                    messageElement.style.color = 'green';
+                    messageElement.style.color = '#4caf50';
                     messageElement.textContent = 'Registration successful!';
                     document.getElementById('registrationForm').reset();
                 } else {
-                    messageElement.style.color = 'red';
+                    messageElement.style.color = '#f44336';
                     messageElement.textContent = result.error || 'Registration failed.';
                 }
             } catch (err) {
-                messageElement.style.color = 'red';
+                messageElement.style.color = '#f44336';
                 messageElement.textContent = 'Error connecting to the server.';
             }
         });
