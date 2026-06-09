@@ -9,7 +9,9 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Configure PostgreSQL connection pool
-const pool = new Pool({
+const pool = process.env.DATABASE_URL 
+  ? new Pool({ connectionString: process.env.DATABASE_URL })
+  : new Pool({
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
   database: process.env.DB_NAME || 'seas_db',
