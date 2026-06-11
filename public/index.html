@@ -3,91 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEAS Bootcamp Registration</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SEAS Project Showcase | Skills Presentation</title>
     <style>
-        /* Guarantees clean layout vertical stacking regardless of style.css settings */
-        .form-container {
-            max-width: 500px;
-            margin: 30px auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
         }
-        .form-field-block {
+        header {
             display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+        .logo-area {
+            font-size: 22px;
+            font-weight: bold;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        nav a {
+            color: #94a3b8;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+        }
+        nav a:hover, nav a.active {
+            color: #38bdf8;
+        }
+        .container {
+            max-width: 650px;
+            margin: 60px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .section-title {
+            font-size: 32px;
+            color: #38bdf8;
+            margin-bottom: 5px;
+        }
+        .section-subtitle {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        form {
+            background-color: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
             text-align: left;
         }
-        .form-field-block label {
-            margin-bottom: 5px;
-            font-weight: bold;
+        .form-group {
+            margin-bottom: 20px;
         }
-        .form-field-block input {
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            background: #fff;
-            color: #333;
-            font-size: 14px;
-        }
-        .submit-btn {
+        input, select {
             width: 100%;
             padding: 12px;
-            background: #00bcd4;
-            color: #fff;
+            background-color: #ffffff;
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+        button.btn-submit {
+            width: 100%;
+            padding: 14px;
+            background-color: #06b6d4;
+            color: #ffffff;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
         }
-        .submit-btn:hover {
-            background: #0097a7;
+        button.btn-submit:hover {
+            background-color: #0891b2;
+        }
+        #message {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
-    <div style="text-align: center; padding: 20px; font-family: sans-serif; color: #fff;">
-        <h1>Implementation of a Cloud-Hosted WebApp with CI/CD: Case of SEAS Bootcamp</h1>
-        
-        <div class="form-container">
-            <h2>Participant Registration</h2>
-            <form id="registrationForm">
-                <div class="form-field-block">
-                    <label for="fullName">Full Name:</label>
-                    <input type="text" id="fullName" required placeholder="Enter your full name">
-                </div>
 
-                <div class="form-field-block">
-                    <label for="email">Email Address:</label>
-                    <input type="email" id="email" required placeholder="Enter your email">
-                </div>
-
-                <div class="form-field-block">
-                    <label for="role">Course Track:</label>
-                    <input type="text" id="role" required placeholder="e.g., Cloud Computing, DevOps">
-                </div>
-
-                <button type="submit" class="submit-btn">Register Now</button>
-            </form>
-            <p id="message" style="margin-top: 15px; font-weight: bold;"></p>
+    <header>
+        <div class="logo-area">
+            <span>🌐</span> SEAS Showcase
         </div>
-        
-        <br>
-        <a href="admin.html" style="color: #00bcd4; text-decoration: none; font-weight: bold;">Go to Admin Dashboard</a>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Presentation Tracks</a>
+            <a href="admin.html" class="active">Register</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title">Join the Ceremony</h2>
+        <p class="section-subtitle">Fill in your details. Groups will be mixed with 3-4 members from different specialties.</p>
+
+        <form id="ceremonyForm">
+            <div class="form-group">
+                <input type="text" id="fullName" required placeholder="Full Name">
+            </div>
+
+            <div class="form-group">
+                <input type="email" id="email" required placeholder="Email Address">
+            </div>
+
+            <div class="form-group">
+                <select id="role" required>
+                    <option value="" disabled selected>I am a...</option>
+                    <option value="Student (Presenter)">Student (Presenter)</option>
+                    <option value="Investor / Sponsor">Investor / Sponsor</option>
+                    <option value="Personnel / Organizer">Personnel / Organizer</option>
+                    <option value="Teacher / Evaluator">Teacher / Evaluator</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select id="level" required>
+                    <option value="" disabled selected>Select your Level...</option>
+                    <option value="Level 2 (BTech / BSc)">Level 2 (BTech / BSc)</option>
+                    <option value="Level 3 (BEng / BHSc)">Level 3 (BEng / BHSc)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select id="specialty" required>
+                    <option value="" disabled selected>Select Specialty...</option>
+                    <optgroup label="BTech (2-Year)">
+                        <option value="SWE (Software Eng)">SWE (Software Eng)</option>
+                        <option value="CSE (Computer)">CSE (Computer)</option>
+                        <option value="SWE (Cloud)">SWE (Cloud)</option>
+                        <option value="EME (Electromechanical)">EME (Electromechanical)</option>
+                        <option value="CHE (Chemical)">CHE (Chemical)</option>
+                    </optgroup>
+                    <optgroup label="BTech (3-Year)">
+                        <option value="ECE (Electronics)">ECE (Electronics)</option>
+                        <option value="EEE (Electrical)">EEE (Electrical)</option>
+                        <option value="MCT (Mechatronics)">MCT (Mechatronics)</option>
+                        <option value="MEC (Mechanical)">MEC (Mechanical)</option>
+                    </optgroup>
+                    <optgroup label="BSc (2-Year)">
+                        <option value="MGT (Management)">MGT (Management)</option>
+                        <option value="MIS (Info Systems)">MIS (Info Systems)</option>
+                        <option value="AF (Accounting & Finance)">AF (Accounting & Finance)</option>
+                        <option value="DMK (Digital Marketing)">DMK (Digital Marketing)</option>
+                    </optgroup>
+                    <optgroup label="BHSc (3-Year)">
+                        <option value="BMS (Biomedical)">BMS (Biomedical)</option>
+                        <option value="NUR (Nursing)">NUR (Nursing)</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">Confirm Participation</button>
+            <p id="message"></p>
+        </form>
     </div>
 
+    <footer>
+        © 2026 SEAS Bootcamp - Project Presentation Ceremony Platform
+    </footer>
+
     <script>
-        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+        document.getElementById('ceremonyForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const messageElement = document.getElementById('message');
             
             const data = {
                 full_name: document.getElementById('fullName').value,
                 email: document.getElementById('email').value,
-                role: document.getElementById('role').value
+                role: document.getElementById('role').value,
+                level: document.getElementById('level').value,
+                specialty: document.getElementById('specialty').value
             };
 
             try {
@@ -100,16 +207,16 @@
                 const result = await response.json();
                 
                 if (response.ok) {
-                    messageElement.style.color = '#4caf50';
-                    messageElement.textContent = 'Registration successful!';
-                    document.getElementById('registrationForm').reset();
+                    messageElement.style.color = '#34d399';
+                    messageElement.textContent = 'Participation confirmed successfully!';
+                    document.getElementById('ceremonyForm').reset();
                 } else {
-                    messageElement.style.color = '#f44336';
+                    messageElement.style.color = '#f87171';
                     messageElement.textContent = result.error || 'Registration failed.';
                 }
             } catch (err) {
-                messageElement.style.color = '#f44336';
-                messageElement.textContent = 'Error connecting to the server.';
+                messageElement.style.color = '#f87171';
+                messageElement.textContent = 'Error sending data to the cloud backend.';
             }
         });
     </script>
