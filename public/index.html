@@ -38,7 +38,7 @@
         }
         .container {
             max-width: 650px;
-            margin: 60px auto;
+            margin: 40px auto;
             padding: 20px;
             text-align: center;
         }
@@ -62,6 +62,13 @@
         .form-group {
             margin-bottom: 20px;
         }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #94a3b8;
+            font-size: 14px;
+        }
         input, select {
             width: 100%;
             padding: 12px;
@@ -71,6 +78,11 @@
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 15px;
+        }
+        select:disabled {
+            background-color: #475569;
+            color: #94a3b8;
+            cursor: not-allowed;
         }
         button.btn-submit {
             width: 100%;
@@ -109,69 +121,48 @@
             <span>🌐</span> SEAS Showcase
         </div>
         <nav>
-            <a href="#">Home</a>
-            <a href="#">Presentation Tracks</a>
-            <a href="admin.html" class="active">Register</a>
+            <a href="index.html" class="active">Home</a>
+            <a href="admin.html">Admin Dashboard</a>
         </nav>
     </header>
 
     <div class="container">
         <h2 class="section-title">Join the Ceremony</h2>
-        <p class="section-subtitle">Fill in your details. Groups will be mixed with 3-4 members from different specialties.</p>
+        <p class="section-subtitle">Mixed multi-disciplinary teams will be assigned across presentation phases.</p>
 
         <form id="ceremonyForm">
             <div class="form-group">
-                <input type="text" id="fullName" required placeholder="Full Name">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" required placeholder="Enter your full name">
             </div>
 
             <div class="form-group">
-                <input type="email" id="email" required placeholder="Email Address">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="username@institution.edu">
             </div>
 
             <div class="form-group">
-                <select id="role" required>
-                    <option value="" disabled selected>I am a...</option>
-                    <option value="Student (Presenter)">Student (Presenter)</option>
-                    <option value="Investor / Sponsor">Investor / Sponsor</option>
-                    <option value="Personnel / Organizer">Personnel / Organizer</option>
-                    <option value="Teacher / Evaluator">Teacher / Evaluator</option>
+                <label for="program">Academic Program</label>
+                <select id="program" required>
+                    <option value="" disabled selected>Select your program...</option>
+                    <option value="BEng">BEng (4-Year Engineering)</option>
+                    <option value="BTech">BTech (3-Year Technology)</option>
+                    <option value="BSc">BSc (Management/Digital)</option>
+                    <option value="BHSc">BHSc (Health Sciences)</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <select id="level" required>
-                    <option value="" disabled selected>Select your Level...</option>
-                    <option value="Level 2 (BTech / BSc)">Level 2 (BTech / BSc)</option>
-                    <option value="Level 3 (BEng / BHSc)">Level 3 (BEng / BHSc)</option>
+                <label for="level">Assigned Level</label>
+                <select id="level" required disabled>
+                    <option value="" disabled selected>Select program first...</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <select id="specialty" required>
-                    <option value="" disabled selected>Select Specialty...</option>
-                    <optgroup label="BTech (2-Year)">
-                        <option value="SWE (Software Eng)">SWE (Software Eng)</option>
-                        <option value="CSE (Computer)">CSE (Computer)</option>
-                        <option value="SWE (Cloud)">SWE (Cloud)</option>
-                        <option value="EME (Electromechanical)">EME (Electromechanical)</option>
-                        <option value="CHE (Chemical)">CHE (Chemical)</option>
-                    </optgroup>
-                    <optgroup label="BTech (3-Year)">
-                        <option value="ECE (Electronics)">ECE (Electronics)</option>
-                        <option value="EEE (Electrical)">EEE (Electrical)</option>
-                        <option value="MCT (Mechatronics)">MCT (Mechatronics)</option>
-                        <option value="MEC (Mechanical)">MEC (Mechanical)</option>
-                    </optgroup>
-                    <optgroup label="BSc (2-Year)">
-                        <option value="MGT (Management)">MGT (Management)</option>
-                        <option value="MIS (Info Systems)">MIS (Info Systems)</option>
-                        <option value="AF (Accounting & Finance)">AF (Accounting & Finance)</option>
-                        <option value="DMK (Digital Marketing)">DMK (Digital Marketing)</option>
-                    </optgroup>
-                    <optgroup label="BHSc (3-Year)">
-                        <option value="BMS (Biomedical)">BMS (Biomedical)</option>
-                        <option value="NUR (Nursing)">NUR (Nursing)</option>
-                    </optgroup>
+                <label for="specialty">Specialty Code</label>
+                <select id="specialty" required disabled>
+                    <option value="" disabled selected>Select program first...</option>
                 </select>
             </div>
 
@@ -181,10 +172,40 @@
     </div>
 
     <footer>
-        © 2026 SEAS Bootcamp - Project Presentation Ceremony Platform
+        © 2026 SEAS Bootcamp - Mixed Specialty Multi-Phase Iterative Platform
     </footer>
 
     <script>
+        // Implements your strict bootcamp mapping logic criteria
+        const operationalRules = {
+            "BEng": { level: "Level 3", specialties: ["CSE", "CEE", "EME", "CHE"] },
+            "BTech": { level: "Level 2", specialties: ["CSE", "EEE", "MCT", "MEC"] },
+            "BSc": { level: "Level 2", specialties: ["MGT", "MIS", "AF", "DMK"] },
+            "BHSc": { level: "Level 3", specialties: ["BMS", "NUR"] }
+        };
+
+        const programSelect = document.getElementById('program');
+        const levelSelect = document.getElementById('level');
+        const specialtySelect = document.getElementById('specialty');
+
+        programSelect.addEventListener('change', function() {
+            const selectedProgram = this.value;
+            const rules = operationalRules[selectedProgram];
+
+            if (rules) {
+                // Set and lock the specific required level automatically
+                levelSelect.innerHTML = `<option value="${rules.level}">${rules.level}</option>`;
+                levelSelect.disabled = false;
+
+                // Populate only the valid specialties allowed for that level program
+                specialtySelect.innerHTML = '<option value="" disabled selected>Choose Specialty...</option>';
+                rules.specialties.forEach(spec => {
+                    specialtySelect.innerHTML += `<option value="${spec}">${spec}</option>`;
+                });
+                specialtySelect.disabled = false;
+            }
+        });
+
         document.getElementById('ceremonyForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const messageElement = document.getElementById('message');
@@ -192,9 +213,9 @@
             const data = {
                 full_name: document.getElementById('fullName').value,
                 email: document.getElementById('email').value,
-                role: document.getElementById('role').value,
-                level: document.getElementById('level').value,
-                specialty: document.getElementById('specialty').value
+                role: `Student (${programSelect.value})`,
+                level: levelSelect.value,
+                specialty: specialtySelect.value
             };
 
             try {
@@ -210,13 +231,15 @@
                     messageElement.style.color = '#34d399';
                     messageElement.textContent = 'Participation confirmed successfully!';
                     document.getElementById('ceremonyForm').reset();
+                    levelSelect.disabled = true;
+                    specialtySelect.disabled = true;
                 } else {
                     messageElement.style.color = '#f87171';
                     messageElement.textContent = result.error || 'Registration failed.';
                 }
             } catch (err) {
                 messageElement.style.color = '#f87171';
-                messageElement.textContent = 'Error sending data to the cloud backend.';
+                messageElement.textContent = 'Error communicating with cloud server.';
             }
         });
     </script>
