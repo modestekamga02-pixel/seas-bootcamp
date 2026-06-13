@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEAS Project Showcase | Skills Presentation</title>
+    <title>SEAS Showcase - Registration</title>
     <style>
         body {
             margin: 0;
@@ -12,234 +12,224 @@
             color: #f8fafc;
         }
         header {
+            background-color: #1e293b;
+            padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 40px;
-            background-color: #1e293b;
-            border-bottom: 1px solid #334155;
+            border-bottom: 2px solid #38bdf8;
         }
-        .logo-area {
-            font-size: 22px;
-            font-weight: bold;
-            color: #38bdf8;
+        .branding-box {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+        }
+        .logo-img {
+            height: 55px;
+            object-fit: contain;
+        }
+        .title-area h1 {
+            font-size: 18px;
+            margin: 0;
+            color: #38bdf8;
+        }
+        .title-area p {
+            font-size: 12px;
+            margin: 2px 0 0 0;
+            color: #94a3b8;
+            font-weight: 600;
         }
         nav a {
-            color: #94a3b8;
+            color: #f8fafc;
             text-decoration: none;
             margin-left: 20px;
-            font-size: 16px;
+            font-weight: 600;
         }
-        nav a:hover, nav a.active {
+        nav a:hover {
             color: #38bdf8;
         }
-        .container {
-            max-width: 650px;
-            margin: 40px auto;
-            padding: 20px;
+        .hero-banner {
             text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95));
+            border-bottom: 1px solid #334155;
         }
-        .section-title {
+        .hero-banner h2 {
             font-size: 32px;
-            color: #38bdf8;
-            margin-bottom: 5px;
+            color: #f8fafc;
+            margin: 0 0 10px 0;
         }
-        .section-subtitle {
+        .hero-banner p {
+            font-size: 15px;
             color: #94a3b8;
-            font-size: 14px;
-            margin-bottom: 30px;
+            max-width: 700px;
+            margin: 0 auto;
         }
-        form {
-            background-color: #1e293b;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            text-align: left;
+        .form-container {
+            max-width: 550px;
+            margin: 40px auto;
+            background: #1e293b;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        .form-container h3 {
+            text-align: center;
+            margin-top: 0;
+            color: #38bdf8;
+            font-size: 24px;
         }
         .form-group {
             margin-bottom: 20px;
         }
-        label {
+        .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #94a3b8;
+            color: #cbd5e1;
             font-size: 14px;
         }
-        input, select {
+        .form-control {
             width: 100%;
             padding: 12px;
-            background-color: #ffffff;
-            color: #0f172a;
-            border: 1px solid #cbd5e1;
+            background-color: #0f172a;
+            border: 1px solid #475569;
             border-radius: 6px;
-            box-sizing: border-box;
+            color: white;
             font-size: 15px;
+            box-sizing: border-box;
         }
-        select:disabled {
-            background-color: #475569;
-            color: #94a3b8;
-            cursor: not-allowed;
+        .form-control:focus {
+            border-color: #06b6d4;
+            outline: none;
         }
-        button.btn-submit {
+        .btn-submit {
             width: 100%;
             padding: 14px;
             background-color: #06b6d4;
-            color: #ffffff;
+            color: white;
             border: none;
             border-radius: 6px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 10px;
         }
-        button.btn-submit:hover {
+        .btn-submit:hover {
             background-color: #0891b2;
         }
-        #message {
+        #messageStatus {
             margin-top: 15px;
-            font-weight: bold;
+            padding: 12px;
+            border-radius: 6px;
             text-align: center;
+            font-weight: 600;
+            display: none;
         }
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: #64748b;
-            font-size: 13px;
-        }
+        .success-msg { background-color: #059669; color: white; }
+        .error-msg { background-color: #dc2626; color: white; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-area">
-            <span>🌐</span> SEAS Showcase
+        <div class="branding-box">
+            <img src="seas-logo.png" alt="SEAS Logo" class="logo-img">
+            <img src="iuc-logo.png" alt="IUC Logo" class="logo-img">
+            <div class="title-area">
+                <h1>SEAS Showcase</h1>
+                <p>School Of Engineering & Applied Sciences (IUC)</p>
+            </div>
         </div>
         <nav>
-            <a href="index.html" class="active">Home</a>
-            <a href="admin.html">Admin Dashboard</a>
+            <a href="index.html">Register</a>
+            <a href="admin.html">Dashboard</a>
         </nav>
     </header>
 
-    <div class="container">
-        <h2 class="section-title">Join the Ceremony</h2>
-        <p class="section-subtitle">Mixed multi-disciplinary teams will be assigned across presentation phases.</p>
+    <section class="hero-banner">
+        <h2>Implementation of a Cloud-Hosted WebApp with CI/CD</h2>
+        <p>Case Study: SEAS Bootcamp Presentation Platform. An automated pipeline demonstration ensuring robust high availability and seamless engineering workflows.</p>
+    </section>
 
-        <form id="ceremonyForm">
+    <main class="form-container">
+        <h3>Join the Ceremony</h3>
+        <form id="registrationForm">
             <div class="form-group">
-                <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" required placeholder="Enter your full name">
+                <label>Full Name</label>
+                <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
             </div>
-
             <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" required placeholder="username@institution.edu">
+                <label>Email Address</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter your email address" required>
             </div>
-
             <div class="form-group">
-                <label for="program">Academic Program</label>
-                <select id="program" required>
-                    <option value="" disabled selected>Select your program...</option>
-                    <option value="BEng">BEng (4-Year Engineering)</option>
-                    <option value="BTech">BTech (3-Year Technology)</option>
-                    <option value="BSc">BSc (Management/Digital)</option>
-                    <option value="BHSc">BHSc (Health Sciences)</option>
+                <label>Your Role</label>
+                <select id="role" class="form-control" required>
+                    <option value="" disabled selected>Select your profile track...</option>
+                    <option value="Student (Presenter)">Student (Presenter)</option>
+                    <option value="Investor / Sponsor">Investor / Sponsor</option>
+                    <option value="Personnel / Organizer">Personnel / Organizer</option>
+                    <option value="Teacher / Evaluator">Teacher / Evaluator</option>
                 </select>
             </div>
-
             <div class="form-group">
-                <label for="level">Assigned Level</label>
-                <select id="level" required disabled>
-                    <option value="" disabled selected>Select program first...</option>
+                <label>Academic Degree Level</label>
+                <select id="level" class="form-control">
+                    <option value="N/A">Not Applicable (Visitor)</option>
+                    <option value="Level 2 (BTech / BSc)">Level 2 (BTech / BSc)</option>
+                    <option value="Level 3 (BEng / BHSc)">Level 3 (BEng / BHSc)</option>
                 </select>
             </div>
-
             <div class="form-group">
-                <label for="specialty">Specialty Code</label>
-                <select id="specialty" required disabled>
-                    <option value="" disabled selected>Select program first...</option>
+                <label>Engineering Specialty Block</label>
+                <select id="specialty" class="form-control">
+                    <option value="N/A">None / General Attendance</option>
+                    <option value="CSE (Cloud Computing / DevOps)">CSE (Cloud Computing / DevOps)</option>
+                    <option value="ECE (Telecommunications)">ECE (Telecommunications)</option>
+                    <option value="EME (Electromechanical)">EME (Electromechanical)</option>
+                    <option value="MGT (Management / Info Systems)">MGT (Management / Info Systems)</option>
                 </select>
             </div>
-
             <button type="submit" class="btn-submit">Confirm Participation</button>
-            <p id="message"></p>
+            <div id="messageStatus"></div>
         </form>
-    </div>
-
-    <footer>
-        © 2026 SEAS Bootcamp - Mixed Specialty Multi-Phase Iterative Platform
-    </footer>
+    </main>
 
     <script>
-        // Implements your strict bootcamp mapping logic criteria
-        const operationalRules = {
-            "BEng": { level: "Level 3", specialties: ["CSE", "CEE", "EME", "CHE"] },
-            "BTech": { level: "Level 2", specialties: ["CSE", "EEE", "MCT", "MEC"] },
-            "BSc": { level: "Level 2", specialties: ["MGT", "MIS", "AF", "DMK"] },
-            "BHSc": { level: "Level 3", specialties: ["BMS", "NUR"] }
-        };
-
-        const programSelect = document.getElementById('program');
-        const levelSelect = document.getElementById('level');
-        const specialtySelect = document.getElementById('specialty');
-
-        programSelect.addEventListener('change', function() {
-            const selectedProgram = this.value;
-            const rules = operationalRules[selectedProgram];
-
-            if (rules) {
-                // Set and lock the specific required level automatically
-                levelSelect.innerHTML = `<option value="${rules.level}">${rules.level}</option>`;
-                levelSelect.disabled = false;
-
-                // Populate only the valid specialties allowed for that level program
-                specialtySelect.innerHTML = '<option value="" disabled selected>Choose Specialty...</option>';
-                rules.specialties.forEach(spec => {
-                    specialtySelect.innerHTML += `<option value="${spec}">${spec}</option>`;
-                });
-                specialtySelect.disabled = false;
-            }
-        });
-
-        document.getElementById('ceremonyForm').addEventListener('submit', async (e) => {
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const messageElement = document.getElementById('message');
+            const statusDiv = document.getElementById('messageStatus');
             
-            const data = {
+            const payload = {
                 full_name: document.getElementById('fullName').value,
                 email: document.getElementById('email').value,
-                role: `Student (${programSelect.value})`,
-                level: levelSelect.value,
-                specialty: specialtySelect.value
+                role: document.getElementById('role').value,
+                level: document.getElementById('level').value,
+                specialty: document.getElementById('specialty').value
             };
 
             try {
                 const response = await fetch('/api/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(payload)
                 });
-
-                const result = await response.json();
                 
-                if (response.ok) {
-                    messageElement.style.color = '#34d399';
-                    messageElement.textContent = 'Participation confirmed successfully!';
-                    document.getElementById('ceremonyForm').reset();
-                    levelSelect.disabled = true;
-                    specialtySelect.disabled = true;
+                const result = await response.json();
+                statusDiv.style.display = 'block';
+
+                if (response.ok && result.success) {
+                    statusDiv.className = 'success-msg';
+                    statusDiv.innerText = "Participation confirmed successfully!";
+                    document.getElementById('registrationForm').reset();
                 } else {
-                    messageElement.style.color = '#f87171';
-                    messageElement.textContent = result.error || 'Registration failed.';
+                    statusDiv.className = 'error-msg';
+                    statusDiv.innerText = result.error || "Failed to process entry.";
                 }
             } catch (err) {
-                messageElement.style.color = '#f87171';
-                messageElement.textContent = 'Error communicating with cloud server.';
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'error-msg';
+                statusDiv.innerText = "Network failure connecting to backend database.";
             }
         });
     </script>
