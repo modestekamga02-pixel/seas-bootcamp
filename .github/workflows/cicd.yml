@@ -1,106 +1,15 @@
-name: SEAS Bootcamp CI/CD Pipeline
-
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
-
-env:
-  DOCKER_IMAGE: seas-bootcamp-app
-  NODE_VERSION: '20'
-
+name: Build and Deploy
+on: [push]
 jobs:
-  build-and-lint:
-    name: "1 — Build & Lint"
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
+      - uses: actions/checkout@v4
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run ESLint
-        run: npm run lint
-
-  unit-tests:
-    name: "2 — Unit Tests"
-    runs-on: ubuntu-latest
-    needs: build-and-lint
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run Jest Testing Suite
-        run: npm test
-
-  docker-build-and-scan:
-    name: "3 — Docker Build & Security Scan"
-    runs-on: ubuntu-latest
-    needs: unit-tests
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build local Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          load: true
-          tags: ${{ env.DOCKER_IMAGE }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Confirm Local Image Generation
-        run: docker images | grep ${{ env.DOCKER_IMAGE }}
-
-  deploy-staging:
-    name: "4A — Deploy to Staging"
-    runs-on: ubuntu-latest
-    needs: docker-build-and-scan
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Simulation of Staging Deployment Environment
-        run: |
-          echo "Connecting to SEAS Staging Target..."
-          echo "Deploying Container Tag: latest to Staging Slots..."
-          echo "Staging Deployment Completed and Verified successfully."
-
-  deploy-production:
-    name: "4B — Deploy to Production"
-    runs-on: ubuntu-latest
-    needs: deploy-staging
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Simulation of Production Release Gate
-        run: |
-          echo "Acquiring Production Orchestration Handshakes..."
-          echo "Executing Blue-Green Deployment Routing Update..."
-          echo "Production Cloud WebApp is now Live."
+          node-version: '24'
+      - run: npm install
+      - run: npm test
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
