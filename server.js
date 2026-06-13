@@ -125,10 +125,9 @@ app.delete('/api/registrations/:id', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 10000;
-let server;
 
 if (process.env.NODE_ENV !== 'test') {
-    server = app.listen(PORT, () => {
+    app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });
 }
