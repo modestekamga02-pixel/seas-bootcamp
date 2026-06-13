@@ -1,17 +1,17 @@
 const request = require('supertest');
 const app = require('../server');
 
-describe('Registration API Verification', () => {
-    it('should block registrations missing fields', async () => {
+describe('API Route Integrations', () => {
+    it('should reject incomplete registration profiles', async () => {
         const res = await request(app)
             .post('/api/register')
             .send({ email: 'test@iuc-edu.cm' });
-
+        
         expect(res.statusCode).toEqual(400);
         expect(res.body.success).toBe(false);
     });
 
-    it('should accept valid profiles', async () => {
+    it('should accept properly formatted profiles', async () => {
         const res = await request(app)
             .post('/api/register')
             .set('x-ci-test', 'true')
@@ -20,7 +20,7 @@ describe('Registration API Verification', () => {
                 email: 'modeste@iuc-edu.cm',
                 role: 'Student (Presenter)'
             });
-
+        
         expect(res.statusCode).toEqual(201);
         expect(res.body.success).toBe(true);
     });
