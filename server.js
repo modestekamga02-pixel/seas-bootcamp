@@ -1,12 +1,16 @@
 /* eslint-disable */
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { Pool } = require('pg');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// CETTE LIGNE EST CRUCIALE POUR TON DASHBOARD
+app.use(express.static(path.join(__dirname, 'public')));
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -25,9 +29,10 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 10000;
-if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}
+// Redirection pour toutes les pages vers index.html si besoin
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
-module.exports = app;
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
