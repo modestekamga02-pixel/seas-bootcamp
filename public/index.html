@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEAS Bootcamp - Home</title>
+    <title>SEAS Bootcamp - Welcome</title>
     <style>
         :root {
             --primary: #0A2540;
@@ -27,7 +27,7 @@
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.05);
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             text-align: center;
         }
         .logo-container {
@@ -35,23 +35,26 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 35px;
+            gap: 20px;
         }
         .logo-container img {
-            height: 55px;
+            height: 65px;
             object-fit: contain;
         }
         h1 {
             font-size: 28px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             color: var(--primary);
+            font-weight: 700;
         }
         p {
-            font-size: 16px;
+            font-size: 15px;
             color: #4F566B;
             line-height: 1.6;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
+            text-align: justify;
         }
-        .btn-enter {
+        .btn-register {
             display: inline-block;
             width: 100%;
             padding: 16px;
@@ -60,11 +63,13 @@
             text-decoration: none;
             border-radius: 6px;
             font-weight: 600;
-            font-size: 18px;
+            font-size: 16px;
             transition: background 0.2s;
             box-sizing: border-box;
+            border: none;
+            cursor: pointer;
         }
-        .btn-enter:hover {
+        .btn-register:hover {
             background: #4B45E5;
         }
     </style>
@@ -72,20 +77,17 @@
 <body>
 
 <div class="hero-card">
-    <!-- Maintained Institutional Branding Logos -->
+    <!-- Institutional Branding Headers -->
     <div class="logo-container">
-        <img src="/assets/logo1.png" alt="Logo 1" onerror="this.style.display='none'">
-        <img src="/assets/logo2.png" alt="Logo 2" onerror="this.style.display='none'">
+        <img src="/assets/iuc-logo.png" alt="IUC Logo" onerror="this.src='iuc-logo.png'">
+        <img src="/assets/seas-logo.png" alt="SEAS Logo" onerror="this.src='seas-logo.png'">
     </div>
 
-    <!-- Required Header -->
     <h1>Welcome to SEAS Bootcamp</h1>
     
-    <!-- Your Verbatim Description Requirements -->
     <p>Empowering students across all specialities. Join your multidisciplinary engineering groups, collaborate through multiple design project development phases, and present your final innovations to expert juries and corporate partners.</p>
     
-    <!-- Active Redirect Button -->
-    <a href="/register.html" class="btn-enter">Go to Registration Form</a>
+    <a href="/register.html" class="btn-register">Register</a>
 </div>
 
 </body>
