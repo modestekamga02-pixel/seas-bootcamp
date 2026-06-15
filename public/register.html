@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAS Bootcamp Registration</title>
+    <style>
+        :root {
+            --primary: #0A2540;
+            --accent: #635BFF;
+            --bg: #F8F9FA;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 480px;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .logo-container img {
+            height: 50px;
+            object-fit: contain;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #E3E8EE;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.1);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #4B45E5;
+        }
+        #message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+        .success { background: #E6F4EA; color: #137333; }
+        .error { background: #FCE8E6; color: #C5221F; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Both Logos Kept Intact -->
+    <div class="logo-container">
+        <img src="/assets/logo1.png" alt="Logo 1" onerror="this.style.display='none'">
+        <img src="/assets/logo2.png" alt="Logo 2" onerror="this.style.display='none'">
+    </div>
+
+    <h2>SEAS Bootcamp Registration</h2>
+    
+    <form id="regForm">
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" required placeholder="Enter your full name">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" required placeholder="username@example.com">
+        </div>
+
+        <div class="form-group">
+            <label for="program">Program / Level</label>
+            <select id="program" required>
+                <option value="">-- Select Your Level --</option>
+                <option value="Beng3">Beng 3</option>
+                <option value="BTech2">BTECH 2</option>
+                <option value="BSc2">BSc 2</option>
+                <option value="BHSc">BHSc</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="specialty">Specialty Area</label>
+            <select id="specialty" required disabled>
+                <option value="">-- Choose Level First --</option>
+            </select>
+        </div>
+
+        <button type="submit">Register for Bootcamp</button>
+        <div id="message"></div>
+    </form>
+</div>
+
+<script>
+    // Exact mapping requested for SeaS Specialties
+    const programData = {
+        "Beng3": ["CSE", "CEE", "EME", "CHE"],
+        "BTech2": ["CSE", "EEE", "MCT", "MEC"],
+        "BSc2": ["MGT", "MIS", "AF", "DMK"],
+        "BHSc": ["BMS3", "NUR3"]
+    };
+
+    const programSelect = document.getElementById('program');
+    const specialtySelect = document.getElementById('specialty');
+    const form = document.getElementById('regForm');
+    const messageDiv = document.getElementById('message');
+
+    // Handle Dynamic Dropdown Changes
+    programSelect.addEventListener('change', function() {
+        const selectedProgram = this.value;
+        specialtySelect.innerHTML = '<option value="">-- Select Specialty --</option>';
+        
+        if (selectedProgram && programData[selectedProgram]) {
+            specialtySelect.disabled = false;
+            programData[selectedProgram].forEach(spec => {
+                const opt = document.createElement('option');
+                opt.value = spec;
+                opt.textContent = spec;
+                specialtySelect.appendChild(opt);
+            });
+        } else {
+            specialtySelect.disabled = true;
+            specialtySelect.innerHTML = '<option value="">-- Choose Level First --</option>';
+        }
+    });
+
+    // Form Submission Connection to Backend
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        messageDiv.style.display = 'none';
+
+        const payload = {
+            full_name: document.getElementById('fullName').value,
+            email: document.getElementById('email').value,
+            program: programSelect.value,
+            specialty: specialtySelect.value
+        };
+
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                messageDiv.className = 'message success';
+                messageDiv.textContent = "Registration Successful! Welcome to SEAS Bootcamp.";
+                messageDiv.style.display = 'block';
+                form.reset();
+                specialtySelect.disabled = true;
+            } else {
+                throw new Error(result.message || "Registration validation failed.");
+            }
+        } catch (err) {
+            messageDiv.className = 'message error';
+            messageDiv.textContent = err.message;
+            messageDiv.style.display = 'block';
+        }
+    });
+</script>
+
+</body>
+</html>
