@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEAS Bootcamp 2025–2026 | IUC Douala</title>
-    <!-- Tailwind CSS Engine for cross-device responsiveness -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for professional UI vector icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Smooth fade transition utility for the slideshow elements */
+        .slide-fade {
+            transition: opacity 0.8s ease-in-out;
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
 
-    <!-- 1. NAVIGATION BAR BAR -->
     <nav class="bg-white shadow-sm sticky top-0 left-0 w-full z-50 border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -33,7 +36,6 @@
         </div>
     </nav>
 
-    <!-- 2. HERO SECTION -->
     <header class="py-16 md:py-24 bg-gradient-to-r from-slate-50 to-indigo-50/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="space-y-6 text-center lg:text-left">
@@ -44,7 +46,7 @@
                     The flagship academic and professional innovation event of IUC Douala. Empowering students across all specialties. Join your multidisciplinary engineering groups, collaborate through multiple design project development phases, and present your final innovations to expert juries and corporate partners.
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2">
-                    <a href="#register" class="bg-indigo-650 bg-indigo-600 text-white px-6 py-3.5 rounded-lg font-bold shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition text-center flex items-center justify-center gap-2">
+                    <a href="#register" class="bg-indigo-600 text-white px-6 py-3.5 rounded-lg font-bold shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition text-center flex items-center justify-center gap-2">
                         <i class="fas fa-pen"></i> Register Now
                     </a>
                     <a href="#about" class="bg-white text-slate-800 border border-slate-200 px-6 py-3.5 rounded-lg font-bold hover:bg-slate-50 transition text-center flex items-center justify-center gap-2 shadow-sm">
@@ -52,16 +54,30 @@
                     </a>
                 </div>
             </div>
+            
             <div class="flex justify-center">
-                <div class="w-full max-w-md bg-gradient-to-br from-slate-900 to-indigo-950 rounded-2xl shadow-xl p-12 flex items-center justify-center text-white aspect-[4/3] relative overflow-hidden group">
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500 rounded-full opacity-10 blur-2xl group-hover:scale-125 transition duration-500"></div>
-                    <i class="fas fa-laptop-code text-7xl md:text-8xl text-indigo-300 drop-shadow-md"></i>
+                <div class="w-full max-w-md bg-slate-900 rounded-2xl shadow-xl border border-slate-800 relative overflow-hidden aspect-[4/3]">
+                    
+                    <img src="/assets/bootcamp-1.jpg" alt="Bootcamp Session 1" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-100">
+                    
+                    <img src="/assets/bootcamp-2.jpg" alt="Bootcamp Session 2" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-0">
+                    
+                    <img src="/assets/bootcamp-3.jpg" alt="Bootcamp Session 3" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-0">
+                    
+                    <img src="/assets/bootcamp-4.jpg" alt="Bootcamp Session 4" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-0">
+                    
+                    <img src="/assets/bootcamp-5.jpg" alt="Bootcamp Session 5" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-0">
+                    
+                    <img src="/assets/bootcamp-6.jpg" alt="Bootcamp Session 6" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-0">
+
+                    <div class="absolute bottom-3 right-3 bg-slate-900/70 backdrop-blur-sm px-2.5 py-1 rounded text-[10px] font-mono text-indigo-300 z-10 tracking-widest uppercase">
+                        Live Exhibition
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- 3. DESCRIPTION SECTION -->
     <section id="about" class="py-16 md:py-24 bg-white border-t border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
@@ -70,7 +86,6 @@
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Card 1 -->
                 <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
                     <div>
                         <div class="text-indigo-600 text-2xl mb-4"><i class="fas fa-users"></i></div>
@@ -78,7 +93,6 @@
                         <p class="text-sm text-slate-600 leading-relaxed">Students from different distinct specialties are combined into multidisciplinary squads to merge managerial and core engineering competencies.</p>
                     </div>
                 </div>
-                <!-- Card 2 -->
                 <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
                     <div>
                         <div class="text-indigo-600 text-2xl mb-4"><i class="fas fa-bullseye"></i></div>
@@ -86,7 +100,6 @@
                         <p class="text-sm text-slate-600 leading-relaxed">Each engineering cohort blueprints, provisions, and hosts a full web-based architectural MVP solving localized production bottlenecks.</p>
                     </div>
                 </div>
-                <!-- Card 3 -->
                 <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
                     <div>
                         <div class="text-indigo-600 text-2xl mb-4"><i class="fas fa-award"></i></div>
@@ -94,7 +107,6 @@
                         <p class="text-sm text-slate-600 leading-relaxed">Rigorous dual evaluation cycles handled thoroughly by internal academic chairs and invited external industry partners.</p>
                     </div>
                 </div>
-                <!-- Card 4 -->
                 <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
                     <div>
                         <div class="text-indigo-600 text-2xl mb-4"><i class="fas fa-chart-line"></i></div>
@@ -106,7 +118,6 @@
         </div>
     </section>
 
-    <!-- 4. ELIGIBILITY MATRIX SECTION -->
     <section class="py-16 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-12">
@@ -155,7 +166,6 @@
         </div>
     </section>
 
-    <!-- 5. ROADMAP MILESTONES SECTION -->
     <section id="phases" class="py-16 md:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
@@ -164,7 +174,6 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Phase 1 -->
                 <div class="border border-slate-200 rounded-xl p-6 bg-white flex flex-col justify-between hover:border-indigo-400 transition shadow-sm group">
                     <div>
                         <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Phase 1</span>
@@ -177,7 +186,6 @@
                         </span>
                     </div>
                 </div>
-                <!-- Phase 2 -->
                 <div class="border border-slate-200 rounded-xl p-6 bg-white flex flex-col justify-between hover:border-indigo-400 transition shadow-sm group">
                     <div>
                         <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Phase 2</span>
@@ -190,7 +198,6 @@
                         </span>
                     </div>
                 </div>
-                <!-- Phase 3 -->
                 <div class="border border-slate-200 rounded-xl p-6 bg-white flex flex-col justify-between hover:border-indigo-400 transition shadow-sm group">
                     <div>
                         <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Phase 3</span>
@@ -203,7 +210,6 @@
                         </span>
                     </div>
                 </div>
-                <!-- Phase 4 -->
                 <div class="border border-slate-200 rounded-xl p-6 bg-white flex flex-col justify-between hover:border-indigo-400 transition shadow-sm group">
                     <div>
                         <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Final Phase</span>
@@ -220,7 +226,6 @@
         </div>
     </section>
 
-    <!-- 6. PORTAL REGISTRATION FORM SECTION -->
     <section id="register" class="py-16 bg-slate-50 border-t border-slate-100">
         <div class="max-w-2xl mx-auto px-4 sm:px-6">
             <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-10 border border-slate-100">
@@ -291,7 +296,6 @@
         </div>
     </section>
 
-    <!-- 7. ANALYTICS ENGINE DISPLAY PANELS -->
     <div class="py-16 bg-slate-900 text-white border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div class="space-y-1">
@@ -317,7 +321,6 @@
         </div>
     </div>
 
-    <!-- 8. FOOTER SECTION -->
     <footer class="bg-slate-950 text-slate-400 py-12 text-sm border-t border-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
             <div class="space-y-4">
@@ -355,25 +358,34 @@
         </div>
     </footer>
 
-    <!-- INTERACTIVE CASCADE CONTROL LAYER -->
     <script>
+        // --- MULTI-IMAGE AUTOMATED ROTATION SCRIPT (2-SECOND INTERNAL INTERVAL) ---
+        const slides = document.querySelectorAll('.bootcamp-slide');
+        let currentSlideIndex = 0;
+
+        function rotateSlideshow() {
+            // Fade out the current slide image
+            slides[currentSlideIndex].classList.remove('opacity-100');
+            slides[currentSlideIndex].classList.add('opacity-0');
+
+            // Move pointer to the next file link index sequence
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+
+            // Fade in the target newly selected picture asset block
+            slides[currentSlideIndex].classList.remove('opacity-0');
+            slides[currentSlideIndex].classList.add('opacity-100');
+        }
+
+        // Initialize cyclical rotation engine loop bound strictly at 2000ms (2 seconds)
+        setInterval(rotateSlideshow, 2000);
+
+
+        // --- REGISTRATION SELECTOR CASCADE CONFIGURATION ---
         const dataMatrix = {
-            "B.Eng": {
-                levels: ["Level 3"],
-                specialties: ["CSE", "CEE", "EME", "CHE"]
-            },
-            "B.Tech": {
-                levels: ["Level 2"],
-                specialties: ["CSE", "EEE", "MCT", "MEC"]
-            },
-            "B.Sc": {
-                levels: ["Level 2"],
-                specialties: ["MGT", "MIS", "AF", "DMK"]
-            },
-            "B.HSc": {
-                levels: ["BMS3", "NUR3"],
-                specialties: ["BMS", "NUR"]
-            }
+            "B.Eng": { levels: ["Level 3"], specialties: ["CSE", "CEE", "EME", "CHE"] },
+            "B.Tech": { levels: ["Level 2"], specialties: ["CSE", "EEE", "MCT", "MEC"] },
+            "B.Sc": { levels: ["Level 2"], specialties: ["MGT", "MIS", "AF", "DMK"] },
+            "B.HSc": { levels: ["BMS3", "NUR3"], specialties: ["BMS", "NUR"] }
         };
 
         const programSelect = document.getElementById('program');
@@ -384,7 +396,6 @@
 
         programSelect.addEventListener('change', function() {
             const prog = this.value;
-            
             levelSelect.innerHTML = '<option value="">-- Select Level --</option>';
             specialtySelect.innerHTML = '<option value="">-- Select Specialty --</option>';
             
@@ -394,15 +405,13 @@
                 
                 dataMatrix[prog].levels.forEach(lvl => {
                     const opt = document.createElement('option');
-                    opt.value = lvl;
-                    opt.textContent = lvl;
+                    opt.value = lvl; opt.textContent = lvl;
                     levelSelect.appendChild(opt);
                 });
                 
                 dataMatrix[prog].specialties.forEach(spec => {
                     const opt = document.createElement('option');
-                    opt.value = spec;
-                    opt.textContent = spec;
+                    opt.value = spec; opt.textContent = spec;
                     specialtySelect.appendChild(opt);
                 });
             } else {
@@ -428,7 +437,6 @@
                 phone: document.getElementById('phone').value
             };
 
-            // Constraint verification layer before running out over external HTTP pipeline
             if (payload.program === "B.Tech" && payload.level !== "Level 2") {
                 feedback.className = "p-3.5 rounded-lg text-sm font-medium text-center border bg-red-50 text-red-700 border-red-200 block";
                 feedback.textContent = "Validation Failure: B.Tech targets Level 2 exclusively.";
@@ -446,7 +454,6 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 const result = await response.json();
 
                 if (response.ok && result.success) {
