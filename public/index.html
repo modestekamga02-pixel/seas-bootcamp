@@ -3,92 +3,508 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEAS Bootcamp - Welcome</title>
+    <title>SEAS Bootcamp 2025–2026 | IUC Douala</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #0A2540;
             --accent: #635BFF;
+            --accent-hover: #4B45E5;
             --bg: #F8F9FA;
+            --text-muted: #4F566B;
+            --border: #E3E8EE;
+            --success: #00B074;
+            --error: #E15241;
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--primary);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .hero-card {
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg); color: var(--primary); line-height: 1.5; }
+        
+        section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 32px; margin-bottom: 15px; position: relative; }
+        .section-subtitle { text-align: center; color: var(--text-muted); font-size: 16px; margin-bottom: 50px; max-width: 700px; margin-left: auto; margin-right: auto; }
+
+        /* 1. NAVBAR */
+        .navbar {
             background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-            width: 100%;
-            max-width: 520px;
-            text-align: center;
-        }
-        .logo-container {
+            padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 35px;
-            gap: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .logo-container img {
-            height: 65px;
-            object-fit: contain;
+        .navbar-brand { display: flex; align-items: center; gap: 12px; }
+        .navbar-brand img { height: 45px; object-fit: contain; }
+        .navbar-brand span { font-weight: 700; font-size: 16px; color: var(--primary); letter-spacing: 0.5px; }
+        .navbar-nav { display: flex; list-style: none; gap: 25px; align-items: center; }
+        .navbar-nav a { text-decoration: none; color: var(--text-muted); font-weight: 600; font-size: 14px; transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
+        .navbar-nav a:hover { color: var(--accent); }
+        .btn-nav-admin { background: var(--primary); color: white !important; padding: 8px 16px; border-radius: 6px; }
+        .btn-nav-admin:hover { background: #1a365d; }
+
+        /* 2. HERO SECTION */
+        .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 100px 20px;
         }
-        h1 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: var(--primary);
-            font-weight: 700;
-        }
-        p {
-            font-size: 15px;
-            color: #4F566B;
-            line-height: 1.6;
-            margin-bottom: 35px;
-            text-align: justify;
-        }
-        .btn-register {
-            display: inline-block;
-            width: 100%;
-            padding: 16px;
-            background: var(--accent);
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 16px;
-            transition: background 0.2s;
-            box-sizing: border-box;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-register:hover {
-            background: #4B45E5;
+        .hero-content { max-width: 600px; }
+        .hero-content h1 { font-size: 46px; line-height: 1.15; margin-bottom: 20px; color: var(--primary); }
+        .hero-content p { font-size: 18px; color: var(--text-muted); margin-bottom: 35px; line-height: 1.6; }
+        .hero-actions { display: flex; gap: 15px; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 6px; font-weight: 600; font-size: 16px; text-decoration: none; cursor: pointer; transition: all 0.2s; border: none; }
+        .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(99, 91, 255, 0.25); }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-secondary { background: white; color: var(--primary); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: #f4f6f8; }
+        .hero-image-box { flex: 1; display: flex; justify-content: center; }
+        .tech-banner { width: 100%; max-width: 450px; height: 320px; background: linear-gradient(135deg, #0A2540 0%, #635BFF 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 80px; box-shadow: 0 20px 40px rgba(10,37,64,0.1); position: relative; overflow: hidden; }
+        .tech-banner::after { content: ''; position: absolute; width: 200%; height: 200%; background: linear-gradient(transparent, rgba(255,255,255,0.05), transparent); transform: rotate(45deg); top: -50%; left: -50%; }
+
+        /* 3. DESCRIPTION SECTION */
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .info-card { background: white; padding: 30px; border-radius: 8px; border: 1px solid var(--border); transition: transform 0.2s, box-shadow 0.2s; }
+        .info-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.04); }
+        .card-icon { font-size: 28px; color: var(--accent); margin-bottom: 20px; }
+        .info-card h3 { font-size: 18px; margin-bottom: 12px; }
+        .info-card p { color: var(--text-muted); font-size: 14px; line-height: 1.6; }
+
+        /* 4. ELIGIBILITY SECTION */
+        .table-container { background: white; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .eligibility-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .eligibility-table th, .eligibility-table td { padding: 16px 24px; border-bottom: 1px solid var(--border); }
+        .eligibility-table th { background: #F8F9FA; font-weight: 600; color: var(--primary); }
+        .eligibility-table tr:last-child td { border-bottom: none; }
+        .badge-prog { padding: 4px 10px; border-radius: 4px; font-size: 13px; font-weight: bold; background: #E8F0FE; color: #1A73E8; }
+        .badge-level { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; background: #E6F4EA; color: #137333; }
+        .badge-disabled { background: #FCE8E6; color: #C5221F; padding: 4px 10px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+
+        /* 5. PHASES CALENDAR */
+        .phases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .phase-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 24px; position: relative; cursor: pointer; transition: all 0.2s; }
+        .phase-card:hover { border-color: var(--accent); background: #FAF9FF; }
+        .phase-num { font-size: 13px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .phase-card h3 { font-size: 16px; margin-bottom: 10px; }
+        .phase-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #B06000; background: #FEF7E0; padding: 4px 8px; border-radius: 4px; }
+        .status-dot { width: 6px; height: 6px; background: #FBBC04; border-radius: 50%; display: inline-block; }
+
+        /* 6. REGISTRATION FORM */
+        .form-wrapper { background: white; max-width: 650px; margin: 0 auto; padding: 40px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group.full-width { grid-column: span 2; }
+        .form-group label { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .form-group input, .form-group select { padding: 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 15px; outline: none; transition: border-color 0.2s; width: 100%; background-color: white; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,91,255,0.08); }
+        .btn-submit { width: 100%; justify-content: center; margin-top: 10px; padding: 14px; background: var(--accent); color: white; border-radius: 6px; font-size: 16px; font-weight: 600; }
+        .form-msg { padding: 12px; border-radius: 6px; font-size: 14px; text-align: center; margin-top: 20px; display: none; font-weight: 500; }
+        .form-msg.msg-success { background: #E6F4EA; color: #137333; border: 1px solid #CEEAD6; display: block; }
+        .form-msg.msg-error { background: #FCE8E6; color: #C5221F; border: 1px solid #FAD2CF; display: block; }
+
+        /* 7. COUNTERS SECTION */
+        .counters-bar { background: var(--primary); color: white; padding: 60px 20px; text-align: center; }
+        .counters-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .counter-item i { font-size: 32px; color: #80E9FF; margin-bottom: 15px; }
+        .counter-num { font-size: 40px; font-weight: 700; margin-bottom: 5px; }
+        .counter-label { font-size: 14px; color: #C1C9D2; font-weight: 500; }
+
+        /* 8. FOOTER */
+        .footer { background: #07192C; color: #C1C9D2; padding: 60px 20px 20px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand img { height: 40px; margin-right: 12px; }
+        .footer-brand p { font-size: 14px; margin-top: 15px; line-height: 1.6; max-width: 320px; }
+        .footer-links h4 { color: white; margin-bottom: 20px; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a { text-decoration: none; color: #C1C9D2; font-size: 14px; transition: color 0.2s; }
+        .footer-links a:hover { color: white; }
+        .social-row { display: flex; gap: 15px; margin-top: 15px; }
+        .social-row a { color: white; font-size: 18px; opacity: 0.7; transition: opacity 0.2s; }
+        .social-row a:hover { opacity: 1; }
+        .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 13px; }
+
+        @media (max-width: 768px) {
+            .hero-section { flex-direction: column; text-align: center; padding: 60px 20px; }
+            .hero-actions { justify-content: center; }
+            .form-wrapper { padding: 25px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .navbar { padding: 15px 20px; }
+            .navbar-nav { display: none; } /* Kept simple for presentation compliance */
+            .footer-grid { grid-template-columns: 1fr; gap: 30px; }
         }
     </style>
 </head>
 <body>
 
-<div class="hero-card">
-    <!-- Institutional Branding Headers -->
-    <div class="logo-container">
-        <img src="/assets/iuc-logo.png" alt="IUC Logo" onerror="this.src='iuc-logo.png'">
-        <img src="/assets/seas-logo.png" alt="SEAS Logo" onerror="this.src='seas-logo.png'">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <img src="/assets/iuc-logo.png" alt="IUC Logo" onerror="this.src='iuc-logo.png'">
+            <img src="/assets/seas-logo.png" alt="SEAS Logo" onerror="this.src='seas-logo.png'">
+            <span>SEAS Bootcamp 2025–2026</span>
+        </div>
+        <ul class="navbar-nav">
+            <li><a href="#"><i class="fas fa-home"></i> Accueil</a></li>
+            <li><a href="#about"><i class="fas fa-info-circle"></i> À propos</a></li>
+            <li><a href="#phases"><i class="fas fa-calendar-alt"></i> Phases</a></li>
+            <li><a href="#register"><i class="fas fa-edit"></i> S'inscrire</a></li>
+            <li><a href="/admin.html" class="btn-nav-admin"><i class="fas fa-lock"></i> Admin</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero-section">
+        <div class="hero-content">
+            <h1>SEAS Bootcamp 2025–2026</h1>
+            <p>L'événement académique et professionnel de l'IUC Douala. Empowering students across all specialities. Join your multidisciplinary engineering groups, collaborate through multiple design project development phases, and present your final innovations to expert juries and corporate partners.</p>
+            <div class="hero-actions">
+                <a href="#register" class="btn btn-primary"><i class="fas fa-pen"></i> S'inscrire maintenant</a>
+                <a href="#about" class="btn btn-secondary"><i class="fas fa-info-circle"></i> En savoir plus</a>
+            </div>
+        </div>
+        <div class="hero-image-box">
+            <div class="tech-banner">
+                <i class="fas fa-laptop-code"></i>
+            </div>
+        </div>
+    </header>
+
+    <section id="about">
+        <h2 class="section-title">Description du Bootcamp</h2>
+        <p class="section-subtitle">Découvrez le cadre opérationnel d'innovation intensive mis en place par la School of Engineering and Applied Sciences.</p>
+        <div class="grid-cards">
+            <div class="info-card">
+                <i class="fas fa-users card-icon"></i>
+                <h3>Groupes Multidisciplinaires</h3>
+                <p>Étudiants de différentes spécialités regroupés ensemble pour mélanger les compétences techniques et managériales.</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-bullseye card-icon"></i>
+                <h3>Apprentissage par Projet</h3>
+                <p>Chaque groupe développe, configure et défend un projet réel basé sur des problématiques d'infrastructure concrètes.</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-award card-icon"></i>
+                <h3>Évaluation Professionnelle</h3>
+                <p>Une validation rigoureuse assurée par un double regard : vos encadrants internes IUC et un jury d'experts industriels externes.</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-chart-line card-icon"></i>
+                <h3>Amélioration Progressive</h3>
+                <p>Présentation à chaque phase charnière avec intégration continue des retours critiques pour faire évoluer le MVP.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="eligibility">
+        <h2 class="section-title">Qui peut participer ?</h2>
+        <p class="section-subtitle">Tableau de configuration des critères académiques et des filières d'ingénierie autorisées.</p>
+        <div class="table-container">
+            <table class="eligibility-table">
+                <thead>
+                    <tr>
+                        <th>Programme</th>
+                        <th>Niveau Éligible</th>
+                        <th>Spécialités Représentées</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge-prog"><i class="fas fa-tools"></i> B.Eng</span></td>
+                        <td><span class="badge-level">Niveau 3 uniquement</span></td>
+                        <td><strong>CSE, CEE, EME, CHE</strong></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-prog"><i class="fas fa-code"></i> B.Tech</span></td>
+                        <td><span class="badge-level">Niveau 2 uniquement</span></td>
+                        <td><strong>CSE, EEE, MCT, MEC</strong></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-prog"><i class="fas fa-chart-bar"></i> BSc</span></td>
+                        <td><span class="badge-level">Niveau 2 uniquement</span></td>
+                        <td><strong>MGT, MIS, AF, DMK</strong></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-prog"><i class="fas fa-heartbeat"></i> B.HSc</span></td>
+                        <td><span class="badge-level">BMS3 / NUR3</span></td>
+                        <td><strong>BMS, NUR</strong></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-disabled"><i class="fas fa-ban"></i> HND</span></td>
+                        <td><span style="color: var(--text-muted); font-size: 14px;">—</span></td>
+                        <td><strong style="color: var(--error);">Non éligible</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="phases">
+        <h2 class="section-title">Calendrier des Phases</h2>
+        <p class="section-subtitle">Le parcours jalonné d'évaluations successives que chaque équipe projet doit franchir avec succès.</p>
+        <div class="phases-grid">
+            <div class="phase-card">
+                <span class="phase-num">Phase 1</span>
+                <h3>Problématique & Design</h3>
+                <p>Présentation du sujet d'ingénierie, de l'analyse métier et des maquettes d'approche UI/UX initiale.</p>
+                <span class="status-badge"><span class="status-dot"></span> À venir</span>
+            </div>
+            <div class="phase-card">
+                <span class="phase-num">Phase 2</span>
+                <h3>Prototype</h3>
+                <p>Validation du premier livrable fonctionnel et de la structure de base de la base de données.</p>
+                <span class="status-badge"><span class="status-dot"></span> À venir</span>
+            </div>
+            <div class="phase-card">
+                <span class="phase-num">Phase 3</span>
+                <h3>Implémentation avancée</h3>
+                <p>Intégration complète des modules logiciels, tests de robustesse et automatisation avancée.</p>
+                <span class="status-badge"><span class="status-dot"></span> À venir</span>
+            </div>
+            <div class="phase-card">
+                <span class="phase-num">Phase Finale</span>
+                <h3>Défense Complète</h3>
+                <p>Soutenance de fin d'exercice devant le jury académique interne couplé aux experts d'entreprises partenaires.</p>
+                <span class="status-badge"><span class="status-dot"></span> À venir</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="register">
+        <h2 class="section-title">Formulaire d'Inscription</h2>
+        <p class="section-subtitle">Remplissez vos paramètres d'identification pour rejoindre la base de données de l'infrastructure.</p>
+        <div class="form-wrapper">
+            <form id="bootcampForm">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="fullName"><i class="fas fa-user"></i> Nom complet</label>
+                        <input type="text" id="fullName" required placeholder="Ex: Modeste-K">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="email" required placeholder="username@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="userType"><i class="fas fa-theater-masks"></i> Je suis...</label>
+                        <select id="userType" required>
+                            <option value="student">Étudiant</option>
+                            <option value="teacher">Enseignant</option>
+                            <option value="jury">Jury</option>
+                            <option value="staff">Personnel SEAS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="program"><i class="fas fa-graduation-cap"></i> Programme</label>
+                        <select id="program" required>
+                            <option value="">-- Sélectionner --</option>
+                            <option value="B.Eng">B.Eng</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="B.Sc">B.Sc</option>
+                            <option value="B.HSc">B.HSc</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="level"><i class="fas fa-signal"></i> Niveau</label>
+                        <select id="level" required disabled>
+                            <option value="">-- Choisir Programme --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="specialty"><i class="fas fa-microscope"></i> Spécialité</label>
+                        <select id="specialty" required disabled>
+                            <option value="">-- Choisir Programme --</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="phone"><i class="fas fa-phone"></i> Téléphone <span style="font-weight:normal; color:var(--text-muted);">(Optionnel)</span></label>
+                        <input type="tel" id="phone" placeholder="+237 6xx xxx xxx">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-submit"><i class="fas fa-check-circle"></i> Confirmer l'inscription</button>
+                <div id="formFeedback" class="form-msg"></div>
+            </form>
+        </div>
+    </section>
+
+    <div class="counters-bar">
+        <div class="counters-container">
+            <div class="counter-item">
+                <i class="fas fa-user-graduate"></i>
+                <div class="counter-num">200+</div>
+                <div class="counter-label">Étudiants participants</div>
+            </div>
+            <div class="counter-item">
+                <i class="fas fa-university"></i>
+                <div class="counter-num">10+</div>
+                <div class="counter-label">Spécialités représentées</div>
+            </div>
+            <div class="counter-item">
+                <i class="fas fa-layer-group"></i>
+                <div class="counter-num">4</div>
+                <div class="counter-label">Phases du Bootcamp</div>
+            </div>
+            <div class="counter-item">
+                <i class="fas fa-gavel"></i>
+                <div class="counter-num">2</div>
+                <div class="counter-label">Types de jury (interne + externe)</div>
+            </div>
+        </div>
     </div>
 
-    <h1>Welcome to SEAS Bootcamp</h1>
-    
-    <p>Empowering students across all specialities. Join your multidisciplinary engineering groups, collaborate through multiple design project development phases, and present your final innovations to expert juries and corporate partners.</p>
-    
-    <a href="/register.html" class="btn-register">Register</a>
-</div>
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div style="display:flex; align-items:center;">
+                    <img src="/assets/iuc-logo.png" alt="IUC Logo" onerror="this.src='iuc-logo.png'">
+                    <img src="/assets/seas-logo.png" alt="SEAS Logo" onerror="this.src='seas-logo.png'">
+                </div>
+                <p>Plateforme cloud centralisée de gestion et d'évaluation continue pour les sprints d'innovation multidisciplinaires de la School of Engineering and Applied Sciences.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Liens rapides</h4>
+                <ul>
+                    <li><a href="#">Accueil</a></li>
+                    <li><a href="#register">S'inscrire</a></li>
+                    <li><a href="#phases">Phases du Calendrier</a></li>
+                    <li><a href="/admin.html">Espace Admin Security</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contact & Secrétariat</h4>
+                <p style="font-size:14px; margin-bottom:10px;"><i class="fas fa-map-marker-alt"></i> IUC Douala, Cameroun</p>
+                <p style="font-size:14px; margin-bottom:15px;"><i class="fas fa-envelope"></i> seas-bootcamp@iuc-douala.cm</p>
+                <h4>Réseaux Sociaux</h4>
+                <div class="social-row">
+                    <a href="https://www.iuc-douala.cm" target="_blank"><i class="fas fa-globe"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 SEAS Bootcamp — IUC Douala. Tous droits réservés. Technical DevOps Portal Framework.
+        </div>
+    </footer>
 
+    <script>
+        // Exact configuration specifications map matrix
+        const dataMatrix = {
+            "B.Eng": {
+                levels: ["Level 3"],
+                specialties: ["CSE", "CEE", "EME", "CHE"]
+            },
+            "B.Tech": {
+                levels: ["Level 2"],
+                specialties: ["CSE", "EEE", "MCT", "MEC"]
+            },
+            "B.Sc": {
+                levels: ["Level 2"],
+                specialties: ["MGT", "MIS", "AF", "DMK"]
+            },
+            "B.HSc": {
+                levels: ["BMS3", "NUR3"],
+                specialties: ["BMS", "NUR"]
+            }
+        };
+
+        const programSelect = document.getElementById('program');
+        const levelSelect = document.getElementById('level');
+        const specialtySelect = document.getElementById('specialty');
+        const form = document.getElementById('bootcampForm');
+        const feedback = document.getElementById('formFeedback');
+
+        // Dynamic multi-level cascade dropdown mapping
+        programSelect.addEventListener('change', function() {
+            const prog = this.value;
+            
+            // Reset dropdowns
+            levelSelect.innerHTML = '<option value="">-- Sélectionner --</option>';
+            specialtySelect.innerHTML = '<option value="">-- Sélectionner --</option>';
+            
+            if (prog && dataMatrix[prog]) {
+                levelSelect.disabled = false;
+                specialtySelect.disabled = false;
+                
+                // Load levels
+                dataMatrix[prog].levels.forEach(lvl => {
+                    const opt = document.createElement('option');
+                    opt.value = lvl;
+                    opt.textContent = lvl;
+                    levelSelect.appendChild(opt);
+                });
+                
+                // Load specialties
+                dataMatrix[prog].specialties.forEach(spec => {
+                    const opt = document.createElement('option');
+                    opt.value = spec;
+                    opt.textContent = spec;
+                    specialtySelect.appendChild(opt);
+                });
+            } else {
+                levelSelect.disabled = true;
+                specialtySelect.disabled = true;
+                levelSelect.innerHTML = '<option value="">-- Choisir Programme --</option>';
+                specialtySelect.innerHTML = '<option value="">-- Choisir Programme --</option>';
+            }
+        });
+
+        // Form pipeline submission handler connected to backend REST API
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            feedback.className = "form-msg";
+            feedback.style.display = "none";
+
+            const payload = {
+                full_name: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                user_type: document.getElementById('userType').value,
+                program: programSelect.value,
+                level: levelSelect.value,
+                specialty: specialtySelect.value,
+                phone: document.getElementById('phone').value
+            };
+
+            // Double checking acceptance constraints validation before fetch trigger
+            if (payload.program === "B.Tech" && payload.level !== "Level 2") {
+                feedback.className = "form-msg msg-error";
+                feedback.textContent = "Erreur: B.Tech est uniquement pour Level 2.";
+                return;
+            }
+            if (payload.program === "B.Eng" && payload.level !== "Level 3") {
+                feedback.className = "form-msg msg-error";
+                feedback.textContent = "Erreur: B.Eng est uniquement pour Level 3.";
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    feedback.className = "form-msg msg-success";
+                    feedback.textContent = "Inscription réussie ! Vérifiez votre email.";
+                    form.reset();
+                    levelSelect.disabled = true;
+                    specialtySelect.disabled = true;
+                } else {
+                    throw new Error(result.error || "Une erreur est survenue lors de la validation.");
+                }
+            } catch (err) {
+                feedback.className = "form-msg msg-error";
+                feedback.textContent = err.message;
+            }
+        });
+    </script>
 </body>
 </html>
