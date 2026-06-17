@@ -7,195 +7,105 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<!-- Replaced background with all-white layout to seamlessly mirror your homepage aesthetic -->
-<body class="bg-white text-slate-900 antialiased font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-white text-slate-900 font-sans min-h-screen">
 
-    <!-- NAVIGATION HEADER -->
-    <nav class="bg-slate-50 border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center space-x-3">
-                    <img src="/assets/iuc-logo.png" alt="IUC Logo" onerror="this.src='iuc-logo.png'" class="h-9 w-auto object-contain">
-                    <img src="/assets/seas-logo.png" alt="SEAS Logo" onerror="this.src='seas-logo.png'" class="h-9 w-auto object-contain">
-                </div>
-                <a href="/" class="text-slate-500 hover:text-slate-900 font-medium text-xs transition flex items-center gap-1">
-                    <i class="fas fa-arrow-left"></i> Back to Home
-                </a>
-            </div>
-        </div>
+    <nav class="border-b border-slate-200 h-16 flex items-center px-8">
+        <a href="/" class="text-slate-500 hover:text-indigo-600 text-xs font-bold flex items-center gap-2">
+            <i class="fas fa-arrow-left"></i> BACK TO HOME
+        </a>
     </nav>
 
-    <!-- REGISTRATION FORM CONTAINER -->
-    <main class="max-w-xl mx-auto w-full px-4 py-12 flex-grow flex items-center justify-center">
-        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-xl w-full relative">
-            
-            <!-- SUCCESS MODAL POPUP -->
-            <div id="successModal" class="hidden absolute inset-0 bg-white/95 rounded-2xl z-50 flex flex-col items-center justify-center p-6 text-center space-y-4">
-                <div class="w-16 h-16 bg-emerald-100 border border-emerald-300 text-emerald-600 rounded-full flex items-center justify-center text-3xl shadow shadow-emerald-200 animate-bounce">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <h2 class="text-xl font-extrabold text-slate-900">Registration Successful!</h2>
-                <p class="text-slate-600 text-sm max-w-sm">Please constantly check the home page to get live updates of the Bootcamp milestones and group formations.</p>
-                <div class="text-xs font-mono text-indigo-600 flex items-center gap-2 pt-2">
-                    <i class="fas fa-spinner animate-spin"></i> Redirecting to Home Page...
-                </div>
-            </div>
-
-            <div class="text-center mb-8">
-                <h1 class="text-2xl font-black text-indigo-600 tracking-tight uppercase">Registration Portal</h1>
-                <p class="text-slate-500 text-xs mt-1">Provide your authenticated credentials to log into the infrastructure environment database.</p>
-            </div>
-
-            <form id="registrationForm" onsubmit="handleRegistrationSubmit(event)" class="space-y-5">
-                <div>
-                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-user text-indigo-500 mr-1"></i> Full Name</label>
-                    <input type="text" id="fullName" required placeholder="e.g., Pamela" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-envelope text-indigo-500 mr-1"></i> Email Address</label>
-                    <input type="email" id="email" required placeholder="pamela@gmail.com" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-users-cog text-indigo-500 mr-1"></i> I Am A...</label>
-                        <select id="userType" onchange="handleRoleAndProgramChange()" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition">
-                            <option value="Student">Student</option>
-                            <option value="Teacher / Instructor">Teacher / Instructor</option>
-                            <option value="Jury Member">Jury Member</option>
-                            <option value="SEAS Administration Staff">SEAS Administration Staff</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-graduation-cap text-indigo-500 mr-1"></i> Program</label>
-                        <select id="program" onchange="handleRoleAndProgramChange()" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition">
-                            <option value="Beng3">Beng (3 Years)</option>
-                            <option value="BTECH2">B.Tech (2 Years)</option>
-                            <option value="BSc2">B.Sc (2 Years)</option>
-                            <option value="BHSc">B.HSc</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-layer-group text-indigo-500 mr-1"></i> Year Level</label>
-                        <select id="level" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition">
-                            <!-- Populated via Script -->
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-atom text-indigo-500 mr-1"></i> Specialty</label>
-                        <select id="specialty" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition">
-                            <!-- Populated via Script -->
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-phone text-indigo-500 mr-1"></i> Phone Number</label>
-                    <input type="text" id="phone" required placeholder="e.g., 694536344" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
-                </div>
-
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs font-mono uppercase tracking-wider shadow-md shadow-indigo-200 transition duration-150 flex items-center justify-center gap-2 mt-2">
-                    <i class="fas fa-id-card"></i> Confirm Registration
-                </button>
-            </form>
+    <main class="max-w-xl mx-auto py-12 px-4">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-black text-indigo-600 uppercase">Registration Portal</h1>
         </div>
+
+        <form id="registrationForm" onsubmit="handleRegistrationSubmit(event)" class="space-y-6">
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase">Full Name</label>
+                <input type="text" id="fullName" required class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:border-indigo-500 outline-none">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase">Email</label>
+                <input type="email" id="email" required class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:border-indigo-500 outline-none">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase">I Am A...</label>
+                <select id="userType" onchange="updateFormFields()" class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none">
+                    <option value="Student">Student</option>
+                    <option value="Teacher / Instructor">Teacher / Instructor</option>
+                    <option value="Jury Member">Jury Member</option>
+                    <option value="SEAS Administration Staff">SEAS Administration Staff</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase">Program</label>
+                    <select id="program" onchange="updateFormFields()" class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none">
+                        <option value="Beng3">Beng</option>
+                        <option value="BTECH2">Btech</option>
+                        <option value="BSc2">BSc</option>
+                        <option value="BHSc">BHSc</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase">Year Level</label>
+                    <select id="level" class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase">Specialty</label>
+                    <select id="specialty" class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none"></select>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-lg uppercase text-xs tracking-widest hover:bg-indigo-700">Confirm Registration</button>
+        </form>
     </main>
 
-    <footer class="bg-slate-50 border-t border-slate-200 py-6 text-center text-[10px] font-mono uppercase tracking-widest text-slate-500">
-        © 2026 SEAS Bootcamp — IUC Douala. All rights reserved.
-    </footer>
-
     <script>
-        // Program criteria structure mirroring your updated tracking matrix rules explicitly
-        const eligibilityMap = {
-            "Beng3": {
-                levels: ["Level 3"],
-                specialties: ["CSE", "CEE", "EME", "CHE"]
-            },
-            "BTECH2": {
-                levels: ["Level 2"],
-                specialties: ["CSE", "EEE", "MCT", "MEC"]
-            },
-            "BSc2": {
-                levels: ["Level 2"],
-                specialties: ["MGT", "MIS", "AF", "DMK"]
-            },
-            "BHSc": {
-                levels: ["BMS3", "NUR3"],
-                specialties: ["BMS", "NUR"]
-            }
+        const academicMapping = {
+            "Beng3": { levels: ["3"], specialties: ["CSE", "CEE", "EME", "CHE"] },
+            "BTECH2": { levels: ["2"], specialties: ["CSE", "EEE", "MCT", "MEC"] },
+            "BSc2": { levels: ["2"], specialties: ["MGT", "MIS", "AF", "DMK"] },
+            "BHSc": { levels: ["3"], specialties: ["BMS3", "NUR3"] }
         };
 
-        function handleRoleAndProgramChange() {
+        function updateFormFields() {
             const role = document.getElementById('userType').value;
-            const programSelect = document.getElementById('program');
-            const levelSelect = document.getElementById('level');
-            const specialtySelect = document.getElementById('specialty');
+            const prog = document.getElementById('program');
+            const lvl = document.getElementById('level');
+            const spec = document.getElementById('specialty');
 
             if (role !== "Student") {
-                programSelect.disabled = true;
-                levelSelect.disabled = true;
-                specialtySelect.disabled = true;
-                programSelect.className = "w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-400 cursor-not-allowed";
-                levelSelect.className = "w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-400 cursor-not-allowed";
-                specialtySelect.className = "w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-400 cursor-not-allowed";
-                levelSelect.innerHTML = '<option value="N/A">N/A</option>';
-                specialtySelect.innerHTML = '<option value="N/A">N/A</option>';
+                prog.disabled = lvl.disabled = spec.disabled = true;
+                lvl.innerHTML = '<option>N/A</option>';
+                spec.innerHTML = '<option>N/A</option>';
             } else {
-                programSelect.disabled = false;
-                levelSelect.disabled = false;
-                specialtySelect.disabled = false;
-                programSelect.className = "w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition";
-                levelSelect.className = "w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition";
-                specialtySelect.className = "w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition";
-                
-                const selectedProgram = programSelect.value;
-                const rule = eligibilityMap[selectedProgram];
-
-                if (rule) {
-                    levelSelect.innerHTML = rule.levels.map(lvl => `<option value="${lvl}">${lvl}</option>`).join('');
-                    specialtySelect.innerHTML = rule.specialties.map(spec => `<option value="${spec}">${spec}</option>`).join('');
-                }
+                prog.disabled = lvl.disabled = spec.disabled = false;
+                const config = academicMapping[prog.value];
+                lvl.innerHTML = config.levels.map(l => `<option value="${l}">${l}</option>`).join('');
+                spec.innerHTML = config.specialties.map(s => `<option value="${s}">${s}</option>`).join('');
             }
         }
 
         async function handleRegistrationSubmit(e) {
             e.preventDefault();
-            const role = document.getElementById('userType').value;
-            const payload = {
+            const data = {
                 full_name: document.getElementById('fullName').value,
                 email: document.getElementById('email').value,
-                user_type: role,
-                program: role === "Student" ? document.getElementById('program').value : "N/A",
-                level: role === "Student" ? document.getElementById('level').value : "N/A",
-                specialty: role === "Student" ? document.getElementById('specialty').value : "N/A",
-                phone: document.getElementById('phone').value
+                user_type: document.getElementById('userType').value,
+                program: document.getElementById('program').value,
+                level: document.getElementById('level').value,
+                specialty: document.getElementById('specialty').value
             };
-
-            try {
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const result = await response.json();
-                if (response.ok && result.success) {
-                    document.getElementById('successModal').classList.remove('hidden');
-                    setTimeout(() => { window.location.replace('/'); }, 3000);
-                } else {
-                    alert(result.error || "Data rejection error occurred.");
-                }
-            } catch (err) {
-                alert("Network connectivity error: " + err.message);
-            }
+            const res = await fetch('/api/register', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+            if (res.ok) { alert("Registration Successful!"); window.location.href = '/'; }
         }
-        
-        document.addEventListener('DOMContentLoaded', handleRoleAndProgramChange);
+
+        document.addEventListener('DOMContentLoaded', updateFormFields);
     </script>
 </body>
 </html>
