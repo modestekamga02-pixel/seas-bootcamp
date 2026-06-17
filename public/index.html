@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEAS Bootcamp 2025–2026 | IUC Douala</title>
-    <!-- Tailwind CSS Engine for cross-device responsiveness -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for professional UI vector icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Smooth fade transition utility for the slideshow elements */
@@ -17,7 +15,6 @@
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
 
-    <!-- 1. NAVIGATION BAR -->
     <nav class="bg-white shadow-sm sticky top-0 left-0 w-full z-50 border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -30,7 +27,7 @@
                     <a href="#" class="text-slate-600 hover:text-indigo-600 font-semibold text-sm transition flex items-center gap-1.5"><i class="fas fa-home"></i> Home</a>
                     <a href="#about" class="text-slate-600 hover:text-indigo-600 font-semibold text-sm transition flex items-center gap-1.5"><i class="fas fa-info-circle"></i> About</a>
                     <a href="#phases" class="text-slate-600 hover:text-indigo-600 font-semibold text-sm transition flex items-center gap-1.5"><i class="fas fa-calendar-alt"></i> Phases</a>
-                    <a href="#register" class="text-slate-600 hover:text-indigo-600 font-semibold text-sm transition flex items-center gap-1.5"><i class="fas fa-edit"></i> Register</a>
+                    <a href="/register.html" class="text-slate-600 hover:text-indigo-600 font-semibold text-sm transition flex items-center gap-1.5"><i class="fas fa-edit"></i> Register</a>
                     <a href="/admin.html" class="bg-slate-900 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-800 transition shadow-sm">
                         <i class="fas fa-lock"></i> <span>Admin Panel</span>
                     </a>
@@ -39,7 +36,6 @@
         </div>
     </nav>
 
-    <!-- 2. HERO SECTION WITH ANIMATED SLIDESHOW -->
     <header class="py-16 md:py-24 bg-gradient-to-r from-slate-50 to-indigo-50/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="space-y-6 text-center lg:text-left">
@@ -50,7 +46,7 @@
                     The flagship academic and professional innovation event of IUC Douala. Empowering students across all specialties. Join your multidisciplinary engineering groups, collaborate through multiple design project development phases, and present your final innovations to expert juries and corporate partners.
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2">
-                    <a href="#register" class="bg-indigo-600 text-white px-6 py-3.5 rounded-lg font-bold shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition text-center flex items-center justify-center gap-2">
+                    <a href="/register.html" class="bg-indigo-600 text-white px-6 py-3.5 rounded-lg font-bold shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition text-center flex items-center justify-center gap-2">
                         <i class="fas fa-pen"></i> Register Now
                     </a>
                     <a href="#about" class="bg-white text-slate-800 border border-slate-200 px-6 py-3.5 rounded-lg font-bold hover:bg-slate-50 transition text-center flex items-center justify-center gap-2 shadow-sm">
@@ -59,29 +55,16 @@
                 </div>
             </div>
             
-            <!-- Dynamic 5-Second Rotating Slideshow Container -->
             <div class="flex justify-center">
                 <div class="w-full max-w-md bg-slate-900 rounded-2xl shadow-xl border border-slate-800 relative overflow-hidden aspect-[4/3]">
                     
-                    <!-- Slide Image 1 -->
                     <img src="/assets/bootcamp-1.jpg" alt="Bootcamp Session 1" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-100">
-                    
-                    <!-- Slide Image 2 -->
                     <img src="/assets/bootcamp-2.jpg" alt="Bootcamp Session 2" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-0">
-                    
-                    <!-- Slide Image 3 -->
                     <img src="/assets/bootcamp-3.jpg" alt="Bootcamp Session 3" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-0">
-                    
-                    <!-- Slide Image 4 -->
                     <img src="/assets/bootcamp-4.jpg" alt="Bootcamp Session 4" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-0">
-                    
-                    <!-- Slide Image 5 -->
                     <img src="/assets/bootcamp-5.jpg" alt="Bootcamp Session 5" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-0">
-                    
-                    <!-- Slide Image 6 -->
                     <img src="/assets/bootcamp-6.jpg" alt="Bootcamp Session 6" class="bootcamp-slide absolute inset-0 w-full h-full object-cover slide-fade opacity-0">
 
-                    <!-- Subtle layout overlay indicator -->
                     <div class="absolute bottom-3 right-3 bg-slate-900/70 backdrop-blur-sm px-2.5 py-1 rounded text-[10px] font-mono text-indigo-300 z-10 tracking-widest uppercase">
                         Live Exhibition
                     </div>
@@ -90,8 +73,7 @@
         </div>
     </header>
 
-    <!-- 3. DESCRIPTION SECTION -->
-    <section id="about" class="py-16 md:py-24 bg-white border-t border-b border-slate-100">
+    <section id="about" class="py-16 md:py-24 bg-white border-t border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl tracking-tight">Bootcamp Description</h2>
@@ -131,8 +113,7 @@
         </div>
     </section>
 
-    <!-- 4. ELIGIBILITY MATRIX SECTION -->
-    <section class="py-16 bg-slate-50">
+    <section class="py-16 bg-slate-50 border-t border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-12">
                 <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl tracking-tight">Who Can Participate?</h2>
@@ -180,7 +161,6 @@
         </div>
     </section>
 
-    <!-- 5. ROADMAP MILESTONES SECTION -->
     <section id="phases" class="py-16 md:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
@@ -241,78 +221,6 @@
         </div>
     </section>
 
-    <!-- 6. PORTAL REGISTRATION FORM SECTION -->
-    <section id="register" class="py-16 bg-slate-50 border-t border-slate-100">
-        <div class="max-w-2xl mx-auto px-4 sm:px-6">
-            <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-10 border border-slate-100">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Registration Portal</h2>
-                    <p class="mt-2 text-sm text-slate-600">Provide your authenticated credentials to log into the infrastructure environment database.</p>
-                </div>
-                
-                <form id="bootcampForm" class="space-y-5">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"><i class="fas fa-user text-slate-400 mr-1"></i> Full Name</label>
-                        <input type="text" id="fullName" required placeholder="e.g., Modeste-K" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none text-sm text-slate-900 bg-white">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"><i class="fas fa-envelope text-slate-400 mr-1"></i> Email Address</label>
-                        <input type="email" id="email" required placeholder="username@example.com" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none text-sm text-slate-900 bg-white">
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"><i class="fas fa-user-tag text-slate-400 mr-1"></i> I am a...</label>
-                            <select id="userType" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none text-sm text-slate-700 bg-white">
-                                <option value="student">Student</option>
-                                <option value="teacher">Teacher / Instructor</option>
-                                <option value="jury">Jury Member</option>
-                                <option value="staff">SEAS Administration Staff</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"><i class="fas fa-graduation-cap text-slate-400 mr-1"></i> Program</label>
-                            <select id="program" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none text-sm text-slate-700 bg-white">
-                                <option value="">-- Select --</option>
-                                <option value="B.Eng">B.Eng</option>
-                                <option value="B.Tech">B.Tech</option>
-                                <option value="B.Sc">B.Sc</option>
-                                <option value="B.HSc">B.HSc</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"><i class="fas fa-signal text-slate-400 mr-1"></i> Year Level</label>
-                            <select id="level" required disabled class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none text-sm text-slate-700 bg-white disabled:bg-slate-50 disabled:cursor-not-allowed">
-                                <option value="">-- Choose Program First --</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"><i class="fas fa-microscope text-slate-400 mr-1"></i> Specialty</label>
-                            <select id="specialty" required disabled class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none text-sm text-slate-700 bg-white disabled:bg-slate-50 disabled:cursor-not-allowed">
-                                <option value="">-- Choose Program First --</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"><i class="fas fa-phone text-slate-400 mr-1"></i> Phone Number <span class="text-slate-400 font-normal lowercase">(optional)</span></label>
-                        <input type="tel" id="phone" placeholder="+237 6xx xxx xxx" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none text-sm text-slate-900 bg-white">
-                    </div>
-
-                    <button type="submit" class="w-full mt-2 bg-indigo-600 text-white font-bold py-3.5 rounded-lg hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/10 flex items-center justify-center gap-2 text-sm sm:text-base">
-                        <i class="fas fa-check-circle"></i> Confirm Registration
-                    </button>
-                    <div id="formFeedback" class="p-3.5 rounded-lg text-sm font-medium text-center hidden border"></div>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- 7. ANALYTICS ENGINE DISPLAY PANELS -->
     <div class="py-16 bg-slate-900 text-white border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div class="space-y-1">
@@ -338,7 +246,6 @@
         </div>
     </div>
 
-    <!-- 8. FOOTER SECTION -->
     <footer class="bg-slate-950 text-slate-400 py-12 text-sm border-t border-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
             <div class="space-y-4">
@@ -354,7 +261,7 @@
                 <h4 class="text-white font-bold uppercase tracking-wider text-xs mb-4">Quick Links</h4>
                 <ul class="space-y-2 text-xs sm:text-sm">
                     <li><a href="#" class="hover:text-white transition">Home Dashboard</a></li>
-                    <li><a href="#register" class="hover:text-white transition">Portal Entry</a></li>
+                    <li><a href="/register.html" class="hover:text-white transition">Portal Entry</a></li>
                     <li><a href="#phases" class="hover:text-white transition">Roadmap Milestones</a></li>
                     <li><a href="/admin.html" class="hover:text-white transition">Admin Dashboard Portal</a></li>
                 </ul>
@@ -376,119 +283,20 @@
         </div>
     </footer>
 
-    <!-- INTERACTIVE SCRIPT CONTROL ENGINE -->
     <script>
         // --- MULTI-IMAGE AUTOMATED ROTATION SCRIPT (5-SECOND INTERVAL) ---
         const slides = document.querySelectorAll('.bootcamp-slide');
         let currentSlideIndex = 0;
 
         function rotateSlideshow() {
-            // Fade out the current slide image
             slides[currentSlideIndex].classList.remove('opacity-100');
             slides[currentSlideIndex].classList.add('opacity-0');
-
-            // Move pointer to the next file link index sequence
             currentSlideIndex = (currentSlideIndex + 1) % slides.length;
-
-            // Fade in the target newly selected picture asset block
             slides[currentSlideIndex].classList.remove('opacity-0');
             slides[currentSlideIndex].classList.add('opacity-100');
         }
 
-        // Initialize cyclical rotation engine loop bound strictly at 5000ms (5 seconds)
         setInterval(rotateSlideshow, 5000);
-
-
-        // --- REGISTRATION SELECTOR CASCADE CONFIGURATION ---
-        const dataMatrix = {
-            "B.Eng": { levels: ["Level 3"], specialties: ["CSE", "CEE", "EME", "CHE"] },
-            "B.Tech": { levels: ["Level 2"], specialties: ["CSE", "EEE", "MCT", "MEC"] },
-            "B.Sc": { levels: ["Level 2"], specialties: ["MGT", "MIS", "AF", "DMK"] },
-            "B.HSc": { levels: ["BMS3", "NUR3"], specialties: ["BMS", "NUR"] }
-        };
-
-        const programSelect = document.getElementById('program');
-        const levelSelect = document.getElementById('level');
-        const specialtySelect = document.getElementById('specialty');
-        const form = document.getElementById('bootcampForm');
-        const feedback = document.getElementById('formFeedback');
-
-        programSelect.addEventListener('change', function() {
-            const prog = this.value;
-            levelSelect.innerHTML = '<option value="">-- Select Level --</option>';
-            specialtySelect.innerHTML = '<option value="">-- Select Specialty --</option>';
-            
-            if (prog && dataMatrix[prog]) {
-                levelSelect.disabled = false;
-                specialtySelect.disabled = false;
-                
-                dataMatrix[prog].levels.forEach(lvl => {
-                    const opt = document.createElement('option');
-                    opt.value = lvl; opt.textContent = lvl;
-                    levelSelect.appendChild(opt);
-                });
-                
-                dataMatrix[prog].specialties.forEach(spec => {
-                    const opt = document.createElement('option');
-                    opt.value = spec; opt.textContent = spec;
-                    specialtySelect.appendChild(opt);
-                });
-            } else {
-                levelSelect.disabled = true;
-                specialtySelect.disabled = true;
-                levelSelect.innerHTML = '<option value="">-- Choose Program First --</option>';
-                specialtySelect.innerHTML = '<option value="">-- Choose Program First --</option>';
-            }
-        });
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            feedback.className = "p-3.5 rounded-lg text-sm font-medium text-center hidden border";
-            feedback.style.display = "none";
-
-            const payload = {
-                full_name: document.getElementById('fullName').value,
-                email: document.getElementById('email').value,
-                user_type: document.getElementById('userType').value,
-                program: programSelect.value,
-                level: levelSelect.value,
-                specialty: specialtySelect.value,
-                phone: document.getElementById('phone').value
-            };
-
-            if (payload.program === "B.Tech" && payload.level !== "Level 2") {
-                feedback.className = "p-3.5 rounded-lg text-sm font-medium text-center border bg-red-50 text-red-700 border-red-200 block";
-                feedback.textContent = "Validation Failure: B.Tech targets Level 2 exclusively.";
-                return;
-            }
-            if (payload.program === "B.Eng" && payload.level !== "Level 3") {
-                feedback.className = "p-3.5 rounded-lg text-sm font-medium text-center border bg-red-50 text-red-700 border-red-200 block";
-                feedback.textContent = "Validation Failure: B.Eng targets Level 3 exclusively.";
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    feedback.className = "p-3.5 rounded-lg text-sm font-medium text-center border bg-green-50 text-green-700 border-green-200 block";
-                    feedback.textContent = "Registration succeeded! Check your email for validation instructions.";
-                    form.reset();
-                    levelSelect.disabled = true;
-                    specialtySelect.disabled = true;
-                } else {
-                    throw new Error(result.error || "An infrastructure error occurred during enrollment routing.");
-                }
-            } catch (err) {
-                feedback.className = "p-3.5 rounded-lg text-sm font-medium text-center border bg-red-50 text-red-700 border-red-200 block";
-                feedback.textContent = err.message;
-            }
-        });
     </script>
 </body>
 </html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Authentication Gate | SEAS Bootcamp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 antialiased font-sans min-h-screen flex flex-col justify-between">
+
+    <nav class="bg-slate-950 w-full border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+            <span class="text-xs font-mono uppercase tracking-widest text-indigo-400 font-bold flex items-center gap-2">
+                <i class="fas fa-shield-alt"></i> SEAS Security Gateway
+            </span>
+            <a href="/" class="text-slate-400 hover:text-white font-medium text-xs transition">
+                Exit to System <i class="fas fa-sign-out-alt ml-1"></i>
+            </a>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="max-w-md w-full bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6">
+            <div class="text-center space-y-2">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 text-xl border border-indigo-500/20 shadow-inner">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h2 class="text-xl font-bold tracking-tight text-white">Infrastructure Control Gate</h2>
+                <p class="text-xs text-slate-400">Provide secret access keys to orchestrate multidisciplinary clusters.</p>
+            </div>
+
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-mono tracking-wider font-bold uppercase text-slate-400 mb-1.5">Administrative Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500 text-sm">
+                            <i class="fas fa-key"></i>
+                        </span>
+                        <input type="password" id="adminToken" required placeholder="••••••••••••••••" class="w-full pl-10 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white font-mono tracking-widest outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-sm">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/10 text-sm flex items-center justify-center gap-2">
+                    Verify Credentials <i class="fas fa-arrow-right text-xs"></i>
+                </button>
+                <div id="authError" class="p-3 bg-red-950/40 border border-red-900/50 text-red-400 text-xs rounded-lg text-center font-medium hidden"></div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-slate-950 text-slate-600 py-4 text-center text-[10px] border-t border-slate-900 font-mono uppercase tracking-widest">
+        Authorization Required Token Engine &copy; 2026
+    </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const token = document.getElementById('adminToken').value;
+            const errorPanel = document.getElementById('authError');
+            errorPanel.classList.add('hidden');
+
+            // Administrative authorization check
+            if (token === "admin123") {
+                localStorage.setItem('seas_admin_authenticated', 'granted_true_session_2026');
+                window.location.href = "/admin.html";
+            } else {
+                errorPanel.classList.remove('hidden');
+                errorPanel.textContent = "Authentication Denied: Invalid access key signature.";
+            }
+        });
+    </script>
+</body>
+</html>

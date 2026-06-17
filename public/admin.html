@@ -3,197 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SeaS Bootcamp - Admin Dashboard</title>
-    <style>
-        :root {
-            --primary: #0A2540;
-            --accent: #635BFF;
-            --bg: #F4F6F8;
-            --border: #E3E8EE;
+    <title>Admin Dashboard Panel | SEAS Bootcamp</title>
+    <script>
+        if (localStorage.getItem('seas_admin_authenticated') !== 'granted_true_session_2026') {
+            window.location.replace('/admin-login.html');
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--primary);
-            margin: 0;
-            padding: 20px;
-        }
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        .admin-logos img {
-            height: 45px;
-            margin-left: 15px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-        }
-        .card {
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            background: #FFFFFF;
-        }
-        h3 { margin-top: 0; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 10px;}
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
-        }
-        th { background: #F8F9FA; font-weight: 600; }
-        .badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .btech { background: #E8F0FE; color: #1A73E8; }
-        .beng { background: #E6F4EA; color: #137333; }
-        .btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .btn-mix { background: #202124; }
-        .group-box {
-            background: #F8F9FA;
-            border: 1px dashed #DADCE0;
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        .group-title { font-weight: bold; color: var(--accent); margin-bottom: 8px; }
-    </style>
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 antialiased font-sans min-h-screen flex flex-col justify-between">
 
-<div class="dashboard-container">
-    <div class="header">
-        <div>
-            <h1 style="margin:0; font-size: 28px;">SeaS Bootcamp Coordination Portal</h1>
-            <p style="margin:5px 0 0 0; color: #6A737D;">Secure Management, Mixed-Specialty Allocation & Evaluation Milestones</p>
-        </div>
-        <div class="admin-logos">
-            <img src="/assets/logo1.png" alt="Logo 1" onerror="this.style.display='none'">
-            <img src="/assets/logo2.png" alt="Logo 2" onerror="this.style.display='none'">
-        </div>
-    </div>
-
-    <div class="grid">
-        <!-- Left Column: Registered Candidates -->
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3>Registered Participants Pool</h3>
-                <button class="btn btn-mix" onclick="generateMixedGroups()">Run SeaS Specialty Mix-Engine</button>
+    <nav class="bg-slate-950 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <img src="/assets/iuc-logo.png" alt="IUC Logo" onerror="this.src='iuc-logo.png'" class="h-9 w-auto brightness-200 object-contain">
+                    <img src="/assets/seas-logo.png" alt="SEAS Logo" onerror="this.src='seas-logo.png'" class="h-9 w-auto brightness-200 object-contain">
+                    <span class="text-xs font-mono uppercase tracking-widest text-indigo-400 font-bold hidden sm:block">SEAS Control Core</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-slate-400 hover:text-white font-medium text-xs transition flex items-center gap-1">
+                        <i class="fas fa-home"></i> View Site
+                    </a>
+                    <button onclick="localStorage.removeItem('seas_admin_authenticated'); window.location.replace('/');" class="bg-red-600/90 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-700 transition flex items-center gap-1.5 shadow-sm shadow-red-900/20">
+                        <i class="fas fa-sign-out-alt"></i> <span>Secure Logout</span>
+                    </button>
+                </div>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Full Name</th>
-                        <th>Email</th>
-                        <th>Program Structure</th>
-                        <th>Specialty</th>
-                    </tr>
-                </thead>
-                <tbody id="participantRows">
-                    <!-- Dynamic Rows Insertion -->
-                    <tr>
-                        <td>Demo Student A</td>
-                        <td>studenta@seas.edu</td>
-                        <td><span class="badge btech">BTech2</span></td>
-                        <td><strong>CSE</strong></td>
-                    </tr>
-                    <tr>
-                        <td>Demo Student B</td>
-                        <td>studentb@seas.edu</td>
-                        <td><span class="badge beng">Beng3</span></td>
-                        <td><strong>EME</strong></td>
-                    </tr>
-                    <tr>
-                        <td>Demo Student C</td>
-                        <td>studentc@seas.edu</td>
-                        <td><span class="badge btech">BTech2</span></td>
-                        <td><strong>MCT</strong></td>
-                    </tr>
-                </tbody>
-            </table>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 flex-grow space-y-8">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-800 pb-6 gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Administrative Workspace</h1>
+                <p class="text-slate-400 text-sm mt-1">Live tracking metrics and analytical management for registered cohorts database clusters.</p>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-center">
+                <span class="flex h-2.5 w-2.5 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span class="text-xs font-mono text-emerald-400 uppercase tracking-wider font-bold">Infrastructure Active</span>
+            </div>
         </div>
 
-        <!-- Right Column: Mixed Groups & Evaluation Phases -->
-        <div style="display: flex; flex-direction: column; gap: 30px;">
-            <div class="card">
-                <h3>Formed Multi-Disciplinary Groups</h3>
-                <div id="groupsContainer">
-                    <div class="group-box">
-                        <div class="group-title">SeaS Mixed Group #1</div>
-                        <span style="font-size:13px; display:block;">• Demo Student A (CSE)</span>
-                        <span style="font-size:13px; display:block;">• Demo Student B (EME)</span>
-                        <span style="font-size:13px; display:block;">• Demo Student C (MCT)</span>
-                    </div>
-                    <p style="font-size: 12px; color: #5F6368; font-style: italic; text-align: center;">Click the "Mix-Engine" button to recalculate cross-department distributions dynamically.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex items-center space-x-4 shadow-xl">
+                <div class="w-12 h-12 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xl flex items-center justify-center shadow-inner">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div>
+                    <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">Total Enrolled Cohorts</div>
+                    <div class="text-2xl font-black text-white mt-0.5" id="metricTotal">...</div>
                 </div>
             </div>
 
-            <div class="card">
-                <h3>Bootcamp Progress Phases</h3>
-                <table style="margin-top:0;">
-                    <tr>
-                        <td><strong>Phase 1: Design UI/UX</strong></td>
-                        <td><span class="badge" style="background:#FEF7E0; color:#B06000;">In Evolution Iteration</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Phase 2: Core Engineering</strong></td>
-                        <td><span class="badge" style="background:#F1F3F4; color:#5F6368;">Pending Progress</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Final Phase: Jury Defense</strong></td>
-                        <td><span class="badge" style="background:#F1F3F4; color:#5F6368;">External Lecturers & Corporate Partners</span></td>
-                    </tr>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex items-center space-x-4 shadow-xl">
+                <div class="w-12 h-12 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xl flex items-center justify-center shadow-inner">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+                <div>
+                    <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">Active Engineering Nodes</div>
+                    <div class="text-2xl font-black text-white mt-0.5" id="metricEngineering">...</div>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex items-center space-x-4 shadow-xl sm:col-span-2 lg:col-span-1">
+                <div class="w-12 h-12 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xl flex items-center justify-center shadow-inner">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div>
+                    <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">Database Access Queries</div>
+                    <div class="text-2xl font-black text-white mt-0.5">OK / Operational</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <h3 class="text-sm font-mono uppercase tracking-wider text-indigo-400 font-bold flex items-center gap-2">
+                    <i class="fas fa-list-ul"></i> Verified Database Registrations
+                </h3>
+                <button onclick="fetchRegistrations()" class="text-xs bg-slate-900 border border-slate-700 hover:bg-slate-850 px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition">
+                    <i class="fas fa-sync-alt"></i> Refresh Cluster
+                </button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full divide-y divide-slate-800 text-left">
+                    <thead class="bg-slate-950 text-slate-400 text-xs font-mono uppercase tracking-wider">
+                        <tr>
+                            <th class="px-6 py-4 font-semibold">Full Name</th>
+                            <th class="px-6 py-4 font-semibold">Email Profile</th>
+                            <th class="px-6 py-4 font-semibold">Track Tier</th>
+                            <th class="px-6 py-4 font-semibold">Specialty Group</th>
+                            <th class="px-6 py-4 font-semibold text-right">Delete Node</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-sm text-slate-300" id="registrationTableBody">
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-slate-500 font-medium">
+                                <i class="fas fa-circle-notch animate-spin text-lg text-indigo-500 mb-2 block"></i> Querying remote registry API hooks...
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
-    </div>
-</div>
+    </main>
 
-<script>
-    // Security Restriction Layer: Verify Access Credentials
-    window.addEventListener('DOMContentLoaded', () => {
-        const token = localStorage.getItem('admin_session_token');
-        // If an explicit login flow isn't handling this token, prompt or placeholder protection acts as armor
-        if (!token) {
-            console.warn("Unauthorized administrative attempt caught by system armor.");
+    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-[10px] font-mono uppercase tracking-widest text-slate-600">
+        SEAS Centralized Monitoring Cluster Dashboard Portal &copy; 2026
+    </footer>
+
+    <script>
+        async function fetchRegistrations() {
+            const tableBody = document.getElementById('registrationTableBody');
+            
+            try {
+                const response = await fetch('/api/registrations');
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || "Failed data pull query.");
+
+                // Calculate engineering specific programs
+                const engCount = data.filter(r => r.program === 'B.Eng' || r.program === 'B.Tech').length;
+                document.getElementById('metricTotal').textContent = data.length;
+                document.getElementById('metricEngineering').textContent = engCount;
+
+                if (data.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="px-6 py-10 text-center text-slate-500">
+                                <i class="fas fa-folder-open text-xl mb-2 block"></i> No registrations found in the active context database.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                tableBody.innerHTML = '';
+                data.forEach(reg => {
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-slate-900/60 transition duration-150";
+                    row.innerHTML = `
+                        <td class="px-6 py-4 font-bold text-white">${reg.full_name}</td>
+                        <td class="px-6 py-4 font-mono text-xs text-slate-400">${reg.email}</td>
+                        <td class="px-6 py-4"><span class="bg-indigo-950 border border-indigo-800 text-indigo-300 px-2 py-0.5 rounded text-xs font-mono">${reg.program}</span></td>
+                        <td class="px-6 py-4 font-mono text-xs text-slate-300">${reg.level} — ${reg.specialty}</td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="deleteRegistration('${reg.id}')" class="text-red-400 hover:text-red-600 transition p-1.5 hover:bg-red-500/10 rounded">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+            } catch (err) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-10 text-center text-red-400 font-medium">
+                            <i class="fas fa-exclamation-triangle text-xl mb-2 block"></i> ${err.message}
+                        </td>
+                    </tr>
+                `;
+            }
         }
-    });
 
-    function generateMixedGroups() {
-        alert("SeaS Optimization Engine: Processing registrations to safely mix distinct specialties into balanced design project pairings!");
-    }
-</script>
+        async function deleteRegistration(id) {
+            if (!confirm("Are you sure you want to completely remove this entry item node from the database?")) return;
+            try {
+                const response = await fetch(`/api/registrations/${id}`, { method: 'DELETE' });
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    fetchRegistrations();
+                } else {
+                    alert(result.error || "Failed to parse deletion sequence parameters.");
+                }
+            } catch (err) {
+                alert("Network communication interrupt during execution: " + err.message);
+            }
+        }
 
+        // Initialize fetch routine on component validation mount
+        document.addEventListener('DOMContentLoaded', fetchRegistrations);
+    </script>
 </body>
 </html>
