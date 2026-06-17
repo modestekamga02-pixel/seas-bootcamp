@@ -7,56 +7,60 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-900 text-slate-100 antialiased font-sans min-h-screen flex flex-col justify-between">
+<!-- Replaced background with all-white layout to seamlessly mirror your homepage aesthetic -->
+<body class="bg-white text-slate-900 antialiased font-sans min-h-screen flex flex-col justify-between">
 
-    <nav class="bg-slate-950 border-b border-slate-800 sticky top-0 z-50">
+    <!-- NAVIGATION HEADER -->
+    <nav class="bg-slate-50 border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center space-x-3">
-                    <img src="/assets/iuc-logo.png" alt="IUC Logo" onerror="this.src='iuc-logo.png'" class="h-9 w-auto brightness-200 object-contain">
-                    <img src="/assets/seas-logo.png" alt="SEAS Logo" onerror="this.src='seas-logo.png'" class="h-9 w-auto brightness-200 object-contain">
+                    <img src="/assets/iuc-logo.png" alt="IUC Logo" onerror="this.src='iuc-logo.png'" class="h-9 w-auto object-contain">
+                    <img src="/assets/seas-logo.png" alt="SEAS Logo" onerror="this.src='seas-logo.png'" class="h-9 w-auto object-contain">
                 </div>
-                <a href="/" class="text-slate-400 hover:text-white font-medium text-xs transition flex items-center gap-1">
+                <a href="/" class="text-slate-500 hover:text-slate-900 font-medium text-xs transition flex items-center gap-1">
                     <i class="fas fa-arrow-left"></i> Back to Home
                 </a>
             </div>
         </div>
     </nav>
 
+    <!-- REGISTRATION FORM CONTAINER -->
     <main class="max-w-xl mx-auto w-full px-4 py-12 flex-grow flex items-center justify-center">
-        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-8 shadow-2xl w-full relative">
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-xl w-full relative">
             
-            <div id="successModal" class="hidden absolute inset-0 bg-slate-950/95 rounded-2xl z-50 flex flex-col items-center justify-center p-6 text-center space-y-4">
-                <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-full flex items-center justify-center text-3xl shadow-lg animate-bounce">
+            <!-- SUCCESS MODAL POPUP -->
+            <div id="successModal" class="hidden absolute inset-0 bg-white/95 rounded-2xl z-50 flex flex-col items-center justify-center p-6 text-center space-y-4">
+                <div class="w-16 h-16 bg-emerald-100 border border-emerald-300 text-emerald-600 rounded-full flex items-center justify-center text-3xl shadow shadow-emerald-200 animate-bounce">
                     <i class="fas fa-check-circle"></i>
                 </div>
-                <h2 class="text-xl font-extrabold text-white">Registration Successful!</h2>
-                <p class="text-slate-400 text-sm max-w-sm">Please constantly check the home page to get live updates of the Bootcamp milestones and group formations.</p>
-                <div class="text-xs font-mono text-indigo-400 flex items-center gap-2 pt-2">
+                <h2 class="text-xl font-extrabold text-slate-900">Registration Successful!</h2>
+                <p class="text-slate-600 text-sm max-w-sm">Please constantly check the home page to get live updates of the Bootcamp milestones and group formations.</p>
+                <div class="text-xs font-mono text-indigo-600 flex items-center gap-2 pt-2">
                     <i class="fas fa-spinner animate-spin"></i> Redirecting to Home Page...
                 </div>
             </div>
 
             <div class="text-center mb-8">
-                <h1 class="text-2xl font-black text-white tracking-tight">Registration Portal</h1>
-                <p class="text-slate-400 text-xs mt-1">Provide your authenticated credentials to log into the infrastructure environment database.</p>
+                <h1 class="text-2xl font-black text-indigo-600 tracking-tight uppercase">Registration Portal</h1>
+                <p class="text-slate-500 text-xs mt-1">Provide your authenticated credentials to log into the infrastructure environment database.</p>
             </div>
 
             <form id="registrationForm" onsubmit="handleRegistrationSubmit(event)" class="space-y-5">
                 <div>
-                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5 font-bold"><i class="fas fa-user text-indigo-400 mr-1"></i> Full Name</label>
-                    <input type="text" id="fullName" required placeholder="e.g., Modeste-K" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-user text-indigo-500 mr-1"></i> Full Name</label>
+                    <input type="text" id="fullName" required placeholder="e.g., Pamela" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5 font-bold"><i class="fas fa-envelope text-indigo-400 mr-1"></i> Email Address</label>
-                    <input type="email" id="email" required placeholder="username@example.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-envelope text-indigo-500 mr-1"></i> Email Address</label>
+                    <input type="email" id="email" required placeholder="pamela@gmail.com" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5 font-bold"><i class="fas fa-users-cog text-indigo-400 mr-1"></i> I Am A...</label>
-                        <select id="userType" onchange="toggleRoleFields()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-users-cog text-indigo-500 mr-1"></i> I Am A...</label>
+                        <select id="userType" onchange="handleRoleAndProgramChange()" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition">
                             <option value="Student">Student</option>
                             <option value="Teacher / Instructor">Teacher / Instructor</option>
                             <option value="Jury Member">Jury Member</option>
@@ -64,82 +68,103 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5 font-bold"><i class="fas fa-graduation-cap text-indigo-400 mr-1"></i> Program</label>
-                        <select id="program" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                            <option value="B.Eng">B.Eng</option>
-                            <option value="B.Tech">B.Tech</option>
-                            <option value="B.Sc">B.Sc</option>
-                            <option value="M.Sc">M.Sc</option>
+                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-graduation-cap text-indigo-500 mr-1"></i> Program</label>
+                        <select id="program" onchange="handleRoleAndProgramChange()" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition">
+                            <option value="Beng3">Beng (3 Years)</option>
+                            <option value="BTECH2">B.Tech (2 Years)</option>
+                            <option value="BSc2">B.Sc (2 Years)</option>
+                            <option value="BHSc">B.HSc</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5 font-bold"><i class="fas fa-layer-group text-indigo-400 mr-1"></i> Year Level</label>
-                        <select id="level" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                            <option value="Level 1">Level 1</option>
-                            <option value="Level 2">Level 2</option>
-                            <option value="Level 3">Level 3</option>
-                            <option value="Level 4">Level 4</option>
+                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-layer-group text-indigo-500 mr-1"></i> Year Level</label>
+                        <select id="level" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition">
+                            <!-- Populated via Script -->
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5 font-bold"><i class="fas fa-atom text-indigo-400 mr-1"></i> Specialty</label>
-                        <select id="specialty" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                            <option value="CSE (Cloud/Software)">CSE (Cloud/Software)</option>
-                            <option value="Telecom & Networks">Telecom & Networks</option>
-                            <option value="Cybersecurity">Cybersecurity</option>
-                            <option value="Data Science / AI">Data Science / AI</option>
+                        <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-atom text-indigo-500 mr-1"></i> Specialty</label>
+                        <select id="specialty" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition">
+                            <!-- Populated via Script -->
                         </select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5 font-bold"><i class="fas fa-phone text-indigo-400 mr-1"></i> Phone Number <span class="text-slate-600 text-[10px] font-normal">(Optional)</span></label>
-                    <input type="text" id="phone" placeholder="+237 6xx xxx xxx" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                    <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-phone text-indigo-500 mr-1"></i> Phone Number</label>
+                    <input type="text" id="phone" required placeholder="e.g., 694536344" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
                 </div>
 
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs font-mono uppercase tracking-wider shadow-lg shadow-indigo-950/50 transition duration-150 flex items-center justify-center gap-2 mt-2">
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs font-mono uppercase tracking-wider shadow-md shadow-indigo-200 transition duration-150 flex items-center justify-center gap-2 mt-2">
                     <i class="fas fa-id-card"></i> Confirm Registration
                 </button>
             </form>
         </div>
     </main>
 
-    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-[10px] font-mono uppercase tracking-widest text-slate-600">
+    <footer class="bg-slate-50 border-t border-slate-200 py-6 text-center text-[10px] font-mono uppercase tracking-widest text-slate-500">
         © 2026 SEAS Bootcamp — IUC Douala. All rights reserved.
     </footer>
 
     <script>
-        function toggleRoleFields() {
+        // Program criteria structure mirroring your updated tracking matrix rules explicitly
+        const eligibilityMap = {
+            "Beng3": {
+                levels: ["Level 3"],
+                specialties: ["CSE", "CEE", "EME", "CHE"]
+            },
+            "BTECH2": {
+                levels: ["Level 2"],
+                specialties: ["CSE", "EEE", "MCT", "MEC"]
+            },
+            "BSc2": {
+                levels: ["Level 2"],
+                specialties: ["MGT", "MIS", "AF", "DMK"]
+            },
+            "BHSc": {
+                levels: ["BMS3", "NUR3"],
+                specialties: ["BMS", "NUR"]
+            }
+        };
+
+        function handleRoleAndProgramChange() {
             const role = document.getElementById('userType').value;
             const programSelect = document.getElementById('program');
             const levelSelect = document.getElementById('level');
             const specialtySelect = document.getElementById('specialty');
 
             if (role !== "Student") {
-                // Safely toggle input view rules for non-student roles
                 programSelect.disabled = true;
                 levelSelect.disabled = true;
                 specialtySelect.disabled = true;
-                programSelect.className = "w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-500 cursor-not-allowed";
-                levelSelect.className = "w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-500 cursor-not-allowed";
-                specialtySelect.className = "w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-500 cursor-not-allowed";
+                programSelect.className = "w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-400 cursor-not-allowed";
+                levelSelect.className = "w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-400 cursor-not-allowed";
+                specialtySelect.className = "w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-400 cursor-not-allowed";
+                levelSelect.innerHTML = '<option value="N/A">N/A</option>';
+                specialtySelect.innerHTML = '<option value="N/A">N/A</option>';
             } else {
-                // Re-enable input contexts cleanly for students
                 programSelect.disabled = false;
                 levelSelect.disabled = false;
                 specialtySelect.disabled = false;
-                programSelect.className = "w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition";
-                levelSelect.className = "w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition";
-                specialtySelect.className = "w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition";
+                programSelect.className = "w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition";
+                levelSelect.className = "w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition";
+                specialtySelect.className = "w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition";
+                
+                const selectedProgram = programSelect.value;
+                const rule = eligibilityMap[selectedProgram];
+
+                if (rule) {
+                    levelSelect.innerHTML = rule.levels.map(lvl => `<option value="${lvl}">${lvl}</option>`).join('');
+                    specialtySelect.innerHTML = rule.specialties.map(spec => `<option value="${spec}">${spec}</option>`).join('');
+                }
             }
         }
 
         async function handleRegistrationSubmit(e) {
             e.preventDefault();
-            
             const role = document.getElementById('userType').value;
             const payload = {
                 full_name: document.getElementById('fullName').value,
@@ -148,7 +173,7 @@
                 program: role === "Student" ? document.getElementById('program').value : "N/A",
                 level: role === "Student" ? document.getElementById('level').value : "N/A",
                 specialty: role === "Student" ? document.getElementById('specialty').value : "N/A",
-                phone: document.getElementById('phone').value || "N/A"
+                phone: document.getElementById('phone').value
             };
 
             try {
@@ -160,21 +185,17 @@
 
                 const result = await response.json();
                 if (response.ok && result.success) {
-                    // Trigger custom UI redirect intercept modal block
                     document.getElementById('successModal').classList.remove('hidden');
-                    setTimeout(() => {
-                        window.location.replace('/');
-                    }, 4000);
+                    setTimeout(() => { window.location.replace('/'); }, 3000);
                 } else {
-                    alert(result.error || "Failed database commit operations.");
+                    alert(result.error || "Data rejection error occurred.");
                 }
             } catch (err) {
-                alert("Error connecting to backend services: " + err.message);
+                alert("Network connectivity error: " + err.message);
             }
         }
         
-        // Initial setup validation
-        document.addEventListener('DOMContentLoaded', toggleRoleFields);
+        document.addEventListener('DOMContentLoaded', handleRoleAndProgramChange);
     </script>
 </body>
 </html>
