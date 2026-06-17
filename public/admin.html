@@ -124,10 +124,24 @@
             const tableBody = document.getElementById('registrationTableBody');
             
             try {
-                const response = await fetch('/api/registrations');
-                const data = await response.json();
+                // Dynamically fall back to the appropriate routing engine path
+                const apiPath = '/api/registrations';
+                const response = await fetch(apiPath);
+                
+                // Read content headers safely to check for HTML responses
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const rawText = await response.text();
+                    
+                    // If running on Render static web service, display clear context instructions
+                    if (window.location.hostname.includes('onrender.com')) {
+                        throw new Error(`Static Hosting Context: This page is hosted on a Render Static site, but your Express routing server code needs to run inside a Render "Web Service" container instance for API calls to work.`);
+                    }
+                    throw new Error(`The local server returned text/html instead of JSON. Status Code: ${response.status}.`);
+                }
 
-                if (!response.ok) throw new Error(data.error || "Failed data pull query.");
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Failed data pull query matching.");
 
                 // Calculate engineering specific programs
                 const engCount = data.filter(r => r.program === 'B.Eng' || r.program === 'B.Tech').length;
@@ -150,10 +164,10 @@
                     const row = document.createElement('tr');
                     row.className = "hover:bg-slate-900/60 transition duration-150";
                     row.innerHTML = `
-                        <td class="px-6 py-4 font-bold text-white">${reg.full_name}</td>
-                        <td class="px-6 py-4 font-mono text-xs text-slate-400">${reg.email}</td>
-                        <td class="px-6 py-4"><span class="bg-indigo-950 border border-indigo-800 text-indigo-300 px-2 py-0.5 rounded text-xs font-mono">${reg.program}</span></td>
-                        <td class="px-6 py-4 font-mono text-xs text-slate-300">${reg.level} — ${reg.specialty}</td>
+                        <td class="px-6 py-4 font-bold text-white">${reg.full_name || 'N/A'}</td>
+                        <td class="px-6 py-4 font-mono text-xs text-slate-400">${reg.email || 'N/A'}</td>
+                        <td class="px-6 py-4"><span class="bg-indigo-950 border border-indigo-800 text-indigo-300 px-2 py-0.5 rounded text-xs font-mono">${reg.program || 'N/A'}</span></td>
+                        <td class="px-6 py-4 font-mono text-xs text-slate-300">${reg.level || ''} — ${reg.specialty || ''}</td>
                         <td class="px-6 py-4 text-right">
                             <button onclick="deleteRegistration('${reg.id}')" class="text-red-400 hover:text-red-600 transition p-1.5 hover:bg-red-500/10 rounded">
                                 <i class="fas fa-trash-alt"></i>
@@ -167,7 +181,7 @@
                 tableBody.innerHTML = `
                     <tr>
                         <td colspan="5" class="px-6 py-10 text-center text-red-400 font-medium">
-                            <i class="fas fa-exclamation-triangle text-xl mb-2 block"></i> ${err.message}
+                            <i class="fas fa-exclamation-triangle text-xl mb-2 block"></i> <span class="break-words px-4 block text-xs font-mono">${err.message}</span>
                         </td>
                     </tr>
                 `;
