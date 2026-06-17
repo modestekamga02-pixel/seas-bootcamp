@@ -1,62 +1,102 @@
-/* eslint-disable */
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
-const { Pool } = require('pg');
-require('dotenv').config();
-
 const app = express();
-app.use(cors());
+const PORT = process.env.PORT || 3000;
+
+// Middleware to process incoming requests data arrays
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static assets directly from the public directory folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// SEAS Bootcamp Program Definitions
-const PROGRAM_CONFIG = {
-    "Beng3": ["CSE", "CEE", "EME", "CHE"],
-    "BTech2": ["CSE", "EEE", "MCT", "MEC"],
-    "BSc2": ["MGT", "MIS", "AF", "DMK"],
-    "BHSc": ["BMS3", "NUR3"]
-};
-
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-
-// Updated Registration Route with Validation
-app.post('/api/register', async (req, res) => {
-    const { full_name, email, program, specialty } = req.body;
-
-    // Validate if the program exists and if the specialty belongs to it
-    if (!PROGRAM_CONFIG[program] || !PROGRAM_CONFIG[program].includes(specialty)) {
-        return res.status(400).json({ success: false, message: "Invalid program or specialty combination." });
+// Mock in-memory runtime database array storage context
+let databaseRegistrations = [
+    {
+        id: "node-1",
+        full_name: "Modeste-K",
+        email: "modestekamga02@gmail.com",
+        program: "B.Tech",
+        level: "Level 2",
+        specialty: "CSE",
+        phone: "+237 600 000 000"
     }
+];
 
-    try {
-        const result = await pool.query(
-            'INSERT INTO participants (full_name, email, program, specialty) VALUES ($1, $2, $3, $4) RETURNING *',
-            [full_name, email, program, specialty]
-        );
-        res.status(201).json({ success: true, data: result.rows[0] });
-    } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
-    }
+// =========================================================================
+// BACKEND CORE API ROUTES (MUST BE REGISTERED BEFORE STATIC CATCH-ALLS)
+// =========================================================================
+
+// 1. GET: Fetch all registrations inside database cluster
+app.get('/api/registrations', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).json(databaseRegistrations);
 });
 
-// Admin access restricted via middleware
-const adminAuth = (req, res, next) => {
-    if (req.headers['x-admin-token'] === process.env.ADMIN_SECRET) {
-        next();
+// 2. POST: Commit new entry data profiles routing logic
+app.post('/api/register', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    const { full_name, email, user_type, program, level, specialty, phone } = req.body;
+
+    if (!full_name || !email) {
+        return res.status(400).json({ success: false, error: "Validation Fault: Full Name and Email are mandatory parameters." });
+    }
+
+    const newNode = {
+        id: 'node-' + Date.now(),
+        full_name,
+        email,
+        user_type,
+        program,
+        level,
+        specialty,
+        phone: phone || "N/A"
+    };
+
+    databaseRegistrations.push(newNode);
+    return res.status(201).json({ success: true, entry: newNode });
+});
+
+// 3. DELETE: Drop verified entry nodes from context index
+app.delete('/api/registrations/:id', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    const targetId = req.params.id;
+    const initialLength = databaseRegistrations.length;
+    
+    databaseRegistrations = databaseRegistrations.filter(item => item.id !== targetId);
+
+    if (databaseRegistrations.length < initialLength) {
+        return res.status(200).json({ success: true });
     } else {
-        res.status(403).json({ error: "Unauthorized access" });
+        return res.status(404).json({ success: false, error: "Target node entity index not found inside matrix tracking." });
     }
-};
-
-app.get('/api/admin/participants', adminAuth, async (req, res) => {
-    const result = await pool.query('SELECT * FROM participants');
-    res.json(result.rows);
 });
 
+// =========================================================================
+// EXPLICIT STATIC ROUTING CONTEXT FALLBACKS
+// =========================================================================
+
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/register.html'));
+});
+
+app.get('/admin-login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/admin-login.html'));
+});
+
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/admin.html'));
+});
+
+// Main system entry page hook fallback rule
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Start local infrastructure engine listener
+app.listen(PORT, () => {
+    console.log(`======================================================`);
+    console.log(`  SEAS Bootcamp Control Engine Running on Port ${PORT}`);
+    console.log(`  Local Access Hub: http://localhost:${PORT}          `);
+    console.log(`======================================================`);
+});
