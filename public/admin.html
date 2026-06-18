@@ -3,203 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard Panel | SEAS Bootcamp</title>
-    <script>
-        if (localStorage.getItem('seas_admin_authenticated') !== 'granted_true_session_2026') {
-            window.location.replace('/admin-login.html');
-        }
-    </script>
+    <title>Admin Dashboard | SEAS Bootcamp</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-900 text-slate-100 antialiased font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-slate-100 font-sans antialiased">
 
-    <nav class="bg-slate-950 border-b border-slate-800 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center space-x-3">
-                    <img src="/assets/iuc-logo.png" alt="IUC Logo" onerror="this.src='iuc-logo.png'" class="h-9 w-auto brightness-200 object-contain">
-                    <img src="/assets/seas-logo.png" alt="SEAS Logo" onerror="this.src='seas-logo.png'" class="h-9 w-auto brightness-200 object-contain">
-                    <span class="text-xs font-mono uppercase tracking-widest text-indigo-400 font-bold hidden sm:block">SEAS Control Core</span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="/" class="text-slate-400 hover:text-white font-medium text-xs transition flex items-center gap-1">
-                        <i class="fas fa-home"></i> View Site
-                    </a>
-                    <button onclick="localStorage.removeItem('seas_admin_authenticated'); window.location.replace('/');" class="bg-red-600/90 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-700 transition flex items-center gap-1.5">
-                        <i class="fas fa-sign-out-alt"></i> <span>Secure Logout</span>
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-indigo-900 text-white shadow-md px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-black tracking-wider uppercase">SEAS Bootcamp Admin Panel</h1>
+            <a href="/" class="text-indigo-200 hover:text-white transition text-sm"><i class="fas fa-sign-out-alt"></i> Public Portal</a>
+        </header>
+
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8">
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                <div class="p-6 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 uppercase">Verify Entry Pools Table</h2>
+                        <p class="text-slate-500 text-xs">Live tracking record database files from the registration endpoint.</p>
+                    </div>
+                    <button onclick="clearAllEntries()" class="bg-red-600 hover:bg-red-700 text-white font-mono text-xs uppercase px-4 py-2 rounded-lg transition shadow-md flex items-center gap-1">
+                        <i class="fas fa-trash-alt"></i> Clear Data Records
                     </button>
                 </div>
-            </div>
-        </div>
-    </nav>
 
-    <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 flex-grow space-y-8">
-        
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-800 pb-6 gap-4">
-            <div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Administrative Workspace</h1>
-                <p class="text-slate-400 text-sm mt-1">Live tracking metrics, role filtering, and automated group matchmaking configurations.</p>
-            </div>
-            <div class="flex items-center gap-2 self-start sm:self-center">
-                <span class="flex h-2.5 w-2.5 relative">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                </span>
-                <span class="text-xs font-mono text-emerald-400 uppercase tracking-wider font-bold">Cluster System Online</span>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex items-center space-x-3 shadow-xl">
-                <div class="w-10 h-10 rounded-lg bg-indigo-500/10 text-indigo-400 text-lg flex items-center justify-center shadow-inner"><i class="fas fa-user-graduate"></i></div>
-                <div>
-                    <div class="text-[9px] font-mono uppercase text-slate-500 font-bold">Students</div>
-                    <div class="text-xl font-black text-white" id="countStudent">0</div>
-                </div>
-            </div>
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex items-center space-x-3 shadow-xl">
-                <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 text-lg flex items-center justify-center shadow-inner"><i class="fas fa-chalkboard-teacher"></i></div>
-                <div>
-                    <div class="text-[9px] font-mono uppercase text-slate-500 font-bold">Teachers / Instructors</div>
-                    <div class="text-xl font-black text-white" id="countTeacher">0</div>
-                </div>
-            </div>
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex items-center space-x-3 shadow-xl">
-                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 text-lg flex items-center justify-center shadow-inner"><i class="fas fa-gavel"></i></div>
-                <div>
-                    <div class="text-[9px] font-mono uppercase text-slate-500 font-bold">Jury Members</div>
-                    <div class="text-xl font-black text-white" id="countJury">0</div>
-                </div>
-            </div>
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex items-center space-x-3 shadow-xl">
-                <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-400 text-lg flex items-center justify-center shadow-inner"><i class="fas fa-user-shield"></i></div>
-                <div>
-                    <div class="text-[9px] font-mono uppercase text-slate-500 font-bold">SEAS Admin Staff</div>
-                    <div class="text-xl font-black text-white" id="countStaff">0</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 h-fit space-y-6">
-                <h3 class="text-xs font-mono uppercase tracking-wider text-indigo-400 font-bold border-b border-slate-800 pb-3"><i class="fas fa-cogs mr-1"></i> Workflow Engine Operations</h3>
-                
-                <div class="space-y-4">
-                    <div>
-                        <p class="text-xs text-slate-400 mb-2">Step 1: Broadcast the live registered list onto the public portal layout view.</p>
-                        <button onclick="publishParticipants()" class="w-full bg-slate-900 border border-indigo-700 text-indigo-300 hover:bg-indigo-950/30 text-xs font-bold py-2 px-4 rounded-xl transition flex items-center justify-center gap-2">
-                            <i class="fas fa-globe"></i> Publish Participants List
-                        </button>
-                    </div>
-
-                    <div>
-                        <p class="text-xs text-slate-400 mb-2">Step 2: Initialize automated cross-specialty team matching clusters (Groups of 5).</p>
-                        <button onclick="runMatchmaking()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-md">
-                            <i class="fas fa-random"></i> Run Specialty Mix Engine
-                        </button>
-                    </div>
-
-                    <div>
-                        <p class="text-xs text-slate-400 mb-2">Step 3: Freeze, assign unique projects, and push finished teams database schema to the homepage.</p>
-                        <button onclick="publishGroups()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-4 rounded-xl transition flex items-center justify-center gap-2">
-                            <i class="fas fa-cloud-upload-alt"></i> Publish Groups & Projects
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col justify-between">
-                <div>
-                    <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/50">
-                        <h3 class="text-sm font-mono uppercase tracking-wider text-indigo-400 font-bold flex items-center gap-2">
-                            <i class="fas fa-list-ul"></i> Verified Entry Pools
-                        </h3>
-                        <button onclick="fetchRegistrations()" class="text-[10px] font-mono bg-slate-900 border border-slate-700 hover:bg-slate-800 px-2.5 py-1 rounded font-semibold transition">
-                            <i class="fas fa-sync-alt"></i> Refresh Pool
-                        </button>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full divide-y divide-slate-800 text-left">
-                            <thead class="bg-slate-950 text-slate-400 text-xs font-mono uppercase tracking-wider">
-                                <tr>
-                                    <th class="px-6 py-3 font-semibold">Name</th>
-                                    <th class="px-6 py-3 font-semibold">Role Profile</th>
-                                    <th class="px-6 py-3 font-semibold">Specialty Group</th>
-                                    <th class="px-6 py-3 text-right">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800 text-xs text-slate-300" id="registrationTableBody">
-                                <tr>
-                                    <td colspan="4" class="px-6 py-12 text-center text-slate-500 font-medium">
-                                        <i class="fas fa-circle-notch animate-spin text-indigo-500 mb-2 block"></i> Synchronizing local registration clusters...
-                                    </td>
-                                </tr>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-mono text-[11px] uppercase tracking-wider border-b border-slate-200">
+                                <th class="p-4">Full Name</th>
+                                <th class="p-4">Profile Role</th>
+                                <th class="p-4">Email Address</th>
+                                <th class="p-4">Program</th>
+                                <th class="p-4">Level</th>
+                                <th class="p-4">Specialty</th>
+                                <th class="p-4">Phone Number</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entriesTableBody" class="divide-y divide-slate-100 text-sm text-slate-800">
                             </tbody>
-                        </table>
-                    </div>
+                    </table>
                 </div>
             </div>
-        </div>
-    </main>
-
-    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-[10px] font-mono uppercase tracking-widest text-slate-600">
-        SEAS Centralized Monitoring Cluster Dashboard Portal © 2026
-    </footer>
+        </main>
+    </div>
 
     <script>
-        async function fetchRegistrations() {
-            const tableBody = document.getElementById('registrationTableBody');
+        async function fetchDashboardEntries() {
             try {
-                const response = await fetch('/api/registrations');
-                if (!response.ok) throw new Error("Failed to extract active payload nodes.");
+                const response = await fetch('/api/participants');
                 const data = await response.json();
+                const tbody = document.getElementById('entriesTableBody');
+                tbody.innerHTML = '';
 
-                // Compute Role Segmentations
-                document.getElementById('countStudent').textContent = data.filter(r => r.user_type === 'Student').length;
-                document.getElementById('countTeacher').textContent = data.filter(r => r.user_type.includes('Teacher')).length;
-                document.getElementById('countJury').textContent = data.filter(r => r.user_type === 'Jury Member').length;
-                document.getElementById('countStaff').textContent = data.filter(r => r.user_type.includes('Administration')).length;
-
-                if (data.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="4" class="px-6 py-10 text-center text-slate-500"><i class="fas fa-folder-open text-base mb-2 block"></i> No verified records active in system registry.</td></tr>`;
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center font-mono text-xs text-slate-400">No data records found in backend server.</td></tr>`;
                     return;
                 }
 
-                tableBody.innerHTML = '';
-                data.forEach(reg => {
+                data.forEach(entry => {
                     const row = document.createElement('tr');
-                    row.className = "hover:bg-slate-900/60 transition";
+                    row.className = "hover:bg-slate-50 transition";
                     row.innerHTML = `
-                        <td class="px-6 py-3.5 font-bold text-white">${reg.full_name}</td>
-                        <td class="px-6 py-3.5"><span class="bg-slate-900 border border-slate-700 px-2 py-0.5 rounded text-[10px] font-mono">${reg.user_type}</span></td>
-                        <td class="px-6 py-3.5 font-mono text-slate-400">${reg.specialty || 'N/A'}</td>
-                        <td class="px-6 py-3.5 text-right">
-                            <button onclick="deleteRegistration('${reg.id}')" class="text-red-400 hover:text-red-600 transition"><i class="fas fa-trash-alt"></i></button>
-                        </td>
+                        <td class="p-4 font-bold text-slate-900">${entry.full_name || 'N/A'}</td>
+                        <td class="p-4"><span class="px-2 py-1 text-xs font-mono rounded bg-indigo-50 border border-indigo-200 text-indigo-700">${entry.user_type || 'N/A'}</span></td>
+                        <td class="p-4 font-mono text-xs text-slate-600">${entry.email || 'N/A'}</td>
+                        <td class="p-4">${entry.program || 'N/A'}</td>
+                        <td class="p-4 font-mono">${entry.level || 'N/A'}</td>
+                        <td class="p-4"><span class="px-2 py-0.5 font-mono text-xs rounded bg-slate-100 text-slate-700">${entry.specialty || 'N/A'}</span></td>
+                        <td class="p-4 font-mono text-xs">${entry.phone || 'N/A'}</td>
                     `;
-                    tableBody.appendChild(row);
+                    tbody.appendChild(row);
                 });
             } catch (err) {
-                tableBody.innerHTML = `<tr><td colspan="4" class="px-6 py-10 text-center text-red-400 font-mono text-[11px]"><i class="fas fa-exclamation-triangle block mb-1"></i> ${err.message}</td></tr>`;
+                console.error("Failed to load pool dashboard:", err);
             }
         }
 
-        async function deleteRegistration(id) {
-            if (!confirm("Remove item permanently from workspace mapping?")) return;
+        async function clearAllEntries() {
+            if (!confirm("Are you absolutely sure you want to completely wipe all database history records?")) return;
             try {
-                const response = await fetch(`/api/registrations/${id}`, { method: 'DELETE' });
-                if (response.ok) fetchRegistrations();
-            } catch (err) { alert(err.message); }
+                const response = await fetch('/api/clear', { method: 'DELETE' });
+                if (response.ok) {
+                    fetchDashboardEntries();
+                } else {
+                    alert("Failed to clear entries.");
+                }
+            } catch (err) {
+                alert("Error communicating with server: " + err.message);
+            }
         }
 
-        function publishParticipants() { alert("Pipeline Status: Participant list exported successfully to Homepage static viewport layout context!"); }
-        function runMatchmaking() { alert("Matchmaking Engine: Balanced multi-disciplinary groups of 5 with mixed specialties have been compiled!"); }
-        function publishGroups() { alert("Pipeline Status: Structured groups and their assigned projects are now deployed live onto the Homepage framework!"); }
-
-        document.addEventListener('DOMContentLoaded', fetchRegistrations);
+        document.addEventListener('DOMContentLoaded', fetchDashboardEntries);
     </script>
 </body>
 </html>

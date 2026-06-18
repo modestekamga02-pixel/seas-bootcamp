@@ -1,63 +1,79 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const DATA_FILE = path.join(__dirname, 'data.json');
+
+// Helper functions to handle persistent reads/writes safely on disk
+function readDatabase() {
+    try {
+        if (!fs.existsSync(DATA_FILE)) {
+            fs.writeFileSync(DATA_FILE, JSON.stringify([]));
+            return [];
+        }
+        const data = fs.readFileSync(DATA_FILE, 'utf8');
+        return JSON.parse(data || '[]');
+    } catch (error) {
+        console.error("Database reading error:", error);
+        return [];
+    }
+}
+
+function writeDatabase(data) {
+    try {
+        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    } catch (error) {
+        console.error("Database writing error:", error);
+    }
+}
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Active structural seed database mockup configuration array tracking
-let databaseRegistrations = [
-    { id: "seed-1", full_name: "Modeste-K", email: "modeste@iuc.cm", user_type: "Student", program: "B.Tech", level: "Level 4", specialty: "CSE (Cloud/Software)", phone: "N/A" },
-    { id: "seed-2", full_name: "Dr. Kamga", email: "kamga.instructor@iuc.cm", user_type: "Teacher / Instructor", program: "N/A", level: "N/A", specialty: "N/A", phone: "N/A" }
-];
-
-// 1. GET API — Pull entire registration array matrix entries context
-app.get('/api/registrations', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    return res.status(200).json(databaseRegistrations);
-});
-
-// 2. POST API — Push newly verified entry data fields straight into pool
+// REGISTRATION POST ENDPOINT
 app.post('/api/register', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
     const { full_name, email, user_type, program, level, specialty, phone } = req.body;
 
-    if (!full_name || !email || !user_type) {
-        return res.status(400).json({ success: false, error: "Validation Intercept Error: Core parameters missing." });
+    if (!full_name || !email || !user_type || !phone) {
+        return res.status(400).json({ success: false, error: "Required fields missing." });
     }
 
-    const newRecord = {
-        id: 'node-' + Date.now(),
+    const currentRecords = readDatabase();
+    
+    const newEntry = {
         full_name,
         email,
         user_type,
-        program,
-        level,
-        specialty,
+        program: program || "N/A",
+        level: level || "N/A",
+        specialty: specialty || "N/A",
         phone
     };
 
-    databaseRegistrations.push(newRecord);
-    return res.status(201).json({ success: true, record: newRecord });
+    currentRecords.push(newEntry);
+    writeDatabase(currentRecords);
+
+    res.status(201).json({ success: true, data: newEntry });
 });
 
-// 3. DELETE API — Clean up database profiles indexes entries
-app.delete('/api/registrations/:id', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    databaseRegistrations = databaseRegistrations.filter(item => item.id !== req.params.id);
-    return res.status(200).json({ success: true });
+// GET REGISTERED PARTICIPANTS POOL ENDPOINT
+app.get('/api/participants', (req, res) => {
+    const data = readDatabase();
+    res.json(data);
 });
 
-// Static SPA Fallback paths routing
-app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public/register.html')));
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public/admin.html')));
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+// WIPE ENTIRE DATABASE RECORDS RECORD (ADMIN ACTION ONLY)
+app.delete('/api/clear', (req, res) => {
+    writeDatabase([]);
+    res.json({ success: true, message: "Database wiped successfully." });
+});
+
+app.get('*', (pathRequest, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.listen(PORT, () => {
-    console.log(`======================================================`);
-    console.log(` SEAS Bootcamp Hub Engine Active on Port ${PORT}       `);
-    console.log(` Test Registration Endpoint: http://localhost:${PORT}/register `);
-    console.log(`======================================================`);
+    console.log(`Persistent Server actively handling traffic on http://localhost:${PORT}`);
 });
