@@ -45,12 +45,12 @@
             <form id="registrationForm" onsubmit="handleRegistrationSubmit(event)" class="space-y-5">
                 <div>
                     <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-user text-indigo-500 mr-1"></i> Full Name</label>
-                    <input type="text" id="fullName" required placeholder="e.g., Pamela" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
+                    <input type="text" id="fullName" required placeholder="e.g., Logan Kamga" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
                 </div>
 
                 <div>
                     <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-envelope text-indigo-500 mr-1"></i> Email Address</label>
-                    <input type="email" id="email" required placeholder="pamela@gmail.com" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
+                    <input type="email" id="email" required placeholder="logan@gmail.com" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -89,7 +89,7 @@
 
                 <div>
                     <label class="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-bold"><i class="fas fa-phone text-indigo-500 mr-1"></i> Phone Number</label>
-                    <input type="text" id="phone" required placeholder="e.g., 694536344" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
+                    <input type="text" id="phone" required placeholder="e.g., 655000055" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 transition shadow-inner">
                 </div>
 
                 <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs font-mono uppercase tracking-wider shadow-md shadow-indigo-200 transition duration-150 flex items-center justify-center gap-2 mt-2">
@@ -104,7 +104,6 @@
     </footer>
 
     <script>
-        // Restricting criteria mapping to exactly match instructions
         const eligibilityMap = {
             "Beng3": { levels: ["3"], specialties: ["CSE", "CEE", "EME", "CHE"] },
             "BTECH2": { levels: ["2"], specialties: ["CSE", "EEE", "MCT", "MEC"] },
@@ -143,15 +142,15 @@
             e.preventDefault();
             const role = document.getElementById('userType').value;
             
-            // Fixed data mapping attributes to perfectly match what the dashboard and DB models look for
+            // Clean values and match database model keys exactly
             const payload = {
-                full_name: document.getElementById('fullName').value,
-                email: document.getElementById('email').value,
+                full_name: document.getElementById('fullName').value.trim(),
+                email: document.getElementById('email').value.trim(),
                 user_type: role,
                 program: role === "Student" ? document.getElementById('program').value : "N/A",
                 level: role === "Student" ? document.getElementById('level').value : "N/A",
                 specialty: role === "Student" ? document.getElementById('specialty').value : "N/A",
-                phone: document.getElementById('phone').value
+                phone: document.getElementById('phone').value.trim()
             };
 
             try {
@@ -166,10 +165,10 @@
                     document.getElementById('successModal').classList.remove('hidden');
                     setTimeout(() => { window.location.replace('/'); }, 3000);
                 } else {
-                    alert(result.error || "Data rejection error occurred.");
+                    alert(result.error || "Data schema mismatched or validation failed.");
                 }
             } catch (err) {
-                alert("Network connectivity error: " + err.message);
+                alert("Network communication error: " + err.message);
             }
         }
         
