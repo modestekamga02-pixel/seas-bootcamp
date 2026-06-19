@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login | SEAS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-96 border border-slate-200 text-center">
+        <h2 class="text-xl font-black text-indigo-900 uppercase mb-6">Restricted Access</h2>
+        <input type="password" id="adminPassword" placeholder="Enter Master Key" class="w-full border border-slate-300 rounded-lg px-4 py-2 mb-4 text-sm">
+        <button onclick="verifyCredentials()" class="w-full bg-indigo-900 text-white font-bold py-2 rounded-lg hover:bg-indigo-800 transition">
+            Unlock Dashboard
+        </button>
+    </div>
+    <script>
+        async function verifyCredentials() {
+            const password = document.getElementById('adminPassword').value;
+            const res = await fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+            if ((await res.json()).success) {
+                window.location.href = '/admin.html';
+            } else {
+                alert("Unauthorized Access Attempted!");
+            }
+        }
+    </script>
+</body>
+</html>
