@@ -3,201 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard Panel | SEAS Bootcamp</title>
-    <script>
-        if (localStorage.getItem('seas_admin_authenticated') !== 'granted_true_session_2026') {
-            window.location.replace('/admin-login.html');
-        }
-    </script>
+    <title>Admin Login | SEAS Bootcamp</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-900 text-slate-100 antialiased font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-slate-900 flex items-center justify-center min-h-screen antialiased">
 
-    <nav class="bg-slate-950 border-b border-slate-800 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center space-x-3">
-                    <img src="/assets/iuc-logo.png" alt="IUC Logo" onerror="this.src='iuc-logo.png'" class="h-9 w-auto brightness-200 object-contain">
-                    <img src="/assets/seas-logo.png" alt="SEAS Logo" onerror="this.src='seas-logo.png'" class="h-9 w-auto brightness-200 object-contain">
-                    <span class="text-xs font-mono uppercase tracking-widest text-indigo-400 font-bold hidden sm:block">SEAS Control Core</span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="/" class="text-slate-400 hover:text-white font-medium text-xs transition flex items-center gap-1">
-                        <i class="fas fa-home"></i> View Site
-                    </a>
-                    <button onclick="localStorage.removeItem('seas_admin_authenticated'); window.location.replace('/');" class="bg-red-600/90 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-700 transition flex items-center gap-1.5 shadow-sm shadow-red-900/20">
-                        <i class="fas fa-sign-out-alt"></i> <span>Secure Logout</span>
-                    </button>
-                </div>
+    <div class="bg-slate-950 p-8 rounded-2xl shadow-2xl border border-slate-800 w-full max-w-sm mx-4">
+        <div class="text-center mb-8">
+            <div class="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl flex items-center justify-center text-xl mx-auto mb-3 shadow-inner">
+                <i class="fas fa-lock"></i>
             </div>
+            <h1 class="text-xl font-black text-white uppercase tracking-tight">Restricted Access</h1>
+            <p class="text-slate-400 text-xs mt-1">SEAS Central Monitoring Core Authentication</p>
         </div>
-    </nav>
 
-    <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 flex-grow space-y-8">
-        
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-800 pb-6 gap-4">
+        <div class="space-y-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Administrative Workspace</h1>
-                <p class="text-slate-400 text-sm mt-1">Live tracking metrics and analytical management for registered cohorts database clusters.</p>
+                <label class="block text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider mb-1">Administrative Master Key</label>
+                <input type="password" id="adminPassword" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 text-sm outline-none focus:border-indigo-500 transition font-mono" placeholder="••••••••">
             </div>
-            <div class="flex items-center gap-2 self-start sm:self-center">
-                <span class="flex h-2.5 w-2.5 relative">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                </span>
-                <span class="text-xs font-mono text-emerald-400 uppercase tracking-wider font-bold">Infrastructure Active</span>
-            </div>
+            
+            <button onclick="verifyCredentials()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg text-sm transition shadow-lg shadow-indigo-900/40 font-mono uppercase tracking-wider">
+                Unlock Dashboard
+            </button>
         </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex items-center space-x-4 shadow-xl">
-                <div class="w-12 h-12 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xl flex items-center justify-center shadow-inner">
-                    <i class="fas fa-user-graduate"></i>
-                </div>
-                <div>
-                    <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">Total Enrolled Cohorts</div>
-                    <div class="text-2xl font-black text-white mt-0.5" id="metricTotal">...</div>
-                </div>
-            </div>
-
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex items-center space-x-4 shadow-xl">
-                <div class="w-12 h-12 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xl flex items-center justify-center shadow-inner">
-                    <i class="fas fa-network-wired"></i>
-                </div>
-                <div>
-                    <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">Active Engineering Nodes</div>
-                    <div class="text-2xl font-black text-white mt-0.5" id="metricEngineering">...</div>
-                </div>
-            </div>
-
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex items-center space-x-4 shadow-xl sm:col-span-2 lg:col-span-1">
-                <div class="w-12 h-12 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xl flex items-center justify-center shadow-inner">
-                    <i class="fasxl fa-database"></i>
-                </div>
-                <div>
-                    <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">Database Access Queries</div>
-                    <div class="text-2xl font-black text-white mt-0.5">OK / Operational</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h3 class="text-sm font-mono uppercase tracking-wider text-indigo-400 font-bold flex items-center gap-2">
-                    <i class="fas fa-list-ul"></i> Verified Database Registrations
-                </h3>
-                <button onclick="fetchRegistrations()" class="text-xs bg-slate-900 border border-slate-700 hover:bg-slate-850 px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition">
-                    <i class="fas fa-sync-alt"></i> Refresh Cluster
-                </button>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full divide-y divide-slate-800 text-left">
-                    <thead class="bg-slate-950 text-slate-400 text-xs font-mono uppercase tracking-wider">
-                        <tr>
-                            <th class="px-6 py-4 font-semibold">Full Name</th>
-                            <th class="px-6 py-4 font-semibold">Email Profile</th>
-                            <th class="px-6 py-4 font-semibold">Track Tier</th>
-                            <th class="px-6 py-4 font-semibold">Specialty Group</th>
-                            <th class="px-6 py-4 font-semibold text-right">Delete Node</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-800 text-sm text-slate-300" id="registrationTableBody">
-                        <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-slate-500 font-medium">
-                                <i class="fas fa-circle-notch animate-spin text-lg text-indigo-500 mb-2 block"></i> Querying remote registry API hooks...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
-
-    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-[10px] font-mono uppercase tracking-widest text-slate-600">
-        SEAS Centralized Monitoring Cluster Dashboard Portal &copy; 2026
-    </footer>
+    </div>
 
     <script>
-        async function fetchRegistrations() {
-            const tableBody = document.getElementById('registrationTableBody');
+        async function verifyCredentials() {
+            const password = document.getElementById('adminPassword').value;
             
             try {
-                const response = await fetch('/api/registrations');
-                
-                // Inspect content types to preempt JSON syntax breakdown errors
-                const contentType = response.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                    const rawText = await response.text();
-                    throw new Error(`Server returned unexpected text instead of JSON payload. Status: ${response.status}. Verify your backend routing implementation logic.`);
-                }
-
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || "Failed data pull query mapping.");
-
-                // Calculate engineering specific programs
-                const engCount = data.filter(r => r.program === 'B.Eng' || r.program === 'B.Tech').length;
-                document.getElementById('metricTotal').textContent = data.length;
-                document.getElementById('metricEngineering').textContent = engCount;
-
-                if (data.length === 0) {
-                    tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="5" class="px-6 py-10 text-center text-slate-500">
-                                <i class="fas fa-folder-open text-xl mb-2 block"></i> No registrations found in the active context database.
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-
-                tableBody.innerHTML = '';
-                data.forEach(reg => {
-                    const row = document.createElement('tr');
-                    row.className = "hover:bg-slate-900/60 transition duration-150";
-                    row.innerHTML = `
-                        <td class="px-6 py-4 font-bold text-white">${reg.full_name}</td>
-                        <td class="px-6 py-4 font-mono text-xs text-slate-400">${reg.email}</td>
-                        <td class="px-6 py-4"><span class="bg-indigo-950 border border-indigo-800 text-indigo-300 px-2 py-0.5 rounded text-xs font-mono">${reg.program}</span></td>
-                        <td class="px-6 py-4 font-mono text-xs text-slate-300">${reg.level} — ${reg.specialty}</td>
-                        <td class="px-6 py-4 text-right">
-                            <button onclick="deleteRegistration('${reg.id}')" class="text-red-400 hover:text-red-600 transition p-1.5 hover:bg-red-500/10 rounded">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
+                const response = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
                 });
 
-            } catch (err) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="px-6 py-10 text-center text-red-400 font-medium">
-                            <i class="fas fa-exclamation-triangle text-xl mb-2 block"></i> <span class="break-all">${err.message}</span>
-                        </td>
-                    </tr>
-                `;
-            }
-        }
-
-        async function deleteRegistration(id) {
-            if (!confirm("Are you sure you want to completely remove this entry item node from the database?")) return;
-            try {
-                const response = await fetch(`/api/registrations/${id}`, { method: 'DELETE' });
                 const result = await response.json();
+
                 if (response.ok && result.success) {
-                    fetchRegistrations();
+                    window.location.replace('/admin.html');
                 } else {
-                    alert(result.error || "Failed to parse deletion sequence parameters.");
+                    alert("Unauthorized Access: Invalid Credentials");
                 }
             } catch (err) {
-                alert("Network communication interrupt during execution: " + err.message);
+                alert("Connection disruption: " + err.message);
             }
         }
 
-        // Initialize fetch routine on component validation mount
-        document.addEventListener('DOMContentLoaded', fetchRegistrations);
+        // Allow pressing Enter key to submit login
+        document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verifyCredentials();
+        });
     </script>
 </body>
 </html>
