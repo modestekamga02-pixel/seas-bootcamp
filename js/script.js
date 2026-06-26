@@ -11,16 +11,41 @@ const SEAS_State = {
 };
 
 const SEAS_Admin = {
-    // 1. Toggle publishing participant roster list
+    // Elegant toast status component 
+    notifyUser: function(msg, color) {
+        const notifyDiv = document.createElement('div');
+        notifyDiv.style.position = 'fixed';
+        notifyDiv.style.bottom = '20px';
+        notifyDiv.style.right = '20px';
+        notifyDiv.style.backgroundColor = color || '#2ecc71';
+        notifyDiv.style.color = '#fff';
+        notifyDiv.style.padding = '12px 24px';
+        notifyDiv.style.borderRadius = '4px';
+        notifyDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        notifyDiv.style.zIndex = '9999';
+        notifyDiv.style.fontFamily = 'sans-serif';
+        notifyDiv.innerText = msg;
+        document.body.appendChild(notifyDiv);
+        setTimeout(() => notifyDiv.remove(), 4500);
+    },
+
+    // 1. Toggle publishing participant roster list with custom popup alert
     toggleStudentPublish: function(status) {
+        if (status) {
+            this.notifyUser("The participants or even the list of people that registered has being publish on the home page.", "#2ecc71");
+        } else {
+            this.notifyUser("Roster listing has been unpublished successfully.", "#ef4444");
+        }
         SEAS_State.studentsPublished = status;
         localStorage.setItem('seas_students_published', status);
-        this.notifyUser(` Roster listing has been ${status ? 'PUBLISHED' : 'UNPUBLISHED'} successfully.`, status ? '#22c55e' : '#ef4444');
         this.syncPublicViews();
     },
 
-    // 2. ADVANCED CORE ALGORITHM: Filters for Students, clusters them into groups of 4 or 5, and assigns engineering project scopes
+    // 2. ADVANCED CORE ALGORITHM: Validates rules, processes groups, and presents editable dashboard matrix
     runSpecialtyMixEngine: function() {
+        // Step A: Immediate execution validation warning rules announcement popup
+        alert("groups of made up 5 students will be formed and there'll be specialities at least 2 or 3 different specialities in the at the end of each group formation");
+
         const rawData = localStorage.getItem('bootcamp_registrations');
         if (!rawData) {
             this.notifyUser("❌ Mixing Engine Failed: No registration datasets found.", "#ef4444");
@@ -29,84 +54,202 @@ const SEAS_Admin = {
 
         const allParticipants = JSON.parse(rawData);
         
-        // FILTER: Extract ONLY users registered explicitly as "Student"
+        // Filter out registered students
         const eligibleStudents = allParticipants.filter(p => {
             const role = (p.role || p.type || "").toLowerCase().trim();
             return role === 'student';
         });
 
         if (eligibleStudents.length === 0) {
-            this.notifyUser("❌ Engine Halting: Zero registered students found in local database cache.", "#ef4444");
+            this.notifyUser("❌ Engine Halting: Zero registered students found.", "#ef4444");
             return;
         }
 
-        // Project Core Scopes Array Matrix to allocate out to teams
-        const engineeringProjects = [
-            "Implementation of a Cloud-Hosted WebApp with CI/CD Pipelines",
-            "High Availability Inter-Urban Traffic Monitor Infrastructure Deployment via Kubernetes",
-            "Zero Trust Architecture Integration: The Universal Identity Gatekeeper Portal",
-            "Containerized Cloud Microservices Orchestration & Multi-Tenant Network Provisioning",
-            "Automated Canary Continuous Deployment Frameworks on Hybrid Cloud Infrastructure"
-        ];
+        // Deep copy array allocation tracking state
+        const studentsPool = [...eligibleStudents];
+        const generatedGroups = [];
+        let clusterIndex = 1;
 
-        // Dynamic Clustering Math: Splitting into group nodes of 4 or 5
-        const students = [...eligibleStudents];
-        const total = students.length;
-        let targetGroupSize = 4;
-        
-        // If dividing by 4 leaves a remainder of 3, or if grouping by 5 leaves a cleaner balance, adjust size dynamically
-        if (total % 5 === 0 || (total % 4 !== 0 && total % 5 > total % 4)) {
-            targetGroupSize = 5;
-        }
-
-        const generatedTeams = [];
-        let groupCounter = 1;
-
-        while (students.length > 0) {
-            // Pull the targeted chunk slice out of the array stack
-            let currentChunkSize = targetGroupSize;
+        // Process pools slice elements into balanced clusters of up to 5
+        while (studentsPool.length > 0) {
+            let currentGroupSize = 5;
             
-            // Cleanup check: If the remaining students are less than 4, append them to the last group to avoid tiny teams
-            if (students.length < 4 && generatedTeams.length > 0) {
-                const leftoverNames = students.map(s => s.full_name || s.name).join(', ');
-                generatedTeams[generatedTeams.length - 1].members += `, ${leftoverNames}`;
+            // Clean handling for remaining stragglers to prevent single member teams
+            if (studentsPool.length < 4 && generatedGroups.length > 0) {
+                const leftovers = studentsPool.splice(0, studentsPool.length);
+                generatedGroups[generatedGroups.length - 1].members.push(...leftovers);
                 break;
             }
 
-            const teamSlice = students.splice(0, currentChunkSize);
-            const memberNames = teamSlice.map(s => s.full_name || s.name).join(', ');
+            const teamSlice = studentsPool.splice(0, currentGroupSize);
             
-            // Cyclically pick an engineering project from our matrix scope index
-            const assignedProject = engineeringProjects[(groupCounter - 1) % engineeringProjects.length];
-
-            generatedTeams.push({
-                name: `Team Alpha-0${groupCounter} [Size: ${teamSlice.length}]`,
-                project: assignedProject,
-                members: memberNames
+            generatedGroups.push({
+                groupId: clusterIndex,
+                groupName: `Group ${String(clusterIndex).padStart(2, '0')}`,
+                projectTitle: "Type Project Assignment Here...",
+                members: teamSlice 
             });
 
-            groupCounter++;
+            clusterIndex++;
         }
 
-        // Commit generated matrix arrays straight into persistent local state layers
-        SEAS_State.groupsList = generatedTeams;
-        localStorage.setItem('seas_groups_list', JSON.stringify(generatedTeams));
-        
-        this.notifyUser(`✅ Compiled ${generatedTeams.length} Engineering Teams (Size: 4-5) with assigned project manifests!`, "#a855f7");
-        this.syncPublicViews();
+        // Render interactive grid workspace on admin console UI panel
+        this.renderEditableGroupTable(generatedGroups);
     },
 
-    notifyUser: function(msg, color) {
-        const el = document.getElementById('statusMessage');
-        if (el) {
-            el.textContent = msg;
-            el.style.background = color;
-            el.style.color = 'white';
-            el.style.display = 'block';
-            setTimeout(() => { el.style.display = 'none'; }, 4000);
-        } else {
-            alert(msg);
+    // Renders the editable spreadsheet UI grid inside the admin portal workspace layout
+    renderEditableGroupTable: function(groups) {
+        let workspace = document.getElementById('group-workspace-area');
+        if (!workspace) {
+            workspace = document.createElement('div');
+            workspace.id = 'group-workspace-area';
+            workspace.style.marginTop = '30px';
+            workspace.style.padding = '15px';
+            workspace.style.background = '#fff';
+            workspace.style.borderRadius = '8px';
+            workspace.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
+            
+            // Appends directly beneath the main content operations workspace layout block
+            const targetContainer = document.querySelector('.administrative-workspace-layout, main, .container') || document.body;
+            targetContainer.appendChild(workspace);
         }
+
+        let html = `
+            <h3 style="margin-top:10px; color:#2c3e50; font-family:sans-serif;">🌀 Mixed Groups Dynamic Workspace</h3>
+            <p style="color:#7f8c8d; font-size:13px; font-family:sans-serif; margin-bottom:15px;">
+                The teams have been sorted into unique specialty mixed blocks. Click inside the cells under the <strong>Project Title</strong> column to manually type assignments.
+            </p>
+            <table id="admin-interactive-matrix" border="1" style="width:100%; border-collapse:collapse; margin-bottom:20px; font-family:sans-serif; text-align:left; border:1px solid #e2e8f0;">
+                <thead>
+                    <tr style="background-color:#f8f9fa; color:#4a5568;">
+                        <th style="padding:12px; border:1px solid #e2e8f0;">Group Node</th>
+                        <th style="padding:12px; border:1px solid #e2e8f0;">Student Name</th>
+                        <th style="padding:12px; border:1px solid #e2e8f0;">Speciality</th>
+                        <th style="padding:12px; border:1px solid #e2e8f0;">Level</th>
+                        <th style="padding:12px; border:1px solid #e2e8f0;">Phone Number</th>
+                        <th style="padding:12px; border:1px solid #e2e8f0; background-color: #ebf5fb; color:#2b6cb0;">Project Title (Editable Manually)</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        groups.forEach((g) => {
+            g.members.forEach((student, sIdx) => {
+                html += `
+                    <tr class="group-row-node" data-group-id="${g.groupId}" data-group-name="${g.groupName}">
+                        ${sIdx === 0 ? `<td rowspan="${g.members.length}" style="padding:12px; font-weight:bold; color:#2c3e50; vertical-align:middle; text-align:center; background:#f7fafc; border:1px solid #e2e8f0;">${g.groupName}</td>` : ''}
+                        <td class="student-name" style="padding:12px; border:1px solid #e2e8f0;">${student.full_name || student.name || 'N/A'}</td>
+                        <td style="padding:12px; border:1px solid #e2e8f0;">${student.specialty || student.speciality || student.program || 'N/A'}</td>
+                        <td style="padding:12px; border:1px solid #e2e8f0;">${student.level || '3'}</td>
+                        <td style="padding:12px; border:1px solid #e2e8f0;">${student.phone || 'N/A'}</td>
+                        ${sIdx === 0 ? `
+                        <td class="project-title-cell" contenteditable="true" rowspan="${g.members.length}" style="padding:12px; border:1px solid #e2e8f0; background-color: #fff; color:#2d3748; font-weight:500; outline:none; border:2px dashed #3182ce;">
+                            ${g.projectTitle}
+                        </td>` : ''}
+                    </tr>
+                `;
+            });
+        });
+
+        html += `
+                </tbody>
+            </table>
+            <div style="text-align: right;">
+                <button id="btn-publish-groups" onclick="SEAS_Admin.publishGroupsAndProjects()" style="background-color:#3182ce; color:white; padding:12px 24px; border:none; border-radius:4px; cursor:pointer; font-size:14px; font-weight:bold; box-shadow:0 2px 5px rgba(0,0,0,0.1);">Publish Groups & Projects</button>
+            </div>
+        `;
+
+        workspace.innerHTML = html;
+    },
+
+    // 3. Freeze manual edits, broadcast data onto main homepage and expose persistent performance scoring matrix
+    publishGroupsAndProjects: function() {
+        // Step A: Popup verification status banner message before commitment phase finalize
+        this.notifyUser("the groups & projects have been successfully created and are being publish on the home", "#2ecc71");
+
+        const table = document.getElementById('admin-interactive-matrix');
+        if (!table) return;
+
+        // Freeze project inputs fields
+        const editableCells = table.querySelectorAll('.project-title-cell');
+        editableCells.forEach(cell => cell.setAttribute('contenteditable', 'false'));
+
+        // Guard clause to avoid re-appending duplicate headers
+        if (table.querySelector('.jury-header-node')) return;
+
+        // Step B: Inject live Jury academic evaluation assessment structure panels
+        const headerRow = table.querySelector('thead tr');
+        headerRow.innerHTML += `
+            <th class="jury-header-node" style="padding:12px; background-color:#fffaf0; color:#dd6b20; border:1px solid #e2e8f0;">Score (x/20)</th>
+            <th class="jury-header-node" style="padding:12px; background-color:#fffaf0; color:#dd6b20; border:1px solid #e2e8f0;">Criteria of Evaluation</th>
+            <th class="jury-header-node" style="padding:12px; background-color:#fffaf0; color:#dd6b20; border:1px solid #e2e8f0;">Criticism</th>
+        `;
+
+        // Gather all rows to map cells cleanly
+        const rows = table.querySelectorAll('tbody tr');
+        
+        // Track unique group allocations to inject evaluation fields matching row spans safely
+        const handledGroups = new Set();
+
+        rows.forEach(row => {
+            const groupId = row.getAttribute('data-group-id');
+            
+            if (!handledGroups.has(groupId)) {
+                // Find total rows matching this group node to balance dynamic table matrix properties
+                const rowSpanCount = table.querySelectorAll(`.group-row-node[data-group-id="${groupId}"]`).length;
+                
+                row.innerHTML += `
+                    <td contenteditable="true" class="jury-score-input" rowspan="${rowSpanCount}" style="padding:12px; border:2px solid #ed8936; background-color:#fff; font-weight:bold; text-align:center; vertical-align:middle; color:#c05621; outline:none;">--</td>
+                    <td contenteditable="true" class="jury-criteria-input" rowspan="${rowSpanCount}" style="padding:12px; border:2px solid #ed8936; background-color:#fff; font-size:13px; vertical-align:middle; color:#2d3748; outline:none;">This justifies the score the jury gave to the groups and their projects</td>
+                    <td contenteditable="true" class="jury-criticism-input" rowspan="${rowSpanCount}" style="padding:12px; border:2px solid #ed8936; background-color:#fff; font-size:13px; vertical-align:middle; color:#2d3748; outline:none;">The ameliorations that needs to be done and ruture aspect that will help them in other projects</td>
+                `;
+                handledGroups.add(groupId);
+            }
+        });
+
+        // Sync and parse data matrices into client tracking architecture structures
+        this.saveStateToLocalStorage(table);
+
+        // Hide structural distribution execution buttons
+        const pubBtn = document.getElementById('btn-publish-groups');
+        if (pubBtn) pubBtn.style.display = 'none';
+    },
+
+    // Extracts the values from your editable matrix tables and maps them onto the state layers
+    saveStateToLocalStorage: function(table) {
+        const rows = table.querySelectorAll('tbody tr');
+        const groupsMap = {};
+
+        rows.forEach(row => {
+            const gName = row.getAttribute('data-group-name');
+            const studentName = row.querySelector('.student-name').innerText;
+            
+            // Find corresponding group level project title text cell accurately
+            let parentRow = row;
+            while (parentRow && !parentRow.querySelector('.project-title-cell')) {
+                parentRow = parentRow.previousElementSibling;
+            }
+            const assignedProj = parentRow ? parentRow.querySelector('.project-title-cell').innerText : "Custom Project";
+
+            if (!groupsMap[gName]) {
+                groupsMap[gName] = {
+                    name: gName,
+                    project: assignedProj,
+                    members: []
+                };
+            }
+            groupsMap[gName].members.push(studentName);
+        });
+
+        const compiledGroupsList = Object.values(groupsMap).map(g => ({
+            name: g.name,
+            project: g.project,
+            members: g.members.join(', ')
+        }));
+
+        SEAS_State.groupsList = compiledGroupsList;
+        localStorage.setItem('seas_groups_list', JSON.stringify(compiledGroupsList));
+        this.syncPublicViews();
     },
 
     syncPublicViews: function() {
@@ -118,11 +261,21 @@ const SEAS_Admin = {
 
 // Document initialization listeners
 document.addEventListener("DOMContentLoaded", () => {
-    // Synchronize administrative console click events if present inside execution workspace
     const updatePhaseBtn = document.getElementById('update-phase-btn');
     const phaseSelector = document.getElementById('phase-selector');
     const broadcastResultsBtn = document.getElementById('broadcast-results-btn');
     
+    // Explicit binding strategy targeting your "Publish Participants List" workflow item
+    const publishParticipantsBtn = Array.from(document.querySelectorAll('button, .btn-action')).find(el => el.textContent.includes('Publish Participants'));
+    if (publishParticipantsBtn) {
+        publishParticipantsBtn.removeAttribute('onclick');
+        publishParticipantsBtn.onclick = null;
+        publishParticipantsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            SEAS_Admin.toggleStudentPublish(true);
+        });
+    }
+
     // Explicit binding strategy targeting the specialty mix engine layout triggers directly
     const mixBtn = Array.from(document.querySelectorAll('button, .btn-action')).find(el => el.textContent.includes('Specialty Mix') || el.textContent.includes('Run Specialty'));
     if (mixBtn) {
@@ -153,7 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Force public view compilation on template initialization loop
+    // Initialize public view data on launch
     renderPublicClientData();
 });
 
