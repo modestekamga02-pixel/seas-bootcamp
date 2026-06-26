@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAS Project Showcase | Skills Presentation</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Telemetry Dashboard Component Styles */
+        .telemetry-container { max-width: 1200px; margin: 40px auto; padding: 40px; background: #1a252f; color: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .telemetry-header { color: #00d2ff; text-align: center; border-bottom: 2px solid #34495e; padding-bottom: 12px; margin-bottom: 30px; font-size: 2rem; }
+        .telemetry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .telemetry-card { background: #2c3e50; padding: 25px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .telemetry-card h3 { margin-top: 0; font-size: 1.25rem; border-bottom: 1px solid #34495e; padding-bottom: 8px; }
+        .telemetry-card p { font-size: 0.9rem; color: #b4c6d0; line-height: 1.4; }
+        
+        /* Dynamic Nodes Display Views */
+        #view-current-phase { font-size: 1.15rem; font-weight: bold; color: #fff; background: #1a252f; padding: 12px; border-radius: 4px; text-align: center; }
+        #view-published-students, #view-published-groups, #view-published-results { background: #1a252f; padding: 12px; border-radius: 4px; max-height: 220px; overflow-y: auto; font-size: 0.95rem; }
+        
+        /* Quick link style for admin tracking fallback */
+        .admin-link-badge { display: inline-block; margin-top: 10px; color: #00d2ff; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
+        .admin-link-badge:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-container">
+            <img src="https://cdn-icons-png.flaticon.com/512/4202/4202275.png" alt="SEAS Logo" class="logo">
+            <span class="logo-text">SEAS Showcase</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#live-metrics">Bootcamp Live Status</a></li>
+            <li><a href="#tracks">Presentation Tracks</a></li>
+            <li><a href="#register">Register</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-text">
+            <h1>SEAS <span class="highlight">Project Showcase</span></h1>
+            <p>A ceremony of innovation. Watch top candidates present professional Cloud, DevOps, and Automation solutions to industry sponsors.</p>
+        </div>
+        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000" alt="Tech Background" class="hero-img">
+    </div>
+
+    <div class="telemetry-container" id="public-homepage-container">
+        <h2 class="telemetry-header">SEAS Bootcamp Portal Telemetry</h2>
+        
+        <div class="telemetry-grid">
+            <div class="telemetry-card" style="border-top: 4px solid #3b82f6;">
+                <h3 style="color: #3b82f6;">📍 Active Bootcamp State</h3>
+                <p>Current Operational Phase monitored via cloud architecture orchestrator:</p>
+                <div id="view-current-phase" style="border-left: 4px solid #3b82f6;">
+                    Loading operational phase metrics...
+                </div>
+            </div>
+
+            <div class="telemetry-card" style="border-top: 4px solid #22c55e;">
+                <h3 style="color: #22c55e;">👥 Registered Personnel Roster</h3>
+                <p>Official public roll of verified and accepted entries:</p>
+                <div id="view-published-students">
+                    Checking registration publication states...
+                </div>
+            </div>
+
+            <div class="telemetry-card" style="border-top: 4px solid #a855f7;">
+                <h3 style="color: #a855f7;">🏗️ Project Team Distributions</h3>
+                <p>Assigned workgroups and structural engineering roles:</p>
+                <div id="view-published-groups">
+                    Awaiting administrative group allocations...
+                </div>
+            </div>
+
+            <div class="telemetry-card" style="border-top: 4px solid #eab308;">
+                <h3 style="color: #eab308;">🎓 Final Performance Standings</h3>
+                <p>End results and technical certification clearance status:</p>
+                <div id="view-published-results">
+                    Pending final grade arrays verification evaluation...
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: right; padding-top: 15px;">
+            <a href="admin.html" class="admin-link-badge">Access Administrative Console &rarr;</a>
+        </div>
+    </div>
+
+    <div id="tracks" class="tracks-section">
+        <h2>Presentation Tracks</h2>
+        <div class="track-grid">
+            <div class="track-card"><h3>Cloud Infrastructure</h3><p>AWS, Azure, and Google Cloud architectural solutions.</p></div>
+            <div class="track-card"><h3>DevOps & CI/CD</h3><p>Automated pipelines, Docker, and Kubernetes deployments.</p></div>
+            <div class="track-card"><h3>Skill-Based Solutions</h3><p>Real-world problem solving using modern frameworks.</p></div>
+            <div class="track-card admin-track"><h3>Admin & Operations</h3><p>Logistics and technical coordination for the bootcamp.</p></div>
+        </div>
+    </div>
+
+    <div id="register" class="registration-section">
+        <h2>Confirm Your Participation</h2>
+        <p>Investors, Teachers, and Students — Register to secure your seat.</p>
+        
+        <form id="registrationForm">
+            <input type="text" id="fullName" placeholder="Full Name" required>
+            <input type="email" id="emailAddress" placeholder="Email Address" required>
+            
+            <select id="userRole" onchange="toggleStudentFields()" required>
+                <option value="" disabled selected>Select Your Role</option>
+                <option value="Student">Student</option>
+                <option value="Investor">Investor/Sponsor</option>
+                <option value="Teacher">Teacher/Staff</option>
+                <option value="Personnel">Personnel (Admin)</option>
+            </select>
+
+            <div id="studentFields" style="display: none; flex-direction: column; gap: 15px;">
+                <select id="academicLevel">
+                    <option value="" disabled selected>Select Level</option>
+                    <option value="Level 1">Level 1</option>
+                    <option value="Level 2">Level 2</option>
+                    <option value="Level 3">Level 3</option>
+                </select>
+                <select id="speciality">
+                    <option value="" disabled selected>Select Specialty</option>
+                    <option value="BEng-CSE">BEng Computer Software</option>
+                    <option value="BEng-CEE">BEng Computer Electronic</option>
+                    <option value="BTech-CSE">BTech Computer Software</option>
+                    <option value="BSc-AF">BSc Accounting & Finance</option>
+                    <option value="BSc-MGT">BSc Management</option>
+                </select>
+            </div>
+
+            <button type="button" id="submitBtn" onclick="submitRegistration()">Confirm Participation</button>
+            <p id="statusMsg" style="margin-top: 15px; font-weight: bold; display: none;"></p>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 SEAS Bootcamp | IUC Douala | Cloud Computing Project</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        function toggleStudentFields() {
+            const role = document.getElementById('userRole').value;
+            const fields = document.getElementById('studentFields');
+            fields.style.display = (role === 'Student') ? 'flex' : 'none';
+        }
+
+        async function submitRegistration() {
+            const btn = document.getElementById('submitBtn');
+            const role = document.getElementById('userRole').value;
+            
+            const payload = {
+                full_name:      document.getElementById('fullName').value,
+                email:          document.getElementById('emailAddress').value,
+                role:           role,
+                academic_level: (role === 'Student') ? document.getElementById('academicLevel').value : null,
+                speciality:     (role === 'Student') ? document.getElementById('speciality').value : null
+            };
+
+            if (!payload.full_name || !payload.email || !payload.role) {
+                showStatus('Please fill all required fields.', '#ef4444');
+                return;
+            }
+
+            try {
+                btn.disabled  = true;
+                btn.innerText = 'Syncing with Storage Engine...';
+
+                // Core Data Interceptor Link: Commit data layout into local array databases
+                let localRegistrations = JSON.parse(localStorage.getItem('bootcamp_registrations')) || [];
+                localRegistrations.push(payload);
+                localStorage.setItem('bootcamp_registrations', JSON.stringify(localRegistrations));
+
+                // Display success confirmation message
+                showStatus('✅ Registration compiled and synchronized inside database infrastructure successfully!', '#22c55e');
+                document.getElementById('registrationForm').reset();
+                toggleStudentFields();
+                
+                // Fire dynamic update loop straight into homepage telemetry displays
+                if (typeof renderPublicClientData === 'function') {
+                    renderPublicClientData();
+                }
+
+            } catch (err) {
+                showStatus('❌ System Error processing storage ingress loops.', '#ef4444');
+            } finally {
+                btn.disabled  = false;
+                btn.innerText = 'Confirm Participation';
+            }
+        }
+
+        function showStatus(message, color) {
+            const el = document.getElementById('statusMsg');
+            el.textContent = message;
+            el.style.color = color;
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 5000);
+        }
+    </script>
+</body>
+</html>
