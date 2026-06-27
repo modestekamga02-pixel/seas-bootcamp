@@ -46,7 +46,7 @@
         #auth-error-msg { color: #ef4444; font-weight: bold; margin-top: 10px; font-size: 0.85rem; display: none; }
     </style>
 </head>
-<body>
+<body class="administrative-workspace">
 
     <div id="auth-gate-overlay">
         <div class="auth-card">
@@ -61,8 +61,8 @@
     </div>
 
     <div id="dashboard-wrapper" style="display: none;">
-        <nav>
-            <span class="logo-text">SEAS Admin Portal</span>
+        <nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 40px; background: #1a252f; border-bottom: 1px solid #34495e;">
+            <span class="logo-text" style="color: #00d2ff; font-weight: bold; font-family: sans-serif;">SEAS Admin Portal</span>
             <button onclick="terminateAdminSession()" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Logout</button>
         </nav>
 
@@ -96,18 +96,17 @@
                 <div class="control-card" style="border-left: 5px solid #22c55e;">
                     <h3>1. Registration List Publishing</h3>
                     <p>Toggle visibility of verified students and personnel listings on the public home page module.</p>
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn-action" onclick="SEAS_Admin.toggleStudentPublish(true)" style="background: #22c55e;">Publish List</button>
-                        <button class="btn-action" onclick="SEAS_Admin.toggleStudentPublish(false)" style="background: #ef4444;">Unpublish List</button>
+                    <div style="margin-top: 25px;">
+                        <button class="btn-action" id="btn-publish-participants" style="background: #22c55e;">👥 Publish Participants List</button>
                     </div>
                 </div>
 
                 <div class="control-card" style="border-left: 5px solid #a855f7;">
                     <h3>2. Form & Publish Project Groups</h3>
-                    <p>Assemble and display tracking groups. Delineate project members using commas.</p>
-                    <input type="text" id="group-name-input" placeholder="e.g., Team Alpha (Cloud Infrastructure)">
-                    <input type="text" id="group-members-input" placeholder="e.g., Amadou Bello, Kamga Christian, Lucrèce">
-                    <button class="btn-action" id="submit-group-btn" style="background: #a855f7; margin-top: 5px;">Publish Group Set</button>
+                    <p>Execute the automated specialty clustering algorithm rules matrix to balance engineering teams into groups of 5.</p>
+                    <div style="margin-top: 25px;">
+                        <button class="btn-action" id="btn-run-mix-engine" style="background: #a855f7;">🌀 Run Specialty Mix Engine</button>
+                    </div>
                 </div>
 
                 <div class="control-card" style="border-left: 5px solid #3b82f6;">
@@ -186,11 +185,13 @@
                     document.getElementById('participantCount').textContent = result.count;
                     renderTable(result.data);
                     
+                    // Keep tracking states local for fallback operations framework layers
                     localStorage.setItem('bootcamp_registrations', JSON.stringify(result.data.map(r => ({
-                        id: r.id || "0",
-                        name: r.full_name,
-                        type: r.role,
-                        program: r.speciality || "Engineering"
+                        full_name: r.full_name,
+                        role: r.role || 'Student',
+                        specialty: r.speciality || 'CSE',
+                        level: r.academic_level || '3',
+                        phone: r.phone || 'N/A'
                     }))));
                 }
             } catch (err) {
@@ -199,11 +200,11 @@
                 document.getElementById('participantCount').textContent = fallback.length;
                 renderTable(fallback.map(f => ({
                     created_at: new Date(),
-                    full_name: f.name,
-                    email: f.name.toLowerCase().replace(" ", "") + "@seas.edu",
-                    role: f.type,
-                    academic_level: 'L3',
-                    speciality: f.program
+                    full_name: f.full_name || f.name,
+                    email: (f.full_name || f.name).toLowerCase().replace(/\s+/g, "") + "@seas.edu",
+                    role: f.role || 'Student',
+                    academic_level: f.level || '3',
+                    speciality: f.specialty || 'CSE'
                 })));
             }
         }
@@ -213,9 +214,9 @@
             if(!tbody) return;
             tbody.innerHTML = data.map(r => `
                 <tr>
-                    <td>${new Date(r.created_at).toLocaleDateString()}</td>
+                    <td>${new Date(r.created_at || new Date()).toLocaleDateString()}</td>
                     <td>${r.full_name}</td>
-                    <td>${r.email}</td>
+                    <td>${r.email || (r.full_name.toLowerCase().replace(/\s+/g, "") + "@seas.edu")}</td>
                     <td><span style="color: ${r.role === 'Student' ? '#22c55e' : '#f59e0b'}">${r.role}</span></td>
                     <td>${r.academic_level || 'N/A'}</td>
                     <td>${r.speciality || 'N/A'}</td>

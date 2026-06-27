@@ -30,14 +30,10 @@ const SEAS_Admin = {
     },
 
     // 1. Toggle publishing participant roster list with custom popup alert
-    toggleStudentPublish: function(status) {
-        if (status) {
-            this.notifyUser("The participants or even the list of people that registered has being publish on the home page.", "#2ecc71");
-        } else {
-            this.notifyUser("Roster listing has been unpublished successfully.", "#ef4444");
-        }
-        SEAS_State.studentsPublished = status;
-        localStorage.setItem('seas_students_published', status);
+    toggleStudentPublish: function() {
+        this.notifyUser("The participants or even the list of people that registered has being publish on the home page.", "#2ecc71");
+        SEAS_State.studentsPublished = true;
+        localStorage.setItem('seas_students_published', 'true');
         this.syncPublicViews();
     },
 
@@ -104,22 +100,22 @@ const SEAS_Admin = {
             workspace = document.createElement('div');
             workspace.id = 'group-workspace-area';
             workspace.style.marginTop = '30px';
-            workspace.style.padding = '15px';
-            workspace.style.background = '#fff';
+            workspace.style.padding = '20px';
+            workspace.style.background = '#ffffff';
             workspace.style.borderRadius = '8px';
-            workspace.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
+            workspace.style.border = '1px solid #e2e8f0';
             
-            // Appends directly beneath the main content operations workspace layout block
-            const targetContainer = document.querySelector('.administrative-workspace-layout, main, .container') || document.body;
+            // Insert it elegantly inside the admin body wrapper layout block
+            const targetContainer = document.querySelector('.administrative-workspace') || document.body;
             targetContainer.appendChild(workspace);
         }
 
         let html = `
-            <h3 style="margin-top:10px; color:#2c3e50; font-family:sans-serif;">🌀 Mixed Groups Dynamic Workspace</h3>
+            <h3 style="margin-top:10px; color:#2c3e50; font-family:sans-serif; font-size:1.25rem; font-weight:600;">🌀 Mixed Groups Dynamic Workspace</h3>
             <p style="color:#7f8c8d; font-size:13px; font-family:sans-serif; margin-bottom:15px;">
                 The teams have been sorted into unique specialty mixed blocks. Click inside the cells under the <strong>Project Title</strong> column to manually type assignments.
             </p>
-            <table id="admin-interactive-matrix" border="1" style="width:100%; border-collapse:collapse; margin-bottom:20px; font-family:sans-serif; text-align:left; border:1px solid #e2e8f0;">
+            <table id="admin-interactive-matrix" border="1" style="width:100%; border-collapse:collapse; margin-bottom:20px; font-family:sans-serif; text-align:left; border:1px solid #e2e8f0; color:#2d3748;">
                 <thead>
                     <tr style="background-color:#f8f9fa; color:#4a5568;">
                         <th style="padding:12px; border:1px solid #e2e8f0;">Group Node</th>
@@ -261,52 +257,25 @@ const SEAS_Admin = {
 
 // Document initialization listeners
 document.addEventListener("DOMContentLoaded", () => {
-    const updatePhaseBtn = document.getElementById('update-phase-btn');
-    const phaseSelector = document.getElementById('phase-selector');
-    const broadcastResultsBtn = document.getElementById('broadcast-results-btn');
-    
-    // Explicit binding strategy targeting your "Publish Participants List" workflow item
-    const publishParticipantsBtn = Array.from(document.querySelectorAll('button, .btn-action')).find(el => el.textContent.includes('Publish Participants'));
+    // Explicit ID binding guarantees buttons will work regardless of structural layout themes
+    const publishParticipantsBtn = document.getElementById('btn-publish-participants');
+    const mixEngineBtn = document.getElementById('btn-run-mix-engine');
+
     if (publishParticipantsBtn) {
-        publishParticipantsBtn.removeAttribute('onclick');
-        publishParticipantsBtn.onclick = null;
         publishParticipantsBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            SEAS_Admin.toggleStudentPublish(true);
+            SEAS_Admin.toggleStudentPublish();
         });
     }
 
-    // Explicit binding strategy targeting the specialty mix engine layout triggers directly
-    const mixBtn = Array.from(document.querySelectorAll('button, .btn-action')).find(el => el.textContent.includes('Specialty Mix') || el.textContent.includes('Run Specialty'));
-    if (mixBtn) {
-        mixBtn.removeAttribute('onclick');
-        mixBtn.onclick = null;
-        mixBtn.addEventListener('click', (e) => {
+    if (mixEngineBtn) {
+        mixEngineBtn.addEventListener('click', (e) => {
             e.preventDefault();
             SEAS_Admin.runSpecialtyMixEngine();
         });
     }
 
-    if (updatePhaseBtn && phaseSelector) {
-        phaseSelector.value = SEAS_State.currentPhase;
-        updatePhaseBtn.addEventListener('click', () => {
-            SEAS_State.currentPhase = phaseSelector.value;
-            localStorage.setItem('seas_phase', SEAS_State.currentPhase);
-            SEAS_Admin.notifyUser(`📍 Phase Updated: ${SEAS_State.currentPhase}`, '#3b82f6');
-            SEAS_Admin.syncPublicViews();
-        });
-    }
-
-    if (broadcastResultsBtn) {
-        broadcastResultsBtn.addEventListener('click', () => {
-            SEAS_State.resultsPublished = true;
-            localStorage.setItem('seas_results_published', 'true');
-            SEAS_Admin.notifyUser("🎓 Performance Metrics Released Live!", "#eab308");
-            SEAS_Admin.syncPublicViews();
-        });
-    }
-
-    // Initialize public view data on launch
+    // Force public view compilation on initialization loop
     renderPublicClientData();
 });
 
