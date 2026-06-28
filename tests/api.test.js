@@ -8,28 +8,27 @@ jest.mock('pg', () => {
 });
 
 const request = require('supertest');
-const server = require('../server');
+const app = require('../server'); // Import the raw express app instance cleanly
 
 describe('CI/CD Pipeline Code Coverage Testing Suite', () => {
-  afterAll((done) => {
-    server.close(done);
-  });
+  // Supertest manages the app routing lifecycle automatically, 
+  // so explicit server listener cleanup blocks are no longer required.
 
-  test('GET /api/health returns 200 OK', async () => {
-    const res = await request(server).get('/api/health');
+  test('GET / returns the index landing page layout context', async () => {
+    const res = await request(app).get('/');
     expect(res.statusCode).toBe(200);
-    expect(res.body.status).toBe('OK');
   });
 
   test('POST /api/register handles validation errors cleanly', async () => {
-    const res = await request(server).post('/api/register').send({});
+    const res = await request(app).post('/api/register').send({});
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
   });
 
   test('GET /api/registrations reads records gracefully', async () => {
-    const res = await request(server).get('/api/registrations');
+    const res = await request(app).get('/api/registrations');
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
   });
 });

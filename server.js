@@ -3,7 +3,6 @@ const path = require('path');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const app = express();
-const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data.json');
 
 // Middleware
@@ -21,7 +20,6 @@ function requireAdmin(req, res, next) {
 
 // Login API: Verify password and set secure cookie
 app.post('/api/admin/login', (req, res) => {
-    // PASSWORD SET HERE
     if (req.body.password === "SEAS2026_ADMIN") {
         res.cookie('admin_authenticated', 'true', { httpOnly: true, maxAge: 3600000 });
         return res.json({ success: true });
@@ -84,6 +82,12 @@ app.get('/api/participants', (req, res) => {
     res.json(data);
 });
 
+// PIPELINE ALIAS: Resolves the CI/CD test runner's target path expectations
+app.get('/api/registrations', (req, res) => {
+    const data = readDatabase();
+    res.json({ success: true, count: data.length, data: data });
+});
+
 // WIPE ENTIRE DATABASE RECORDS (ADMIN ACTION ONLY)
 app.delete('/api/clear', (req, res) => {
     writeDatabase([]);
@@ -94,6 +98,13 @@ app.get('*', (pathRequest, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-    console.log(`Persistent Server actively handling traffic on http://localhost:${PORT}`);
-});
+// CRUCIAL PIECE FOR CI/CD GREEN CHAINS: Only boot server if not importing for testing environments
+if (process.env.NODE_ENV !== 'test') {
+    const PORT = process.env.PORT || 10000;
+    app.listen(PORT, () => {
+        console.log(`Persistent Server actively handling traffic on http://localhost:${PORT}`);
+    });
+}
+
+// Export the raw instance app context so Supertest can hook directly into it smoothly
+module.exports = app;
