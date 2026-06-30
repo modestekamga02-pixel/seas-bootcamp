@@ -3,60 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | SEAS Bootcamp</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>SEAS Admin Portal Authentication</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; }
+        .login-card { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; max-width: 360px; width: 100%; }
+        h2 { color: #1e293b; margin-bottom: 8px; }
+        p { color: #64748b; font-size: 14px; margin-bottom: 24px; }
+        input[type="password"] { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 16px; box-sizing: border-box; text-align: center; }
+        input[type="password"]:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+        button { background: #2563eb; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 16px; cursor: pointer; width: 100%; font-weight: 6px; }
+        button:hover { background: #1d4ed8; }
+        .error-message { color: #dc2626; margin-top: 12px; font-size: 14px; display: none; }
+    </style>
 </head>
-<body class="bg-slate-900 flex items-center justify-center min-h-screen antialiased">
-
-    <div class="bg-slate-950 p-8 rounded-2xl shadow-2xl border border-slate-800 w-full max-w-sm mx-4">
-        <div class="text-center mb-8">
-            <div class="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl flex items-center justify-center text-xl mx-auto mb-3 shadow-inner">
-                <i class="fas fa-lock"></i>
-            </div>
-            <h1 class="text-xl font-black text-white uppercase tracking-tight">Restricted Access</h1>
-            <p class="text-slate-400 text-xs mt-1">SEAS Central Monitoring Core Authentication</p>
-        </div>
-
-        <div class="space-y-4">
-            <div>
-                <label class="block text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider mb-1">Administrative Master Key</label>
-                <input type="password" id="adminPassword" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 text-sm outline-none focus:border-indigo-500 transition font-mono" placeholder="••••••••">
-            </div>
-            
-            <button onclick="verifyCredentials()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg text-sm transition shadow-lg shadow-indigo-900/40 font-mono uppercase tracking-wider">
-                Unlock Dashboard
-            </button>
-        </div>
+<body>
+    <div class="login-card">
+        <h2>SEAS Admin Core</h2>
+        <p>Enter password to unlock dashboard tracking matrix</p>
+        <input type="password" id="passwordInput" placeholder="Enter Administrative Password" onkeypress="if(event.key === 'Enter') handleLogin()">
+        <button onclick="handleLogin()">Unlock Interface</button>
+        <div id="errorMsg" class="error-message">Incorrect password credentials. Access denied.</div>
     </div>
 
     <script>
-        async function verifyCredentials() {
-            const password = document.getElementById('adminPassword').value;
+        function handleLogin() {
+            const password = document.getElementById('passwordInput').value;
+            const errorMsg = document.getElementById('errorMsg');
             
-            try {
-                const response = await fetch('/api/admin/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password })
-                });
-
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    window.location.replace('/admin.html');
+            fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Password accepted! Redirect directly to the secure dashboard page
+                    window.location.href = '/admin.html';
                 } else {
-                    alert("Unauthorized Access: Invalid Credentials");
+                    errorMsg.style.display = 'block';
                 }
-            } catch (err) {
-                alert("Connection disruption: " + err.message);
-            }
+            })
+            .catch(err => {
+                console.error("Authentication handshake error:", err);
+            });
         }
-
-        // Allow pressing Enter key to submit login
-        document.getElementById('adminPassword').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') verifyCredentials();
-        });
     </script>
 </body>
 </html>

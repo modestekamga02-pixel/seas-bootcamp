@@ -25,8 +25,19 @@ describe('CI/CD Pipeline Code Coverage Testing Suite', () => {
     expect(res.body.success).toBe(false);
   });
 
-  test('GET /api/registrations reads records gracefully', async () => {
+  // 1. SECURITY TEST: Verify the pipeline blocks unauthenticated access
+  test('GET /api/registrations blocks unauthenticated API access requests', async () => {
     const res = await request(app).get('/api/registrations');
+    expect(res.statusCode).toBe(401); 
+    expect(res.body.success).toBe(false);
+  });
+
+  // 2. FUNCTIONAL TEST: Verify the pipeline allows access when valid auth cookies are passed
+  test('GET /api/registrations reads records gracefully with valid admin session cookie', async () => {
+    const res = await request(app)
+      .get('/api/registrations')
+      .set('Cookie', ['admin_authenticated=true']); // Simulate an active logged-in session
+    
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);

@@ -8,15 +8,28 @@ const DATA_FILE = path.join(__dirname, 'data.json');
 // Middleware
 app.use(express.json());
 app.use(cookieParser('seas-secret-2026')); 
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Security Gatekeeper: Blocks access if not logged in
 function requireAdmin(req, res, next) {
     if (req.cookies.admin_authenticated === 'true') {
         return next();
     }
+    // If it's an API request, return a clean JSON error status code
+    if (req.path.startsWith('/api/')) {
+        return res.status(401).json({ success: false, error: "Unauthorized administrative access." });
+    }
+    // If it's a browser request for a page layout, redirect to login page
     res.redirect('/admin-login.html');
 }
+
+// 1. CRUCIAL FIX: Explicitly intercept and protect admin.html BEFORE serving the static 'public' directory.
+// Otherwise, express.static can bypass your route declaration entirely.
+app.get('/admin.html', requireAdmin, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+// Serve public static folder for assets, index, and login interfaces
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Login API: Verify password and set secure cookie
 app.post('/api/admin/login', (req, res) => {
@@ -25,11 +38,6 @@ app.post('/api/admin/login', (req, res) => {
         return res.json({ success: true });
     }
     res.status(401).json({ success: false });
-});
-
-// Protect the Admin Dashboard
-app.get('/admin.html', requireAdmin, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
 // Helper functions to handle persistent reads/writes safely on disk
@@ -55,7 +63,7 @@ function writeDatabase(data) {
     }
 }
 
-// REGISTRATION POST ENDPOINT
+// PUBLIC REGISTRATION POST ENDPOINT
 app.post('/api/register', (req, res) => {
     const { full_name, email, user_type, program, level, specialty, phone } = req.body;
     if (!full_name || !email || !user_type || !phone) {
@@ -76,24 +84,27 @@ app.post('/api/register', (req, res) => {
     res.status(201).json({ success: true, data: newEntry });
 });
 
+// PROTECTED ADMINISTRATIVE ENDPOINTS (Appended requireAdmin security check)
+
 // GET REGISTERED PARTICIPANTS POOL ENDPOINT
-app.get('/api/participants', (req, res) => {
+app.get('/api/participants', requireAdmin, (req, res) => {
     const data = readDatabase();
     res.json(data);
 });
 
 // PIPELINE ALIAS: Resolves the CI/CD test runner's target path expectations
-app.get('/api/registrations', (req, res) => {
+app.get('/api/registrations', requireAdmin, (req, res) => {
     const data = readDatabase();
     res.json({ success: true, count: data.length, data: data });
 });
 
 // WIPE ENTIRE DATABASE RECORDS (ADMIN ACTION ONLY)
-app.delete('/api/clear', (req, res) => {
+app.delete('/api/clear', requireAdmin, (req, res) => {
     writeDatabase([]);
     res.json({ success: true, message: "Database wiped successfully." });
 });
 
+// Catch-all route to serve home page layout
 app.get('*', (pathRequest, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
