@@ -109,11 +109,11 @@ app.get('*', (pathRequest, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// CRUCIAL PIECE FOR CI/CD GREEN CHAINS: Only boot server if not importing for testing environments
+// FIXED: Dynamically bind port environment parameters for cloud environment validation
 if (process.env.NODE_ENV !== 'test') {
-    const PORT = process.env.PORT || 10000;
-    app.listen(PORT, () => {
-        console.log(`Persistent Server actively handling traffic on http://localhost:${PORT}`);
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Persistent Server actively handling traffic on port ${PORT}`);
     });
 }
 
