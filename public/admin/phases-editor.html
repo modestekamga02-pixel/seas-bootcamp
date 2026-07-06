@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milestone Phase Configurator | SEAS Admin</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .container { padding: 40px; max-width: 1200px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1a252f; color: white; }
+        th, td { padding: 12px; border: 1px solid #34495e; text-align: left; }
+        th { background-color: #3b82f6; color: white; }
+        td[contenteditable="true"] { background: #2c3e50; outline: 1px dashed #3b82f6; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; }
+        .btn-blue { background: #3b82f6; }
+        .btn-green { background: #22c55e; }
+    </style>
+    <script>
+        // --- ADMINISTRATIVE SUB-PAGE GATEKEEPER GUARD ---
+        if (sessionStorage.getItem('seas_admin_authenticated') !== 'true') {
+            alert("🔒 Access Denied: Unverified administration session container state. Returning to primary entry layers.");
+            window.location.href = "../admin.html";
+        }
+    </script>
+</head>
+<body>
+    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 40px; background: #1a252f; border-bottom: 1px solid #34495e;">
+        <span style="color: #3b82f6; font-weight: bold;">SEAS Phase Management Engine</span>
+        <a href="../admin.html" style="color: white; text-decoration: none;">&larr; Back to Dashboard</a>
+    </nav>
+
+    <div class="container">
+        <h1>Configure Bootcamp Timeline Phases Matrix</h1>
+        <p style="color: #b4c6d0;">Set structural milestone evaluation phases down below. Edits are published to student interfaces instantly.</p>
+        
+        <div id="statusAlert" style="display:none; padding: 12px; margin-bottom: 15px; border-radius: 4px; color: white;"></div>
+
+        <button class="btn btn-blue" onclick="addPhaseRow()">➕ Add Dynamic Phase Block</button>
+        <button class="btn btn-green" style="float: right;" onclick="publishPhasesTable()">📢 Publish Timeline Schedule</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Phase Step</th>
+                    <th>Activities Details Description</th>
+                    <th>Timeline Duration Window</th>
+                    <th style="width: 70px;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="phasesTableBody">
+                <!-- Rows injected dynamically via code setup loops -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function addPhaseRow(phase='', desc='', duration='') {
+            const tbody = document.getElementById('phasesTableBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td contenteditable="true" class="p-name">${phase || 'Phase X'}</td>
+                <td contenteditable="true" class="p-desc">${desc || 'Enter activity descriptions...'}</td>
+                <td contenteditable="true" class="p-time">${duration || 'Pending Update'}</td>
+                <td style="text-align:center;"><button class="btn" style="background:#ef4444; padding:4px 8px;" onclick="this.closest('tr').remove()">🗑️</button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        // Preload standard rows if no entries are currently logged
+        addPhaseRow('Phase 1: Architecture Planning', 'System flow blueprints and interface layouts.', 'Week 1');
+        addPhaseRow('Phase 2: Alpha Prototyping', 'Database validation engine wiring.', 'Week 2');
+
+        async function publishPhasesTable() {
+            const rows = [];
+            document.querySelectorAll('#phasesTableBody tr').forEach(tr => {
+                rows.push([
+                    tr.querySelector('.p-name').textContent.trim(),
+                    tr.querySelector('.p-desc').textContent.trim(),
+                    tr.querySelector('.p-time').textContent.trim()
+                ]);
+            });
+
+            const payload = { headers: ["Phase Step", "Activities Details Description", "Timeline Duration Window"], rows };
+
+            try {
+                const response = await fetch('/api/phases/publish', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const res = await response.json();
+                if(res.success) {
+                    const alertBox = document.getElementById('statusAlert');
+                    alertBox.textContent = "📅 Active milestone phase calendar changes pushed live successfully!";
+                    alertBox.style.background = "#22c55e";
+                    alertBox.style.display = "block";
+                    setTimeout(() => alertBox.style.display="none", 4000);
+                }
+            } catch (err) { alert('Network pipeline error.'); }
+        }
+    </script>
+</body>
+</html>

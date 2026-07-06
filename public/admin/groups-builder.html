@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Workspace Creator | SEAS Admin</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .container { padding: 40px; max-width: 1200px; margin: auto; }
+        .editor-actions { margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1a252f; color: white; }
+        th, td { padding: 12px; border: 1px solid #34495e; text-align: left; }
+        th { background-color: #a855f7; color: white; }
+        td[contenteditable="true"] { background: #2c3e50; outline: 1px dashed #a855f7; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; text-decoration: none; }
+        .btn-purple { background: #a855f7; }
+        .btn-blue { background: #3b82f6; }
+        .btn-green { background: #22c55e; }
+        .btn-danger { background: #ef4444; padding: 4px 8px; font-size: 0.8rem; }
+    </style>
+    <script>
+        // --- ADMINISTRATIVE SUB-PAGE GATEKEEPER GUARD ---
+        if (sessionStorage.getItem('seas_admin_authenticated') !== 'true') {
+            alert("🔒 Access Denied: Unverified administration session container state. Returning to primary entry layers.");
+            window.location.href = "../admin.html";
+        }
+    </script>
+</head>
+<body>
+    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 40px; background: #1a252f; border-bottom: 1px solid #34495e;">
+        <span style="color: #a855f7; font-weight: bold;">SEAS Group Builder Console</span>
+        <a href="../admin.html" style="color: white; text-decoration: none;">&larr; Back to Dashboard</a>
+    </nav>
+
+    <div class="container">
+        <h1>Create Groups & Assign Projects Workspace</h1>
+        <p style="color: #b4c6d0;">This sheet imports active student datasets. You can manually create tables, add/delete rows or columns, and assign engineering project criteria.</p>
+        
+        <div id="statusAlert" style="display:none; padding: 12px; margin-bottom: 15px; border-radius: 4px; color: white;"></div>
+
+        <div class="editor-actions">
+            <button class="btn btn-blue" onclick="addColumn()">➕ Add Column</button>
+            <button class="btn btn-blue" onclick="addRow()">➕ Add Empty Row</button>
+            <button class="btn btn-purple" onclick="importRegisteredStudents()">📥 Import Student Pool</button>
+            <button class="btn btn-green" style="margin-left: auto;" onclick="publishGroupsList()">🚀 Publish Groups List & Projects</button>
+        </div>
+
+        <table id="groupsMatrixTable">
+            <thead>
+                <tr id="tableHeaderRow">
+                    <th contenteditable="true">Group Name</th>
+                    <th contenteditable="true">Assigned Project Title</th>
+                    <th contenteditable="true">Assigned Members/Students</th>
+                    <th style="width: 70px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="groupsTableBody">
+                <!-- Injected Rows -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Dynamically add a table cell header
+        function addColumn() {
+            const headerRow = document.getElementById('tableHeaderRow');
+            const th = document.createElement('th');
+            th.setAttribute('contenteditable', 'true');
+            th.textContent = 'Custom Critera';
+            headerRow.insertBefore(th, headerRow.lastElementChild);
+            
+            // Sync all existing data rows with an empty cell matching the new structural layer
+            const rows = document.querySelectorAll('#groupsTableBody tr');
+            rows.forEach(row => {
+                const td = document.createElement('td');
+                td.setAttribute('contenteditable', 'true');
+                row.insertBefore(td, row.lastElementChild);
+            });
+        }
+
+        function addRow(data = ['', '', '']) {
+            const tbody = document.getElementById('groupsTableBody');
+            const colCount = document.querySelectorAll('#tableHeaderRow th').length - 1;
+            const tr = document.createElement('tr');
+            
+            for(let i = 0; i < colCount; i++) {
+                const td = document.createElement('td');
+                td.setAttribute('contenteditable', 'true');
+                td.textContent = data[i] || '';
+                tr.appendChild(td);
+            }
+            
+            // Injection of Action Column Delete hooks
+            const actionTd = document.createElement('td');
+            actionTd.style.textAlign = 'center';
+            actionTd.innerHTML = `<button class="btn btn-danger" onclick="this.closest('tr').remove()">🗑️</button>`;
+            tr.appendChild(actionTd);
+            tbody.appendChild(tr);
+        }
+
+        async function importRegisteredStudents() {
+            try {
+                const response = await fetch('/api/participants');
+                const list = await response.json();
+                const students = list.filter(p => p.user_type === 'Student' || p.role === 'Student');
+                
+                if(students.length === 0) {
+                    alert('No eligible student registrations found to import.');
+                    return;
+                }
+
+                document.getElementById('groupsTableBody').innerHTML = '';
+                // Split students into sample mock groups of 5 for easier editing structures
+                for (let i = 0; i < students.length; i += i === 0 ? 3 : 5) {
+                    const groupNum = Math.floor(i/5) + 1;
+                    const chunk = students.slice(i, i+5);
+                    const namesList = chunk.map(s => s.full_name).join(', ');
+                    addRow([`Team Hybrid ${groupNum}`, `Project Title Matrix Hex-${groupNum}`, namesList]);
+                }
+            } catch (err) {
+                alert('Failed to pull entry databases.');
+            }
+        }
+
+        async function publishGroupsList() {
+            const headers = [];
+            document.querySelectorAll('#tableHeaderRow th').forEach((th, idx, arr) => {
+                if(idx < arr.length - 1) headers.push(th.textContent.trim());
+            });
+
+            const rows = [];
+            document.querySelectorAll('#groupsTableBody tr').forEach(tr => {
+                const rowCells = [];
+                tr.querySelectorAll('td').forEach((td, idx, arr) => {
+                    if(idx < arr.length - 1) rowCells.push(td.textContent.trim());
+                });
+                if(rowCells.length > 0) rows.push(rowCells);
+            });
+
+            const payload = { headers, rows };
+
+            try {
+                const response = await fetch('/api/groups/publish', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const res = await response.json();
+                if(res.success) {
+                    const alertBox = document.getElementById('statusAlert');
+                    alertBox.textContent = "🚀 Custom groups list and project assignments successfully published live to public channels!";
+                    alertBox.style.background = "#22c55e";
+                    alertBox.style.display = "block";
+                    setTimeout(() => alertBox.style.display="none", 4000);
+                }
+            } catch (err) {
+                alert('Pipeline communication error.');
+            }
+        }
+    </script>
+</body>
+</html>
