@@ -3,29 +3,38 @@ const path = require('path');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const app = express();
+
 const DATA_FILE = path.join(__dirname, 'data.json');
+const GROUPS_FILE = path.join(__dirname, 'groups.json');
+const PHASES_FILE = path.join(__dirname, 'phases.json');
 
 // Middleware
 app.use(express.json());
-app.use(cookieParser('seas-secret-2026')); 
+app.use(cookieParser('seas-secret-2026'));
 
 // Security Gatekeeper: Blocks access if not logged in
 function requireAdmin(req, res, next) {
     if (req.cookies.admin_authenticated === 'true') {
         return next();
     }
-    // If it's an API request, return a clean JSON error status code
     if (req.path.startsWith('/api/')) {
         return res.status(401).json({ success: false, error: "Unauthorized administrative access." });
     }
-    // If it's a browser request for a page layout, redirect to login page
     res.redirect('/admin-login.html');
 }
 
-// 1. CRUCIAL FIX: Explicitly intercept and protect admin.html BEFORE serving the static 'public' directory.
-// Otherwise, express.static can bypass your route declaration entirely.
+// Explicitly intercept and protect admin.html BEFORE serving the static 'public' directory.
 app.get('/admin.html', requireAdmin, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+// Protect secondary custom admin sub-screens before falling back to static engines
+app.get('/admin/groups-builder.html', requireAdmin, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'admin', 'groups-builder.html'));
+});
+
+app.get('/admin/phases-editor.html', requireAdmin, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'admin', 'phases-editor.html'));
 });
 
 // Serve public static folder for assets, index, and login interfaces
@@ -41,36 +50,43 @@ app.post('/api/admin/login', (req, res) => {
 });
 
 // Helper functions to handle persistent reads/writes safely on disk
-function readDatabase() {
+function readDatabase(file = DATA_FILE, defaultStructure = []) {
     try {
-        if (!fs.existsSync(DATA_FILE)) {
-            fs.writeFileSync(DATA_FILE, JSON.stringify([]));
-            return [];
+        if (!fs.existsSync(file)) {
+            fs.writeFileSync(file, JSON.stringify(defaultStructure));
+            return defaultStructure;
         }
-        const data = fs.readFileSync(DATA_FILE, 'utf8');
-        return JSON.parse(data || '[]');
+        const data = fs.readFileSync(file, 'utf8');
+        return JSON.parse(data || JSON.stringify(defaultStructure));
     } catch (error) {
-        console.error("Database reading error:", error);
-        return [];
+        console.error(`Database reading error (${file}):`, error);
+        return defaultStructure;
     }
 }
 
-function writeDatabase(data) {
+// FIXED: Clean database verification matrix handler
+function writeDatabase(data, file = DATA_FILE) {
     try {
-        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+        fs.writeFileSync(file, JSON.stringify(data, null, 2));
     } catch (error) {
-        console.error("Database writing error:", error);
+        console.error(`Database writing error (${file}):`, error);
     }
 }
 
-// PUBLIC REGISTRATION POST ENDPOINT
+// PUBLIC/ADMIN REGISTRATION ENDPOINTS
+app.get('/api/participants', (req, res) => {
+    const data = readDatabase(DATA_FILE);
+    res.json(data);
+});
+
 app.post('/api/register', (req, res) => {
     const { full_name, email, user_type, program, level, specialty, phone } = req.body;
     if (!full_name || !email || !user_type || !phone) {
         return res.status(400).json({ success: false, error: "Required fields missing." });
     }
-    const currentRecords = readDatabase();
+    const currentRecords = readDatabase(DATA_FILE);
     const newEntry = {
+        id: Date.now().toString(), // Unique ID key for target identification during inline grid mutations
         full_name,
         email,
         user_type,
@@ -80,28 +96,60 @@ app.post('/api/register', (req, res) => {
         phone
     };
     currentRecords.push(newEntry);
-    writeDatabase(currentRecords);
+    writeDatabase(currentRecords, DATA_FILE);
     res.status(201).json({ success: true, data: newEntry });
 });
 
-// PROTECTED ADMINISTRATIVE ENDPOINTS (Appended requireAdmin security check)
+// UPDATE ENTIRE PARTICIPANT MATRIX (For Manual Admin Row Inlines/Edits/Deletions)
+app.put('/api/participants', requireAdmin, (req, res) => {
+    if (!Array.isArray(req.body)) {
+        return res.status(400).json({ success: false, error: "Invalid layout matrix data structure provided." });
+    }
+    writeDatabase(req.body, DATA_FILE);
+    res.json({ success: true, message: "Participants updated successfully." });
+});
 
-// GET REGISTERED PARTICIPANTS POOL ENDPOINT
-app.get('/api/participants', requireAdmin, (req, res) => {
-    const data = readDatabase();
-    res.json(data);
+// --- DYNAMIC INTERACTIVE GROUP CREATOR & PROJECT ASSIGNER API ---
+app.get('/api/groups', (req, res) => {
+    const defaultData = { headers: ["Group Name", "Assigned Project Title", "Assigned Members/Students"], rows: [] };
+    res.json(readDatabase(GROUPS_FILE, defaultData));
+});
+
+app.post('/api/groups/publish', requireAdmin, (req, res) => {
+    writeDatabase(req.body, GROUPS_FILE);
+    res.json({ success: true, message: "Group lists and project matrices published successfully." });
+});
+
+// --- BOOTCAMP TIMELINE MILESTONE PHASES CONFIGURATOR API ---
+app.get('/api/phases', (req, res) => {
+    const defaultData = { headers: ["Phase", "Activities Details Description", "Timeline Duration Window"], rows: [] };
+    res.json(readDatabase(PHASES_FILE, defaultData));
+});
+
+app.post('/api/phases/publish', requireAdmin, (req, res) => {
+    writeDatabase(req.body, PHASES_FILE);
+    res.json({ success: true, message: "Bootcamp milestone phases matrix published successfully." });
 });
 
 // PIPELINE ALIAS: Resolves the CI/CD test runner's target path expectations
 app.get('/api/registrations', requireAdmin, (req, res) => {
-    const data = readDatabase();
+    const data = readDatabase(DATA_FILE);
     res.json({ success: true, count: data.length, data: data });
 });
 
 // WIPE ENTIRE DATABASE RECORDS (ADMIN ACTION ONLY)
 app.delete('/api/clear', requireAdmin, (req, res) => {
-    writeDatabase([]);
+    writeDatabase([], DATA_FILE);
     res.json({ success: true, message: "Database wiped successfully." });
+});
+
+// FIXED: Explicit route handlers to bypass catch-all fallbacks on cloud systems
+app.get('/phases.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'phases.html'));
+});
+
+app.get('/phases', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'phases.html'));
 });
 
 // Catch-all route to serve home page layout
@@ -117,5 +165,4 @@ if (process.env.NODE_ENV !== 'test') {
     });
 }
 
-// Export the raw instance app context so Supertest can hook directly into it smoothly
 module.exports = app;
