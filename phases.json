@@ -1,0 +1,29 @@
+{
+  "headers": [
+    "BOOT CAMP STAGE & PHASE AND DAY",
+    "TASKS DESCRIPTIONS & TARGET OBJECTIVES",
+    "STARTING & EXPECTED TIME COMPLETION",
+    "EXPECTED RESULT"
+  ],
+  "rows": [
+    [
+      "Phase 1: Initial Launching\nDay 1: 10/05/2026",
+      "Groups & Projects Introduction and Starting Line",
+      "Day 1: From 10:30am - 4:10pm",
+      "Editable Data Field"
+    ],
+    [
+      "Phase 2: Project Architecture\nDay 2: 11/05/2026",
+      "Forming collaborative groups and launching containerized workspaces.",
+      "Day 2: From 10:30am - 4:10pm",
+      "Editable Data Field"
+    ],
+    [
+      "Phase 3: Finals & Project Awards",
+      "Awarding Students with the Best Result in their Projects",
+      "Day 3: From 10:30am - 3:50pm",
+      "Editable Data Row Entry"
+    ]
+  ],
+  "published": true
+}

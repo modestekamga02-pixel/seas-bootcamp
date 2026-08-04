@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phases & Grouping | SEAS Bootcamp</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .public-container { padding: 40px; max-width: 1200px; margin: auto; font-family: sans-serif; }
+        .data-section { margin-bottom: 50px; }
+        .data-section h2 { color: #00d2ff; border-bottom: 2px solid #34495e; padding-bottom: 10px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #1a252f; color: white; }
+        th, td { padding: 12px; border: 1px solid #34495e; text-align: left; }
+        th { background-color: #2c3e50; color: #00d2ff; }
+        tr:nth-child(even) { background-color: #243342; }
+        .badge-student { background: #22c55e; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.85rem; }
+        .badge-staff { background: #f59e0b; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.85rem; }
+        .empty-callout { text-align: center; color: #b4c6d0; padding: 20px; background: #1a252f; border-radius: 6px; border: 1px dashed #34495e; }
+    </style>
+</head>
+<body class="public-portal-layout">
+
+    <!-- Top Navigation Bar Header -->
+    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #1a252f; border-bottom: 1px solid #34495e;">
+        <span style="color: #00d2ff; font-weight: bold; font-size: 1.2rem;">SEAS Bootcamp Public Portal</span>
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;">&larr; Back to Home</a>
+    </nav>
+
+    <div class="public-container">
+        
+        <!-- SECTION 1: Active Timeline Milestone Schedule Matrix -->
+        <div class="data-section">
+            <h2>📅 Bootcamp Operational Milestone Phases</h2>
+            <div id="phasesContainer">
+                <p style="color: #b4c6d0;">Loading active milestones directly from administrative layers...</p>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Project Teams and Group Allocations Matrix -->
+        <div class="data-section">
+            <h2>👥 Published Team Grouping & Project Assignments</h2>
+            <div id="groupsContainer">
+                <p style="color: #b4c6d0;">Loading team configurations...</p>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Combined Roster Registry View -->
+        <div class="data-section">
+            <h2>📋 Verified Participants & Jury Registry</h2>
+            <p style="color: #b4c6d0; font-size: 0.95rem;">Live directory listing of all successfully registered Students, Instructors, and designated Evaluation Jury members.</p>
+            <table id="rosterTable">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email Address</th>
+                        <th>Role Type</th>
+                        <th>Program Path</th>
+                        <th>Academic Level</th>
+                        <th>Specialty Track</th>
+                    </tr>
+                </thead>
+                <tbody id="rosterTableBody">
+                    <tr><td colspan="6" style="text-align: center; color: #b4c6d0;">Fetching infrastructure directory logs...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // Run all core view lookups concurrently on interface ingestion initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchPublicPhases();
+            fetchPublicGroups();
+            fetchPublicRoster();
+        });
+
+        // 1. Fetch Schedule Timeline Matrix
+        async function fetchPublicPhases() {
+            try {
+                const res = await fetch('/api/phases');
+                const data = await res.json();
+                const container = document.getElementById('phasesContainer');
+                
+                if (!data.rows || data.rows.length === 0) {
+                    container.innerHTML = `<div class="empty-callout">📅 No active structural milestone schedule parameters have been published yet.</div>`;
+                    return;
+                }
+
+                let html = `<table><thead><tr>`;
+                data.headers.forEach(h => html += `<th>${h}</th>`);
+                html += `</tr></thead><tbody>`;
+                data.rows.forEach(row => {
+                    html += `<tr>` + row.map(cell => `<td>${cell}</td>`).join('') + `</tr>`;
+                });
+                html += `</tbody></table>`;
+                container.innerHTML = html;
+            } catch (err) {
+                console.error(err);
+                document.getElementById('phasesContainer').innerHTML = `<p style="color: #ef4444;">Failed to sync lifecycle schedule details.</p>`;
+            }
+        }
+
+        // 2. Fetch Project Assignments & Groups Matrix
+        async function fetchPublicGroups() {
+            try {
+                const res = await fetch('/api/groups');
+                const data = await res.json();
+                const container = document.getElementById('groupsContainer');
+                
+                if (!data.rows || data.rows.length === 0) {
+                    container.innerHTML = `<div class="empty-callout">👥 Team formation blocks and assigned project schemas are awaiting official admin publication releases.</div>`;
+                    return;
+                }
+
+                let html = `<table><thead><tr>`;
+                data.headers.forEach(h => html += `<th>${h}</th>`);
+                html += `</tr></thead><tbody>`;
+                data.rows.forEach(row => {
+                    html += `<tr>` + row.map(cell => `<td>${cell}</td>`).join('') + `</tr>`;
+                });
+                html += `</tbody></table>`;
+                container.innerHTML = html;
+            } catch (err) {
+                console.error(err);
+                document.getElementById('groupsContainer').innerHTML = `<p style="color: #ef4444;">Failed to sync grouping metrics.</p>`;
+            }
+        }
+
+        // 3. Fetch Master Registry Pool (Students + Staff/Jury Details)
+        async function fetchPublicRoster() {
+            try {
+                const res = await fetch('/api/participants');
+                const list = await res.json();
+                const tbody = document.getElementById('rosterTableBody');
+                
+                if (!Array.isArray(list) || list.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #b4c6d0;">📁 No active entry logs discovered in local storage structures.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = list.map(p => `
+                    <tr>
+                        <td><strong>${p.full_name || 'N/A'}</strong></td>
+                        <td>${p.email || 'N/A'}</td>
+                        <td>
+                            <span class="${p.user_type === 'Student' ? 'badge-student' : 'badge-staff'}">
+                                ${p.user_type || 'Student'}
+                            </span>
+                        </td>
+                        <td>${p.program || 'N/A'}</td>
+                        <td>${p.level || 'N/A'}</td>
+                        <td>${p.specialty || 'N/A'}</td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error(err);
+                document.getElementById('rosterTableBody').innerHTML = `<tr><td colspan="6" style="text-align: center; color: #ef4444;">Pipeline retrieval failure.</td></tr>`;
+            }
+        }
+    </script>
+</body>
+</html>

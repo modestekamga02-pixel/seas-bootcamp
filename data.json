@@ -1,0 +1,20 @@
+[
+  {
+    "full_name": "Modeste K",
+    "email": "modeste@example.com",
+    "user_type": "Student",
+    "program": "B.Eng",
+    "level": "Level 3",
+    "specialty": "CSE",
+    "phone": "+237678080074"
+  },
+  {
+    "full_name": "Nelson Mandela",
+    "email": "mandelanelson@gmail.com",
+    "user_type": "Jury",
+    "program": "N/A",
+    "level": "N/A",
+    "specialty": "N/A",
+    "phone": "+237683405896"
+  }
+]

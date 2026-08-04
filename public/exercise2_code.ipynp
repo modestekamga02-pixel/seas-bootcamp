@@ -1,0 +1,11 @@
+    import numpy as numpy
+    impoprt pandas as pd 
+    from sklearn.datastes import load_iris
+    iris=load_iris()
+    df_raw=pd.DataFrame(data=iris.data, columns=['Sepal_Lenght', 'Sepal_Width', 'Petal_Lenght', 'Petal_Width'])
+    df_raw['Product_Line']=[iris.target_names[target]for target in iris.target]
+    np.random.seed(42)
+    for col in ['Sepal_Width', 'Petal_Length']:
+    df_raw.loc[df_raw.sample(3).index, col]=np.nan
+    df_raw.to_csv('bioflora_inventory.csv', index=False)
+    print("SUCCESS:Local data exported as 'bioflora_inventory.csv'!")

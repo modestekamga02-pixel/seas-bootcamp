@@ -1,0 +1,40 @@
+{
+  "headers": [
+    "Group Identifier",
+    "Assigned Project Challenge Title",
+    "GROUPS MEMBER LIST & SPECIALTIES"
+  ],
+  "rows": [
+    [
+      "Group Beta",
+      "Implementation of a Cloud-Hosted Web Application with CI/CD: Case Seas BOOT CAMP.",
+      "Modeste K \"Mec 2\", Carole \"MIS 2\", Stephany Steve \"CSE 2\", Paul Tambe \"EEE 2\""
+    ],
+    [
+      "Group Alpha",
+      "Implementation of a school Management System with high Graded access",
+      "Olivia \"DMK 2\", Emma \"MGT 2\", Franck \"Beng CSE 3\", Abdel \"MCT 2\", Samuel \"MIS 2\""
+    ],
+    [
+      "Group Omega",
+      "Design and implementation of Patient Health Monitoring System",
+      "Tagne Bobda \"BMS 3\", Enama Christel \"NUR 3\", Salif Keita \"CHE 3\", Moudimba Pascal \"MEC 2\", Ekollo Peter \"BMS 3\""
+    ],
+    [
+      "Group Theta",
+      "Design & Implementation of An Intelligent printing machine system",
+      "Editable Data Row Entry"
+    ],
+    [
+      "Group Sphinx",
+      "Editable Data Row Entry",
+      "Editable Data Row Entry"
+    ],
+    [
+      "Group Portfolio",
+      "Editable Data Row Entry",
+      "Editable Data Row Entry"
+    ]
+  ],
+  "published": true
+}
